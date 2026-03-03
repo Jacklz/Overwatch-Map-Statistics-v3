@@ -1,10 +1,16 @@
-﻿namespace Overwatch_Map_Statistics_v3
+﻿using Newtonsoft.Json;
+
+namespace Overwatch_Map_Statistics_v3
 {
     public class Map
     {
         public readonly string mapname;
-        public readonly string mode;
-        public readonly string fullname;
+
+        [JsonIgnore]
+        public string mode;
+
+        [JsonIgnore]
+        public string fullname;
 
         public Map(string mapname, string mode)
         {

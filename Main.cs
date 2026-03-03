@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace Overwatch_Map_Statistics_v3
 {
@@ -10,6 +11,7 @@ namespace Overwatch_Map_Statistics_v3
         public static List<string> alloutcomes = [];
         public static List<string> profiles = [];
         public static List<string> statprofiles = [];
+        public static Dictionary<string, string> maptomode = [];
 
         public Main()
         {
@@ -18,7 +20,7 @@ namespace Overwatch_Map_Statistics_v3
 
         private void Main_Load(object sender, EventArgs e)
         {
-            session_date_picker.Value = DateTime.Now;
+            session_date_picker.Value = DateTime.Today;
             CheckAndCreateFiles();
         }
 
@@ -191,9 +193,10 @@ namespace Overwatch_Map_Statistics_v3
                 var maps = File.ReadLines("maps.txt");
                 foreach (var map in maps)
                 {
-                    string mapname = map.Substring(0, map.IndexOf("-"));
-                    string maptype = map.Substring(map.IndexOf("-") + 1);
-                    allmaps.Add(new(mapname.Trim(), maptype.Trim()));
+                    string mapname = map.Substring(0, map.IndexOf("-")).Trim();
+                    string maptype = map.Substring(map.IndexOf("-") + 1).Trim();
+                    allmaps.Add(new(mapname, maptype));
+                    maptomode[mapname] = maptype;
                 }
             }
             else
@@ -201,6 +204,7 @@ namespace Overwatch_Map_Statistics_v3
                 var maps = Map.GetAllMaps();
                 File.WriteAllLines("maps.txt", maps.Select(map => map.fullname));
                 allmaps.AddRange(maps);
+                maps.ForEach(map => { maptomode[map.mapname] = map.mode; });
             }
             UpdateMapsDisplayLists();
         }
@@ -272,7 +276,7 @@ namespace Overwatch_Map_Statistics_v3
         private void reset_entry_button_Click(object sender, EventArgs e)
         {
             session_entries_listbox.Items.Clear();
-            session_date_picker.Value = DateTime.Now;
+            session_date_picker.Value = DateTime.Today;
             UpdateRecordLabel();
             ResetCurrentEntry();
         }
@@ -541,7 +545,15 @@ namespace Overwatch_Map_Statistics_v3
             foreach (var line in File.ReadAllLines("records.json"))
             {
                 SessionRecordEntry? record = JsonConvert.DeserializeObject<SessionRecordEntry>(line);
-                if (profiles.Contains(record.statprofilename)) entries.Add(record);
+                if (record == null) continue;
+                if (profiles.Contains(record.statprofilename))
+                {
+                    //foreach (var entry in record.mapdata)
+                    //{
+                    //    entry.mode = maptomode[entry.mapname];
+                    //}
+                    entries.Add(record);
+                }
             }
             Stats_Viewer stats_Viewer = new(entries);
             stats_Viewer.Show();
@@ -571,15 +583,24 @@ namespace Overwatch_Map_Statistics_v3
             SessionRecordEntry session = new(profilename, statprofile, session_date_picker.Value);
             foreach (var entry in session_entries_listbox.Items)
             {
-                string? line = entry.ToString();
-                string mapname = "";
-                string mapmode = "";
-                string outcome = "";
-                List<string> notes = [];
-                MapResult mapdata = new(mapname, mapmode, outcome, notes);
+                string? line = entry?.ToString();
+                var parts = line.Split('-');
+                string mapname = parts[0].Trim();
+                string mapmode = maptomode[mapname];
+                string outcome = parts[1].Trim();
+                List<string> notes2 = [];
+                if (parts.Length > 2)
+                {
+                    string notes = parts[2];
+                    notes2.AddRange(notes.Split('|').Select(entry => entry.Trim()));
+                }
+                MapResult mapdata = new(mapname, mapmode, outcome, notes2);
                 session.AddMapResult(mapdata);
             }
             string serializeddata = JsonConvert.SerializeObject(session);
+            //Debug.WriteLine(serializeddata);
+            //MessageBox.Show(serializeddata);
+            //return;
             bool newline = false;
             if (File.Exists("records.json")) newline = true;
             StreamWriter writer = new("records.json", true);

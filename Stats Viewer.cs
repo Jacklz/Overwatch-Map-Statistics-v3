@@ -27,6 +27,10 @@
                     }
                 }
             }
+            foreach (var entry in mapstats.Values.OrderBy(x => x.mapname))
+            {
+                map_stats_grid.Rows.Add(entry.mapname, entry.mode, entry.wins, entry.losses, entry.draws, entry.total, entry.winrate);
+            }
         }
     }
 }
