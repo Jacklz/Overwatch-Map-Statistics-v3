@@ -35,10 +35,11 @@
             notes_checkedlistbox = new CheckedListBox();
             label3 = new Label();
             add_entry_button = new Button();
-            reset_entry_button = new Button();
-            exit_button = new Button();
+            reset_session_button = new Button();
+            save_button = new Button();
             tabControl1 = new TabControl();
             session_page = new TabPage();
+            current_record_label = new Label();
             save_statprofile_combobox = new ComboBox();
             session_date_picker = new DateTimePicker();
             save_profile_combobox = new ComboBox();
@@ -85,7 +86,6 @@
             label10 = new Label();
             statprofile_textbox = new TextBox();
             statprofiles_checkedlistbox = new CheckedListBox();
-            current_record_label = new Label();
             tabControl1.SuspendLayout();
             session_page.SuspendLayout();
             maps_page.SuspendLayout();
@@ -157,24 +157,25 @@
             add_entry_button.UseVisualStyleBackColor = true;
             add_entry_button.Click += add_entry_button_Click;
             // 
-            // reset_entry_button
+            // reset_session_button
             // 
-            reset_entry_button.Location = new Point(149, 218);
-            reset_entry_button.Name = "reset_entry_button";
-            reset_entry_button.Size = new Size(132, 23);
-            reset_entry_button.TabIndex = 7;
-            reset_entry_button.Text = "Reset Current Entry";
-            reset_entry_button.UseVisualStyleBackColor = true;
-            reset_entry_button.Click += reset_entry_button_Click;
+            reset_session_button.Location = new Point(149, 218);
+            reset_session_button.Name = "reset_session_button";
+            reset_session_button.Size = new Size(132, 23);
+            reset_session_button.TabIndex = 7;
+            reset_session_button.Text = "Reset Session";
+            reset_session_button.UseVisualStyleBackColor = true;
+            reset_session_button.Click += reset_entry_button_Click;
             // 
-            // exit_button
+            // save_button
             // 
-            exit_button.Location = new Point(287, 275);
-            exit_button.Name = "exit_button";
-            exit_button.Size = new Size(123, 23);
-            exit_button.TabIndex = 9;
-            exit_button.Text = "Save and Close";
-            exit_button.UseVisualStyleBackColor = true;
+            save_button.Location = new Point(287, 275);
+            save_button.Name = "save_button";
+            save_button.Size = new Size(123, 23);
+            save_button.TabIndex = 9;
+            save_button.Text = "Save";
+            save_button.UseVisualStyleBackColor = true;
+            save_button.Click += exit_button_Click;
             // 
             // tabControl1
             // 
@@ -200,10 +201,10 @@
             session_page.Controls.Add(remove_sel_entry_button);
             session_page.Controls.Add(session_entries_listbox);
             session_page.Controls.Add(label1);
-            session_page.Controls.Add(exit_button);
+            session_page.Controls.Add(save_button);
             session_page.Controls.Add(maplist_combobox);
             session_page.Controls.Add(label2);
-            session_page.Controls.Add(reset_entry_button);
+            session_page.Controls.Add(reset_session_button);
             session_page.Controls.Add(outcome_combobox);
             session_page.Controls.Add(add_entry_button);
             session_page.Controls.Add(notes_checkedlistbox);
@@ -215,6 +216,15 @@
             session_page.TabIndex = 0;
             session_page.Text = "Session";
             session_page.UseVisualStyleBackColor = true;
+            // 
+            // current_record_label
+            // 
+            current_record_label.AutoSize = true;
+            current_record_label.Location = new Point(176, 251);
+            current_record_label.Name = "current_record_label";
+            current_record_label.Size = new Size(76, 15);
+            current_record_label.TabIndex = 16;
+            current_record_label.Text = "W/L/D: 0-0-0";
             // 
             // save_statprofile_combobox
             // 
@@ -592,6 +602,7 @@
             check_all_statprofiles_button.TabIndex = 7;
             check_all_statprofiles_button.Text = "Check All";
             check_all_statprofiles_button.UseVisualStyleBackColor = true;
+            check_all_statprofiles_button.Click += check_all_statprofiles_button_Click;
             // 
             // uncheck_all_statprofiles_button
             // 
@@ -601,6 +612,7 @@
             uncheck_all_statprofiles_button.TabIndex = 6;
             uncheck_all_statprofiles_button.Text = "Uncheck All";
             uncheck_all_statprofiles_button.UseVisualStyleBackColor = true;
+            uncheck_all_statprofiles_button.Click += uncheck_all_statprofiles_button_Click;
             // 
             // view_stats_button
             // 
@@ -610,6 +622,7 @@
             view_stats_button.TabIndex = 5;
             view_stats_button.Text = "View Stats";
             view_stats_button.UseVisualStyleBackColor = true;
+            view_stats_button.Click += view_stats_button_Click;
             // 
             // remove_statprofile_button
             // 
@@ -655,15 +668,6 @@
             statprofiles_checkedlistbox.Size = new Size(220, 292);
             statprofiles_checkedlistbox.TabIndex = 0;
             // 
-            // current_record_label
-            // 
-            current_record_label.AutoSize = true;
-            current_record_label.Location = new Point(176, 251);
-            current_record_label.Name = "current_record_label";
-            current_record_label.Size = new Size(76, 15);
-            current_record_label.TabIndex = 16;
-            current_record_label.Text = "W/L/D: 0-0-0";
-            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -703,9 +707,9 @@
         private CheckedListBox notes_checkedlistbox;
         private Label label3;
         private Button add_entry_button;
-        private Button reset_entry_button;
+        private Button reset_session_button;
         private Button view_session_entries_button;
-        private Button exit_button;
+        private Button save_button;
         private TabControl tabControl1;
         private TabPage session_page;
         private TabPage maps_page;

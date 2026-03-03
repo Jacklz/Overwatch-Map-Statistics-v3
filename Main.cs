@@ -18,6 +18,7 @@ namespace Overwatch_Map_Statistics_v3
 
         private void Main_Load(object sender, EventArgs e)
         {
+            session_date_picker.Value = DateTime.Now;
             CheckAndCreateFiles();
         }
 
@@ -226,6 +227,7 @@ namespace Overwatch_Map_Statistics_v3
                 profiles.AddRange(File.ReadAllLines("profiles.txt"));
             }
             else File.Create("profiles.txt");
+            UpdateProfileDisplayLists();
         }
 
         private void add_entry_button_Click(object sender, EventArgs e)
@@ -269,6 +271,9 @@ namespace Overwatch_Map_Statistics_v3
 
         private void reset_entry_button_Click(object sender, EventArgs e)
         {
+            session_entries_listbox.Items.Clear();
+            session_date_picker.Value = DateTime.Now;
+            UpdateRecordLabel();
             ResetCurrentEntry();
         }
 
@@ -412,7 +417,7 @@ namespace Overwatch_Map_Statistics_v3
                 UpdateProfileDisplayLists();
                 File.WriteAllLines("profiles.txt", profiles);
                 profiles_listbox.SelectedIndex = -1;
-                DeleteProfileData(name);
+                DeleteProfileData(name, false);
             }
         }
 
@@ -454,30 +459,29 @@ namespace Overwatch_Map_Statistics_v3
                 UpdateStatDisplayLists();
                 File.WriteAllLines("statprofiles.txt", statprofiles);
                 statprofiles_checkedlistbox.SelectedIndex = -1;
-                DeleteStatProfileData(name);
+                DeleteProfileData(name, true);
             }
         }
 
-        private void DeleteProfileData(string profilename)
+        private void DeleteProfileData(string profilename, bool statprofile)
         {
+            if (!File.Exists("records.json"))
+            {
+                MessageBox.Show("Could not delete profile data, records.json file was not found");
+                return;
+            }
             List<SessionRecordEntry> records = [];
             foreach (string line in File.ReadAllLines("records.json"))
             {
                 SessionRecordEntry? entry = JsonConvert.DeserializeObject<SessionRecordEntry>(line);
-                if (entry.profilename != profilename) records.Add(entry);
-            }
-            List<string> serializedrecords = [];
-            records.ForEach(record => serializedrecords.Add(JsonConvert.SerializeObject(record)));
-            File.WriteAllLines("records.json", serializedrecords);
-        }
-
-        private void DeleteStatProfileData(string statprofilename)
-        {
-            List<SessionRecordEntry> records = [];
-            foreach (string line in File.ReadAllLines("records.json"))
-            {
-                SessionRecordEntry? entry = JsonConvert.DeserializeObject<SessionRecordEntry>(line);
-                if (entry.statprofilename != statprofilename) records.Add(entry);
+                if (statprofile)
+                {
+                    if (entry.statprofilename != profilename) records.Add(entry);
+                }
+                else
+                {
+                    if (entry.profilename != profilename) records.Add(entry);
+                }
             }
             List<string> serializedrecords = [];
             records.ForEach(record => serializedrecords.Add(JsonConvert.SerializeObject(record)));
@@ -498,6 +502,77 @@ namespace Overwatch_Map_Statistics_v3
             }
             current_record_label.Text = $"W/L/D: {wins}-{losses}-{draws}";
             File.WriteAllText("today.txt", current_record_label.Text);
+        }
+
+        private void check_all_statprofiles_button_Click(object sender, EventArgs e)
+        {
+            for (int a = 0; a < statprofiles_checkedlistbox.Items.Count; a++)
+            {
+                statprofiles_checkedlistbox.SetItemChecked(a, true);
+            }
+        }
+
+        private void uncheck_all_statprofiles_button_Click(object sender, EventArgs e)
+        {
+            for (int a = 0; a < statprofiles_checkedlistbox.Items.Count; a++)
+            {
+                statprofiles_checkedlistbox.SetItemChecked(a, false);
+            }
+        }
+
+        private void view_stats_button_Click(object sender, EventArgs e)
+        {
+            List<string> profiles = [];
+            foreach (var entry in statprofiles_checkedlistbox.CheckedItems)
+            {
+                profiles.Add(entry.ToString());
+            }
+            if (profiles.Count == 0)
+            {
+                MessageBox.Show("Select a stat profile!");
+                return;
+            }
+            if (!File.Exists("records.json"))
+            {
+                MessageBox.Show("Could not open stats as no records.json file was found");
+                return;
+            }
+            List<SessionRecordEntry> entries = [];
+            foreach (var line in File.ReadAllLines("records.json"))
+            {
+                SessionRecordEntry? record = JsonConvert.DeserializeObject<SessionRecordEntry>(line);
+                if (profiles.Contains(record.statprofilename)) entries.Add(record);
+            }
+            Stats_Viewer stats_Viewer = new(entries);
+            stats_Viewer.Show();
+        }
+
+        private void exit_button_Click(object sender, EventArgs e)
+        {
+            int profile = save_profile_combobox.SelectedIndex;
+            int stat = save_statprofile_combobox.SelectedIndex;
+            if (profile == -1)
+            {
+                MessageBox.Show("Select a profile to save the data to");
+                return;
+            }
+            if (stat == -1)
+            {
+                MessageBox.Show("Select a stat profile to save the data to");
+                return;
+            }
+            string? profilename = save_profile_combobox.Items[profile]?.ToString();
+            string? statprofile = save_statprofile_combobox.Items[stat]?.ToString();
+            SessionRecordEntry session = new(profilename, statprofile, session_date_picker.Value);
+            string serializeddata = JsonConvert.SerializeObject(session);
+            bool newline = false;
+            if (File.Exists("records.json")) newline = true;
+            StreamWriter writer = new("records.json", true);
+            if (newline) writer.Write("\n");
+            writer.Write(serializeddata);
+            writer.Close();
+            var result = MessageBox.Show("Successfully saved stats. Close program?", "", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes) Close();
         }
     }
 }
