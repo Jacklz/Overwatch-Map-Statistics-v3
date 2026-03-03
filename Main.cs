@@ -564,6 +564,16 @@ namespace Overwatch_Map_Statistics_v3
             string? profilename = save_profile_combobox.Items[profile]?.ToString();
             string? statprofile = save_statprofile_combobox.Items[stat]?.ToString();
             SessionRecordEntry session = new(profilename, statprofile, session_date_picker.Value);
+            foreach (var entry in session_entries_listbox.Items)
+            {
+                string? line = entry.ToString();
+                string mapname = "";
+                string mapmode = "";
+                string outcome = "";
+                List<string> notes = [];
+                MapResult mapdata = new(mapname, mapmode, outcome, notes);
+                session.AddMapResult(mapdata);
+            }
             string serializeddata = JsonConvert.SerializeObject(session);
             bool newline = false;
             if (File.Exists("records.json")) newline = true;
