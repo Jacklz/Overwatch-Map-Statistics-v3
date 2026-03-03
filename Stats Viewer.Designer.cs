@@ -41,7 +41,12 @@
             draw_column = new DataGridViewTextBoxColumn();
             totals_column = new DataGridViewTextBoxColumn();
             winrate_column = new DataGridViewTextBoxColumn();
+            tabControl1 = new TabControl();
+            tabPage1 = new TabPage();
+            tabPage2 = new TabPage();
             ((System.ComponentModel.ISupportInitialize)map_stats_grid).BeginInit();
+            tabControl1.SuspendLayout();
+            tabPage1.SuspendLayout();
             SuspendLayout();
             // 
             // map_stats_grid
@@ -51,10 +56,10 @@
             map_stats_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             map_stats_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             map_stats_grid.Columns.AddRange(new DataGridViewColumn[] { map_column, mode_column, wins_column, loss_column, draw_column, totals_column, winrate_column });
-            map_stats_grid.Location = new Point(13, 76);
+            map_stats_grid.Location = new Point(6, 98);
             map_stats_grid.Name = "map_stats_grid";
             map_stats_grid.ReadOnly = true;
-            map_stats_grid.Size = new Size(625, 300);
+            map_stats_grid.Size = new Size(704, 370);
             map_stats_grid.TabIndex = 0;
             // 
             // map_column
@@ -112,12 +117,43 @@
             winrate_column.Name = "winrate_column";
             winrate_column.ReadOnly = true;
             // 
+            // tabControl1
+            // 
+            tabControl1.Controls.Add(tabPage1);
+            tabControl1.Controls.Add(tabPage2);
+            tabControl1.Location = new Point(0, 0);
+            tabControl1.Name = "tabControl1";
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(721, 502);
+            tabControl1.TabIndex = 1;
+            // 
+            // tabPage1
+            // 
+            tabPage1.Controls.Add(map_stats_grid);
+            tabPage1.Location = new Point(4, 24);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(713, 474);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "tabPage1";
+            tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            tabPage2.Location = new Point(4, 24);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(192, 72);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "tabPage2";
+            tabPage2.UseVisualStyleBackColor = true;
+            // 
             // Stats_Viewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(651, 384);
-            Controls.Add(map_stats_grid);
+            ClientSize = new Size(723, 505);
+            Controls.Add(tabControl1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(4, 3, 4, 3);
             MaximizeBox = false;
@@ -130,6 +166,8 @@
             Text = "Stats Viewer";
             Load += Stats_Viewer_Load;
             ((System.ComponentModel.ISupportInitialize)map_stats_grid).EndInit();
+            tabControl1.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
             ResumeLayout(false);
 
         }
@@ -144,5 +182,8 @@
         private DataGridViewTextBoxColumn draw_column;
         private DataGridViewTextBoxColumn totals_column;
         private DataGridViewTextBoxColumn winrate_column;
+        private TabControl tabControl1;
+        private TabPage tabPage1;
+        private TabPage tabPage2;
     }
 }

@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using System.Diagnostics;
 
 namespace Overwatch_Map_Statistics_v3
 {
@@ -478,6 +477,7 @@ namespace Overwatch_Map_Statistics_v3
             foreach (string line in File.ReadAllLines("records.json"))
             {
                 SessionRecordEntry? entry = JsonConvert.DeserializeObject<SessionRecordEntry>(line);
+                if (entry == null) continue;
                 if (statprofile)
                 {
                     if (entry.statprofilename != profilename) records.Add(entry);
