@@ -149,7 +149,7 @@
             // 
             // add_entry_button
             // 
-            add_entry_button.Location = new Point(6, 217);
+            add_entry_button.Location = new Point(6, 218);
             add_entry_button.Name = "add_entry_button";
             add_entry_button.Size = new Size(137, 23);
             add_entry_button.TabIndex = 6;
@@ -251,7 +251,7 @@
             // 
             // remove_sel_entry_button
             // 
-            remove_sel_entry_button.Location = new Point(6, 247);
+            remove_sel_entry_button.Location = new Point(3, 247);
             remove_sel_entry_button.Name = "remove_sel_entry_button";
             remove_sel_entry_button.Size = new Size(137, 23);
             remove_sel_entry_button.TabIndex = 11;

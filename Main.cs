@@ -561,6 +561,11 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Select a stat profile to save the data to");
                 return;
             }
+            if (session_entries_listbox.Items.Count == 0)
+            {
+                MessageBox.Show("No data to save!");
+                return;
+            }
             string? profilename = save_profile_combobox.Items[profile]?.ToString();
             string? statprofile = save_statprofile_combobox.Items[stat]?.ToString();
             SessionRecordEntry session = new(profilename, statprofile, session_date_picker.Value);
