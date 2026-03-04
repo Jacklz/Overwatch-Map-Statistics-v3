@@ -10,8 +10,34 @@
             InitializeComponent();
             stats.AddRange(entries);
         }
-
+       
         private void Stats_Viewer_Load(object sender, EventArgs e)
+        {
+            LoadRoles();
+            LoadProfiles();
+            SetDates();
+            LoadStats();            
+        }
+
+        private void LoadRoles()
+        {
+            Main.roles.ForEach(role => { role_checkedlistbox.Items.Add(role); });
+            role_checkedlistbox.SetItemChecked(0, true);
+        }
+
+        private void LoadProfiles()
+        {
+            Main.profiles.ForEach(profile => { profile_checkedlistbox.Items.Add(profile); });
+        }
+
+        private void SetDates()
+        {
+            var list = stats.OrderBy(entry => entry.date).ToList();
+            start_date.Value = list[0].date;
+            end_date.Value = list[^1].date;
+        }
+
+        private void LoadStats()
         {
             foreach (var entry in stats)
             {

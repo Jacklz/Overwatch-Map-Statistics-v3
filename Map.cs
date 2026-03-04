@@ -28,7 +28,6 @@ namespace Overwatch_Map_Statistics_v3
                 "Hybrid",
                 "Escort",
                 "Push",
-                "Clash",
             ];
         }
 

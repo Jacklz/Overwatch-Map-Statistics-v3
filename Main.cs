@@ -11,6 +11,7 @@ namespace Overwatch_Map_Statistics_v3
         public static List<string> profiles = [];
         public static List<string> statprofiles = [];
         public static Dictionary<string, string> maptomode = [];
+        public static List<string> roles = ["Open Queue", "DPS", "Tank", "Support"];
 
         public Main()
         {
@@ -31,7 +32,14 @@ namespace Overwatch_Map_Statistics_v3
             LoadNotes();
             LoadOutcomes();
             LoadStatProfiles();
+            LoadRoles();
             CheckRecordsForExtraProfiles();
+        }
+
+        private void LoadRoles()
+        {
+            roles.ForEach(role => { role_combobox.Items.Add(role); });
+            role_combobox.SelectedIndex = 0;
         }
 
         private void CheckRecordsForExtraProfiles()
@@ -136,8 +144,7 @@ namespace Overwatch_Map_Statistics_v3
                     "Friendly Cheater",
                     "Enemy DC",
                     "Enemy Cheater",
-                    "Game Canceled",
-                    "Server Closed",
+                    "Stomp",
                 ];
                 File.WriteAllLines("notes.txt", notes);
                 allnotes.AddRange(notes);
@@ -239,21 +246,24 @@ namespace Overwatch_Map_Statistics_v3
             {
                 int map = maplist_combobox.SelectedIndex;
                 int selout = outcome_combobox.SelectedIndex;
-                if (map == -1 || selout == -1)
+                int roleindex = role_combobox.SelectedIndex;
+                if (map == -1 || selout == -1 || roleindex == -1)
                 {
-                    MessageBox.Show("Error adding entry. Make sure at least the map and outcome fields are set!");
+                    MessageBox.Show("Error adding entry. Make sure the map, role, and outcome fields are set!");
                     return;
                 }
                 string? mapname = maplist_combobox.Items[map]?.ToString();
+                string? role = role_combobox.Items[roleindex]?.ToString();
                 string? outcome = outcome_combobox.Items[selout]?.ToString();
                 List<string> notes = [];
                 foreach (var note in notes_checkedlistbox.CheckedItems)
                 {
                     notes.Add(note.ToString());
                 }
-                string entry;
-                if (notes.Count > 0) entry = $"{mapname} - {outcome} - {string.Join(" | ", notes)}";
-                else entry = $"{mapname} - {outcome}";
+                string entry = $"{mapname} - {role} - {outcome}";
+                if (notes.Count > 0) entry += $" - {string.Join(" | ", notes)}";
+                //if (notes.Count > 0) entry = $"{mapname} - {role} - {outcome} - {string.Join(" | ", notes)}";
+                //else entry = $"{mapname} - {role} - {outcome}";
                 session_entries_listbox.Items.Add(entry);
                 ResetCurrentEntry();
                 UpdateRecordLabel();
@@ -587,14 +597,15 @@ namespace Overwatch_Map_Statistics_v3
                 var parts = line.Split('-');
                 string mapname = parts[0].Trim();
                 string mapmode = maptomode[mapname];
-                string outcome = parts[1].Trim();
+                string role = parts[1].Trim();
+                string outcome = parts[2].Trim();
                 List<string> notes2 = [];
-                if (parts.Length > 2)
+                if (parts.Length > 3)
                 {
-                    string notes = parts[2];
+                    string notes = parts[3];
                     notes2.AddRange(notes.Split('|').Select(entry => entry.Trim()));
                 }
-                MapResult mapdata = new(mapname, mapmode, outcome, notes2);
+                MapResult mapdata = new(mapname, mapmode, role, outcome, notes2);
                 session.AddMapResult(mapdata);
             }
             string serializeddata = JsonConvert.SerializeObject(session);

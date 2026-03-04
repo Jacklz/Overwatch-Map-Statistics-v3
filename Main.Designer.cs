@@ -39,6 +39,10 @@
             save_button = new Button();
             tabControl1 = new TabControl();
             session_page = new TabPage();
+            label13 = new Label();
+            label12 = new Label();
+            role_combobox = new ComboBox();
+            label11 = new Label();
             current_record_label = new Label();
             save_statprofile_combobox = new ComboBox();
             session_date_picker = new DateTimePicker();
@@ -86,6 +90,8 @@
             label10 = new Label();
             statprofile_textbox = new TextBox();
             statprofiles_checkedlistbox = new CheckedListBox();
+            label14 = new Label();
+            label15 = new Label();
             tabControl1.SuspendLayout();
             session_page.SuspendLayout();
             maps_page.SuspendLayout();
@@ -116,7 +122,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(176, 3);
+            label2.Location = new Point(294, 3);
             label2.Name = "label2";
             label2.Size = new Size(60, 15);
             label2.TabIndex = 2;
@@ -125,7 +131,7 @@
             // outcome_combobox
             // 
             outcome_combobox.FormattingEnabled = true;
-            outcome_combobox.Location = new Point(176, 26);
+            outcome_combobox.Location = new Point(294, 26);
             outcome_combobox.Name = "outcome_combobox";
             outcome_combobox.Size = new Size(105, 23);
             outcome_combobox.TabIndex = 3;
@@ -133,7 +139,8 @@
             // notes_checkedlistbox
             // 
             notes_checkedlistbox.FormattingEnabled = true;
-            notes_checkedlistbox.Location = new Point(287, 26);
+            notes_checkedlistbox.HorizontalScrollbar = true;
+            notes_checkedlistbox.Location = new Point(408, 26);
             notes_checkedlistbox.Name = "notes_checkedlistbox";
             notes_checkedlistbox.Size = new Size(123, 184);
             notes_checkedlistbox.TabIndex = 4;
@@ -141,7 +148,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(287, 3);
+            label3.Location = new Point(408, 3);
             label3.Name = "label3";
             label3.Size = new Size(41, 15);
             label3.TabIndex = 5;
@@ -151,7 +158,7 @@
             // 
             add_entry_button.Location = new Point(6, 218);
             add_entry_button.Name = "add_entry_button";
-            add_entry_button.Size = new Size(137, 23);
+            add_entry_button.Size = new Size(105, 23);
             add_entry_button.TabIndex = 6;
             add_entry_button.Text = "Add Entry";
             add_entry_button.UseVisualStyleBackColor = true;
@@ -159,9 +166,9 @@
             // 
             // reset_session_button
             // 
-            reset_session_button.Location = new Point(149, 218);
+            reset_session_button.Location = new Point(6, 247);
             reset_session_button.Name = "reset_session_button";
-            reset_session_button.Size = new Size(132, 23);
+            reset_session_button.Size = new Size(105, 23);
             reset_session_button.TabIndex = 7;
             reset_session_button.Text = "Reset Session";
             reset_session_button.UseVisualStyleBackColor = true;
@@ -169,7 +176,7 @@
             // 
             // save_button
             // 
-            save_button.Location = new Point(287, 275);
+            save_button.Location = new Point(408, 275);
             save_button.Name = "save_button";
             save_button.Size = new Size(123, 23);
             save_button.TabIndex = 9;
@@ -189,11 +196,17 @@
             tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(429, 335);
+            tabControl1.Size = new Size(548, 335);
             tabControl1.TabIndex = 10;
             // 
             // session_page
             // 
+            session_page.Controls.Add(label15);
+            session_page.Controls.Add(label14);
+            session_page.Controls.Add(label13);
+            session_page.Controls.Add(label12);
+            session_page.Controls.Add(role_combobox);
+            session_page.Controls.Add(label11);
             session_page.Controls.Add(current_record_label);
             session_page.Controls.Add(save_statprofile_combobox);
             session_page.Controls.Add(session_date_picker);
@@ -212,15 +225,50 @@
             session_page.Location = new Point(4, 24);
             session_page.Name = "session_page";
             session_page.Padding = new Padding(3);
-            session_page.Size = new Size(421, 307);
+            session_page.Size = new Size(540, 307);
             session_page.TabIndex = 0;
             session_page.Text = "Session";
             session_page.UseVisualStyleBackColor = true;
             // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(117, 250);
+            label13.Name = "label13";
+            label13.Size = new Size(86, 15);
+            label13.TabIndex = 20;
+            label13.Text = "Session record:";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(6, 279);
+            label12.Name = "label12";
+            label12.Size = new Size(75, 15);
+            label12.TabIndex = 19;
+            label12.Text = "Session date:";
+            // 
+            // role_combobox
+            // 
+            role_combobox.FormattingEnabled = true;
+            role_combobox.Location = new Point(166, 26);
+            role_combobox.Name = "role_combobox";
+            role_combobox.Size = new Size(122, 23);
+            role_combobox.TabIndex = 18;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(166, 3);
+            label11.Name = "label11";
+            label11.Size = new Size(33, 15);
+            label11.TabIndex = 17;
+            label11.Text = "Role:";
+            // 
             // current_record_label
             // 
             current_record_label.AutoSize = true;
-            current_record_label.Location = new Point(176, 251);
+            current_record_label.Location = new Point(209, 250);
             current_record_label.Name = "current_record_label";
             current_record_label.Size = new Size(76, 15);
             current_record_label.TabIndex = 16;
@@ -229,31 +277,31 @@
             // save_statprofile_combobox
             // 
             save_statprofile_combobox.FormattingEnabled = true;
-            save_statprofile_combobox.Location = new Point(287, 247);
+            save_statprofile_combobox.Location = new Point(408, 247);
             save_statprofile_combobox.Name = "save_statprofile_combobox";
             save_statprofile_combobox.Size = new Size(123, 23);
             save_statprofile_combobox.TabIndex = 15;
             // 
             // session_date_picker
             // 
-            session_date_picker.Location = new Point(6, 275);
+            session_date_picker.Location = new Point(87, 275);
             session_date_picker.Name = "session_date_picker";
-            session_date_picker.Size = new Size(275, 23);
+            session_date_picker.Size = new Size(312, 23);
             session_date_picker.TabIndex = 14;
             // 
             // save_profile_combobox
             // 
             save_profile_combobox.FormattingEnabled = true;
-            save_profile_combobox.Location = new Point(287, 218);
+            save_profile_combobox.Location = new Point(408, 218);
             save_profile_combobox.Name = "save_profile_combobox";
             save_profile_combobox.Size = new Size(123, 23);
             save_profile_combobox.TabIndex = 12;
             // 
             // remove_sel_entry_button
             // 
-            remove_sel_entry_button.Location = new Point(3, 247);
+            remove_sel_entry_button.Location = new Point(117, 218);
             remove_sel_entry_button.Name = "remove_sel_entry_button";
-            remove_sel_entry_button.Size = new Size(137, 23);
+            remove_sel_entry_button.Size = new Size(171, 23);
             remove_sel_entry_button.TabIndex = 11;
             remove_sel_entry_button.Text = "Remove Selected Entry";
             remove_sel_entry_button.UseVisualStyleBackColor = true;
@@ -262,9 +310,10 @@
             // session_entries_listbox
             // 
             session_entries_listbox.FormattingEnabled = true;
+            session_entries_listbox.HorizontalScrollbar = true;
             session_entries_listbox.Location = new Point(6, 55);
             session_entries_listbox.Name = "session_entries_listbox";
-            session_entries_listbox.Size = new Size(275, 154);
+            session_entries_listbox.Size = new Size(393, 154);
             session_entries_listbox.TabIndex = 10;
             // 
             // maps_page
@@ -279,7 +328,7 @@
             maps_page.Location = new Point(4, 24);
             maps_page.Name = "maps_page";
             maps_page.Padding = new Padding(3);
-            maps_page.Size = new Size(421, 307);
+            maps_page.Size = new Size(540, 307);
             maps_page.TabIndex = 1;
             maps_page.Text = "Maps";
             maps_page.UseVisualStyleBackColor = true;
@@ -354,7 +403,7 @@
             modes_page.Controls.Add(modelist_box);
             modes_page.Location = new Point(4, 24);
             modes_page.Name = "modes_page";
-            modes_page.Size = new Size(421, 307);
+            modes_page.Size = new Size(540, 307);
             modes_page.TabIndex = 2;
             modes_page.Text = "Modes";
             modes_page.UseVisualStyleBackColor = true;
@@ -412,7 +461,7 @@
             outcomes_page.Controls.Add(outcomes_listbox);
             outcomes_page.Location = new Point(4, 24);
             outcomes_page.Name = "outcomes_page";
-            outcomes_page.Size = new Size(421, 307);
+            outcomes_page.Size = new Size(540, 307);
             outcomes_page.TabIndex = 4;
             outcomes_page.Text = "Outcomes";
             outcomes_page.UseVisualStyleBackColor = true;
@@ -470,7 +519,7 @@
             notes_page.Controls.Add(notes_listbox);
             notes_page.Location = new Point(4, 24);
             notes_page.Name = "notes_page";
-            notes_page.Size = new Size(421, 307);
+            notes_page.Size = new Size(540, 307);
             notes_page.TabIndex = 5;
             notes_page.Text = "Notes";
             notes_page.UseVisualStyleBackColor = true;
@@ -514,6 +563,7 @@
             // notes_listbox
             // 
             notes_listbox.FormattingEnabled = true;
+            notes_listbox.HorizontalScrollbar = true;
             notes_listbox.Location = new Point(8, 6);
             notes_listbox.Name = "notes_listbox";
             notes_listbox.Size = new Size(220, 289);
@@ -528,7 +578,7 @@
             profiles_page.Controls.Add(profiles_listbox);
             profiles_page.Location = new Point(4, 24);
             profiles_page.Name = "profiles_page";
-            profiles_page.Size = new Size(421, 307);
+            profiles_page.Size = new Size(540, 307);
             profiles_page.TabIndex = 3;
             profiles_page.Text = "Profiles";
             profiles_page.UseVisualStyleBackColor = true;
@@ -589,7 +639,7 @@
             stats_page.Controls.Add(statprofiles_checkedlistbox);
             stats_page.Location = new Point(4, 24);
             stats_page.Name = "stats_page";
-            stats_page.Size = new Size(421, 307);
+            stats_page.Size = new Size(540, 307);
             stats_page.TabIndex = 6;
             stats_page.Text = "Stat Profiles";
             stats_page.UseVisualStyleBackColor = true;
@@ -668,17 +718,35 @@
             statprofiles_checkedlistbox.Size = new Size(220, 292);
             statprofiles_checkedlistbox.TabIndex = 0;
             // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(355, 221);
+            label14.Name = "label14";
+            label14.Size = new Size(44, 15);
+            label14.TabIndex = 21;
+            label14.Text = "Profile:";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(335, 250);
+            label15.Name = "label15";
+            label15.Size = new Size(67, 15);
+            label15.TabIndex = 22;
+            label15.Text = "Stat profile:";
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(434, 338);
+            ClientSize = new Size(551, 338);
             Controls.Add(tabControl1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             Name = "Main";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Overwatch Map Statistics 3";
+            Text = "Overwatch Map Statistics v3.0";
             Load += Main_Load;
             tabControl1.ResumeLayout(false);
             session_page.ResumeLayout(false);
@@ -760,5 +828,11 @@
         private Button check_all_statprofiles_button;
         private Button uncheck_all_statprofiles_button;
         private Label current_record_label;
+        private Label label11;
+        private ComboBox role_combobox;
+        private Label label12;
+        private Label label13;
+        private Label label15;
+        private Label label14;
     }
 }
