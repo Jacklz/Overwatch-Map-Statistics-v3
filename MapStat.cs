@@ -1,46 +1,17 @@
 ﻿namespace Overwatch_Map_Statistics_v3
 {
-    internal class MapStat : Map
+    internal class MapStat : GenericStat
     {
-        public int wins;
-        public int draws;
-        public int losses;
-        public int total;
-        public double winrate;
+        public readonly Map map;
 
-        public MapStat(string mapname, string mode) : base(mapname, mode)
+        public MapStat(Map map)
         {
+            this.map = map;
         }
 
-        public void AddWin(int wins)
+        public MapStat(string name, string mode)
         {
-            this.wins += wins;
-            total += wins;
-            CalculateWinrate();
-        }
-
-        public void AddDraw(int draws)
-        {
-            this.draws += draws;
-            total += draws;
-        }
-
-        public void AddLoss(int loss)
-        {
-            this.losses += loss;
-            total += loss;
-            CalculateWinrate();
-        }
-
-        private void CalculateWinrate()
-        {
-            winrate = Math.Round(((double)wins / (double)(wins + losses)) * 100, 2);
-        }
-
-        public double GetWinrate()
-        {
-            CalculateWinrate();
-            return winrate;
+            map = new(name, mode);
         }
     }
 }

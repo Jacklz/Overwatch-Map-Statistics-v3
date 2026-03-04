@@ -40,11 +40,27 @@
             wins_column = new DataGridViewTextBoxColumn();
             loss_column = new DataGridViewTextBoxColumn();
             draw_column = new DataGridViewTextBoxColumn();
+            misc_column = new DataGridViewButtonColumn();
             totals_column = new DataGridViewTextBoxColumn();
             winrate_column = new DataGridViewTextBoxColumn();
             tabControl1 = new TabControl();
             map_stats_page = new TabPage();
             map_totals_page = new TabPage();
+            mode_stats_grid = new DataGridView();
+            map_type_column = new DataGridViewTextBoxColumn();
+            mode_wins_column = new DataGridViewTextBoxColumn();
+            mode_losses_column = new DataGridViewTextBoxColumn();
+            mode_draws_column = new DataGridViewTextBoxColumn();
+            mode_misc_column = new DataGridViewTextBoxColumn();
+            mode_total = new DataGridViewTextBoxColumn();
+            mode_winrate = new DataGridViewTextBoxColumn();
+            totals_grid = new DataGridView();
+            total_wins_column = new DataGridViewTextBoxColumn();
+            total_losses_column = new DataGridViewTextBoxColumn();
+            total_draws_column = new DataGridViewTextBoxColumn();
+            misc_outcomes_column = new DataGridViewTextBoxColumn();
+            total_games_column = new DataGridViewTextBoxColumn();
+            winrate_totals_column = new DataGridViewTextBoxColumn();
             day_stats_page = new TabPage();
             data_entries_page = new TabPage();
             data_selection_page = new TabPage();
@@ -62,10 +78,23 @@
             role_checkedlistbox = new CheckedListBox();
             label3 = new Label();
             profile_checkedlistbox = new CheckedListBox();
+            day_stats_grid = new DataGridView();
+            day_column = new DataGridViewTextBoxColumn();
+            day_wins = new DataGridViewTextBoxColumn();
+            day_losses = new DataGridViewTextBoxColumn();
+            day_draws = new DataGridViewTextBoxColumn();
+            day_misc = new DataGridViewTextBoxColumn();
+            day_totals = new DataGridViewTextBoxColumn();
+            day_winrate = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)map_stats_grid).BeginInit();
             tabControl1.SuspendLayout();
             map_stats_page.SuspendLayout();
+            map_totals_page.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)mode_stats_grid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)totals_grid).BeginInit();
+            day_stats_page.SuspendLayout();
             data_selection_page.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)day_stats_grid).BeginInit();
             SuspendLayout();
             // 
             // map_stats_grid
@@ -86,7 +115,7 @@
             dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
             map_stats_grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             map_stats_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            map_stats_grid.Columns.AddRange(new DataGridViewColumn[] { map_column, mode_column, wins_column, loss_column, draw_column, totals_column, winrate_column });
+            map_stats_grid.Columns.AddRange(new DataGridViewColumn[] { map_column, mode_column, wins_column, loss_column, draw_column, misc_column, totals_column, winrate_column });
             map_stats_grid.Location = new Point(6, 6);
             map_stats_grid.Name = "map_stats_grid";
             map_stats_grid.ReadOnly = true;
@@ -130,6 +159,12 @@
             draw_column.HeaderText = "Draws";
             draw_column.Name = "draw_column";
             draw_column.ReadOnly = true;
+            // 
+            // misc_column
+            // 
+            misc_column.HeaderText = "Misc";
+            misc_column.Name = "misc_column";
+            misc_column.ReadOnly = true;
             // 
             // totals_column
             // 
@@ -175,6 +210,8 @@
             // 
             // map_totals_page
             // 
+            map_totals_page.Controls.Add(mode_stats_grid);
+            map_totals_page.Controls.Add(totals_grid);
             map_totals_page.Location = new Point(4, 24);
             map_totals_page.Name = "map_totals_page";
             map_totals_page.Padding = new Padding(3);
@@ -183,8 +220,94 @@
             map_totals_page.Text = "Map Totals";
             map_totals_page.UseVisualStyleBackColor = true;
             // 
+            // mode_stats_grid
+            // 
+            mode_stats_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            mode_stats_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            mode_stats_grid.Columns.AddRange(new DataGridViewColumn[] { map_type_column, mode_wins_column, mode_losses_column, mode_draws_column, mode_misc_column, mode_total, mode_winrate });
+            mode_stats_grid.Location = new Point(6, 232);
+            mode_stats_grid.Name = "mode_stats_grid";
+            mode_stats_grid.Size = new Size(700, 241);
+            mode_stats_grid.TabIndex = 1;
+            // 
+            // map_type_column
+            // 
+            map_type_column.HeaderText = "Map Type";
+            map_type_column.Name = "map_type_column";
+            // 
+            // mode_wins_column
+            // 
+            mode_wins_column.HeaderText = "Wins";
+            mode_wins_column.Name = "mode_wins_column";
+            // 
+            // mode_losses_column
+            // 
+            mode_losses_column.HeaderText = "Losses";
+            mode_losses_column.Name = "mode_losses_column";
+            // 
+            // mode_draws_column
+            // 
+            mode_draws_column.HeaderText = "Draws";
+            mode_draws_column.Name = "mode_draws_column";
+            // 
+            // mode_misc_column
+            // 
+            mode_misc_column.HeaderText = "Misc";
+            mode_misc_column.Name = "mode_misc_column";
+            // 
+            // mode_total
+            // 
+            mode_total.HeaderText = "Total";
+            mode_total.Name = "mode_total";
+            // 
+            // mode_winrate
+            // 
+            mode_winrate.HeaderText = "Win %";
+            mode_winrate.Name = "mode_winrate";
+            // 
+            // totals_grid
+            // 
+            totals_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            totals_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            totals_grid.Columns.AddRange(new DataGridViewColumn[] { total_wins_column, total_losses_column, total_draws_column, misc_outcomes_column, total_games_column, winrate_totals_column });
+            totals_grid.Location = new Point(6, 40);
+            totals_grid.Name = "totals_grid";
+            totals_grid.Size = new Size(700, 89);
+            totals_grid.TabIndex = 0;
+            // 
+            // total_wins_column
+            // 
+            total_wins_column.HeaderText = "Total Wins";
+            total_wins_column.Name = "total_wins_column";
+            // 
+            // total_losses_column
+            // 
+            total_losses_column.HeaderText = "Total Losses";
+            total_losses_column.Name = "total_losses_column";
+            // 
+            // total_draws_column
+            // 
+            total_draws_column.HeaderText = "Total Draws";
+            total_draws_column.Name = "total_draws_column";
+            // 
+            // misc_outcomes_column
+            // 
+            misc_outcomes_column.HeaderText = "Misc Outcomes";
+            misc_outcomes_column.Name = "misc_outcomes_column";
+            // 
+            // total_games_column
+            // 
+            total_games_column.HeaderText = "Total Games";
+            total_games_column.Name = "total_games_column";
+            // 
+            // winrate_totals_column
+            // 
+            winrate_totals_column.HeaderText = "Win %";
+            winrate_totals_column.Name = "winrate_totals_column";
+            // 
             // day_stats_page
             // 
+            day_stats_page.Controls.Add(day_stats_grid);
             day_stats_page.Location = new Point(4, 24);
             day_stats_page.Name = "day_stats_page";
             day_stats_page.Size = new Size(713, 479);
@@ -232,6 +355,7 @@
             reset_dates_button.TabIndex = 14;
             reset_dates_button.Text = "Reset dates";
             reset_dates_button.UseVisualStyleBackColor = true;
+            reset_dates_button.Click += reset_dates_button_Click;
             // 
             // uncheck_all_roles_button
             // 
@@ -241,6 +365,7 @@
             uncheck_all_roles_button.TabIndex = 13;
             uncheck_all_roles_button.Text = "Uncheck all";
             uncheck_all_roles_button.UseVisualStyleBackColor = true;
+            uncheck_all_roles_button.Click += uncheck_all_roles_button_Click;
             // 
             // check_all_roles_button
             // 
@@ -250,6 +375,7 @@
             check_all_roles_button.TabIndex = 12;
             check_all_roles_button.Text = "Check all";
             check_all_roles_button.UseVisualStyleBackColor = true;
+            check_all_roles_button.Click += check_all_roles_button_Click;
             // 
             // export_stats_button
             // 
@@ -259,6 +385,7 @@
             export_stats_button.TabIndex = 11;
             export_stats_button.Text = "Export stats to xlsx";
             export_stats_button.UseVisualStyleBackColor = true;
+            export_stats_button.Click += export_stats_button_Click;
             // 
             // uncheck_all_profiles_button
             // 
@@ -268,6 +395,7 @@
             uncheck_all_profiles_button.TabIndex = 10;
             uncheck_all_profiles_button.Text = "Uncheck all";
             uncheck_all_profiles_button.UseVisualStyleBackColor = true;
+            uncheck_all_profiles_button.Click += uncheck_all_profiles_button_Click;
             // 
             // check_all_profiles_button
             // 
@@ -277,6 +405,7 @@
             check_all_profiles_button.TabIndex = 9;
             check_all_profiles_button.Text = "Check all";
             check_all_profiles_button.UseVisualStyleBackColor = true;
+            check_all_profiles_button.Click += check_all_profiles_button_Click;
             // 
             // end_date
             // 
@@ -326,6 +455,7 @@
             role_checkedlistbox.Name = "role_checkedlistbox";
             role_checkedlistbox.Size = new Size(211, 76);
             role_checkedlistbox.TabIndex = 2;
+            role_checkedlistbox.ItemCheck += role_checkedlistbox_ItemCheck;
             // 
             // label3
             // 
@@ -343,6 +473,52 @@
             profile_checkedlistbox.Name = "profile_checkedlistbox";
             profile_checkedlistbox.Size = new Size(211, 202);
             profile_checkedlistbox.TabIndex = 0;
+            profile_checkedlistbox.ItemCheck += profile_checkedlistbox_ItemCheck;
+            // 
+            // day_stats_grid
+            // 
+            day_stats_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            day_stats_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            day_stats_grid.Columns.AddRange(new DataGridViewColumn[] { day_column, day_wins, day_losses, day_draws, day_misc, day_totals, day_winrate });
+            day_stats_grid.Location = new Point(9, 12);
+            day_stats_grid.Name = "day_stats_grid";
+            day_stats_grid.Size = new Size(697, 242);
+            day_stats_grid.TabIndex = 0;
+            // 
+            // day_column
+            // 
+            day_column.HeaderText = "Day";
+            day_column.Name = "day_column";
+            // 
+            // day_wins
+            // 
+            day_wins.HeaderText = "Wins";
+            day_wins.Name = "day_wins";
+            // 
+            // day_losses
+            // 
+            day_losses.HeaderText = "Losses";
+            day_losses.Name = "day_losses";
+            // 
+            // day_draws
+            // 
+            day_draws.HeaderText = "Draws";
+            day_draws.Name = "day_draws";
+            // 
+            // day_misc
+            // 
+            day_misc.HeaderText = "Misc";
+            day_misc.Name = "day_misc";
+            // 
+            // day_totals
+            // 
+            day_totals.HeaderText = "Total";
+            day_totals.Name = "day_totals";
+            // 
+            // day_winrate
+            // 
+            day_winrate.HeaderText = "Win %";
+            day_winrate.Name = "day_winrate";
             // 
             // Stats_Viewer
             // 
@@ -364,8 +540,13 @@
             ((System.ComponentModel.ISupportInitialize)map_stats_grid).EndInit();
             tabControl1.ResumeLayout(false);
             map_stats_page.ResumeLayout(false);
+            map_totals_page.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)mode_stats_grid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)totals_grid).EndInit();
+            day_stats_page.ResumeLayout(false);
             data_selection_page.ResumeLayout(false);
             data_selection_page.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)day_stats_grid).EndInit();
             ResumeLayout(false);
 
         }
@@ -373,13 +554,6 @@
         #endregion
 
         private DataGridView map_stats_grid;
-        private DataGridViewTextBoxColumn map_column;
-        private DataGridViewTextBoxColumn mode_column;
-        private DataGridViewTextBoxColumn wins_column;
-        private DataGridViewTextBoxColumn loss_column;
-        private DataGridViewTextBoxColumn draw_column;
-        private DataGridViewTextBoxColumn totals_column;
-        private DataGridViewTextBoxColumn winrate_column;
         private TabControl tabControl1;
         private TabPage map_stats_page;
         private TabPage map_totals_page;
@@ -400,5 +574,36 @@
         private Button uncheck_all_roles_button;
         private Button check_all_roles_button;
         private Button reset_dates_button;
+        private DataGridViewTextBoxColumn map_column;
+        private DataGridViewTextBoxColumn mode_column;
+        private DataGridViewTextBoxColumn wins_column;
+        private DataGridViewTextBoxColumn loss_column;
+        private DataGridViewTextBoxColumn draw_column;
+        private DataGridViewButtonColumn misc_column;
+        private DataGridViewTextBoxColumn totals_column;
+        private DataGridViewTextBoxColumn winrate_column;
+        private DataGridView mode_stats_grid;
+        private DataGridView totals_grid;
+        private DataGridViewTextBoxColumn map_type_column;
+        private DataGridViewTextBoxColumn mode_wins_column;
+        private DataGridViewTextBoxColumn mode_losses_column;
+        private DataGridViewTextBoxColumn mode_draws_column;
+        private DataGridViewTextBoxColumn mode_misc_column;
+        private DataGridViewTextBoxColumn mode_total;
+        private DataGridViewTextBoxColumn mode_winrate;
+        private DataGridViewTextBoxColumn total_wins_column;
+        private DataGridViewTextBoxColumn total_losses_column;
+        private DataGridViewTextBoxColumn total_draws_column;
+        private DataGridViewTextBoxColumn misc_outcomes_column;
+        private DataGridViewTextBoxColumn total_games_column;
+        private DataGridViewTextBoxColumn winrate_totals_column;
+        private DataGridView day_stats_grid;
+        private DataGridViewTextBoxColumn day_column;
+        private DataGridViewTextBoxColumn day_wins;
+        private DataGridViewTextBoxColumn day_losses;
+        private DataGridViewTextBoxColumn day_draws;
+        private DataGridViewTextBoxColumn day_misc;
+        private DataGridViewTextBoxColumn day_totals;
+        private DataGridViewTextBoxColumn day_winrate;
     }
 }

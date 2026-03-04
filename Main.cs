@@ -609,15 +609,10 @@ namespace Overwatch_Map_Statistics_v3
                 session.AddMapResult(mapdata);
             }
             string serializeddata = JsonConvert.SerializeObject(session);
-            //Debug.WriteLine(serializeddata);
-            //MessageBox.Show(serializeddata);
-            //return;
-            bool newline = false;
-            if (File.Exists("records.json")) newline = true;
-            StreamWriter writer = new("records.json", true);
-            if (newline) writer.Write("\n");
-            writer.Write(serializeddata);
-            writer.Close();
+            using (StreamWriter writer = new("records.json", true))
+            {
+                writer.WriteLine(serializeddata);
+            }
             var result = MessageBox.Show("Successfully saved stats. Close program?", "", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes) Close();
         }
