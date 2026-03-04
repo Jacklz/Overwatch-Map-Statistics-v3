@@ -27,13 +27,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
             map_stats_grid = new DataGridView();
             map_column = new DataGridViewTextBoxColumn();
             mode_column = new DataGridViewTextBoxColumn();
@@ -51,7 +51,7 @@
             reset_dates_button = new Button();
             uncheck_all_roles_button = new Button();
             check_all_roles_button = new Button();
-            button1 = new Button();
+            export_stats_button = new Button();
             uncheck_all_profiles_button = new Button();
             check_all_profiles_button = new Button();
             end_date = new DateTimePicker();
@@ -74,17 +74,17 @@
             map_stats_grid.AllowUserToDeleteRows = false;
             map_stats_grid.AllowUserToResizeColumns = false;
             map_stats_grid.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = Color.LightGray;
-            map_stats_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle8.BackColor = Color.LightGray;
+            map_stats_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle8;
             map_stats_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            map_stats_grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = SystemColors.Control;
+            dataGridViewCellStyle9.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+            map_stats_grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             map_stats_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             map_stats_grid.Columns.AddRange(new DataGridViewColumn[] { map_column, mode_column, wins_column, loss_column, draw_column, totals_column, winrate_column });
             map_stats_grid.Location = new Point(6, 6);
@@ -109,42 +109,42 @@
             // 
             // wins_column
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            wins_column.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            wins_column.DefaultCellStyle = dataGridViewCellStyle10;
             wins_column.HeaderText = "Wins";
             wins_column.Name = "wins_column";
             wins_column.ReadOnly = true;
             // 
             // loss_column
             // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            loss_column.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            loss_column.DefaultCellStyle = dataGridViewCellStyle11;
             loss_column.HeaderText = "Losses";
             loss_column.Name = "loss_column";
             loss_column.ReadOnly = true;
             // 
             // draw_column
             // 
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            draw_column.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            draw_column.DefaultCellStyle = dataGridViewCellStyle12;
             draw_column.HeaderText = "Draws";
             draw_column.Name = "draw_column";
             draw_column.ReadOnly = true;
             // 
             // totals_column
             // 
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            totals_column.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            totals_column.DefaultCellStyle = dataGridViewCellStyle13;
             totals_column.HeaderText = "Total";
             totals_column.Name = "totals_column";
             totals_column.ReadOnly = true;
             // 
             // winrate_column
             // 
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.Format = "N2";
-            dataGridViewCellStyle7.NullValue = null;
-            winrate_column.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.Format = "N2";
+            dataGridViewCellStyle14.NullValue = null;
+            winrate_column.DefaultCellStyle = dataGridViewCellStyle14;
             winrate_column.HeaderText = "Win %";
             winrate_column.Name = "winrate_column";
             winrate_column.ReadOnly = true;
@@ -206,7 +206,7 @@
             data_selection_page.Controls.Add(reset_dates_button);
             data_selection_page.Controls.Add(uncheck_all_roles_button);
             data_selection_page.Controls.Add(check_all_roles_button);
-            data_selection_page.Controls.Add(button1);
+            data_selection_page.Controls.Add(export_stats_button);
             data_selection_page.Controls.Add(uncheck_all_profiles_button);
             data_selection_page.Controls.Add(check_all_profiles_button);
             data_selection_page.Controls.Add(end_date);
@@ -251,14 +251,14 @@
             check_all_roles_button.Text = "Check all";
             check_all_roles_button.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // export_stats_button
             // 
-            button1.Location = new Point(9, 451);
-            button1.Name = "button1";
-            button1.Size = new Size(211, 23);
-            button1.TabIndex = 11;
-            button1.Text = "Export stats to xlsx";
-            button1.UseVisualStyleBackColor = true;
+            export_stats_button.Location = new Point(9, 451);
+            export_stats_button.Name = "export_stats_button";
+            export_stats_button.Size = new Size(211, 23);
+            export_stats_button.TabIndex = 11;
+            export_stats_button.Text = "Export stats to xlsx";
+            export_stats_button.UseVisualStyleBackColor = true;
             // 
             // uncheck_all_profiles_button
             // 
@@ -390,7 +390,7 @@
         private CheckedListBox profile_checkedlistbox;
         private Label label4;
         private CheckedListBox role_checkedlistbox;
-        private Button button1;
+        private Button export_stats_button;
         private Button uncheck_all_profiles_button;
         private Button check_all_profiles_button;
         private DateTimePicker end_date;

@@ -10,13 +10,13 @@
             InitializeComponent();
             stats.AddRange(entries);
         }
-       
+
         private void Stats_Viewer_Load(object sender, EventArgs e)
         {
             LoadRoles();
             LoadProfiles();
             SetDates();
-            LoadStats();            
+            LoadStats();
         }
 
         private void LoadRoles()
@@ -28,6 +28,10 @@
         private void LoadProfiles()
         {
             Main.profiles.ForEach(profile => { profile_checkedlistbox.Items.Add(profile); });
+            for (int a = 0; a < profile_checkedlistbox.Items.Count; a++)
+            {
+                profile_checkedlistbox.SetItemChecked(a, true);
+            }
         }
 
         private void SetDates()
@@ -37,12 +41,27 @@
             end_date.Value = list[^1].date;
         }
 
+        private List<string> GetSelectedProfiles()
+        {
+            return [];
+        }
+
+        private List<string> GetSelectedRoles()
+        {
+            return [];
+        }
+
         private void LoadStats()
         {
+            var activeprofiles = GetSelectedProfiles();
+            var activeroles = GetSelectedRoles();
             foreach (var entry in stats)
             {
+                if (!activeprofiles.Contains(entry.profilename)) continue;
+                if (entry.date > end_date.Value || entry.date < start_date.Value) continue;
                 foreach (var data in entry.mapdata)
                 {
+                    if (!activeroles.Contains(data.role)) continue;
                     if (!mapstats.ContainsKey(data.mapname)) mapstats[data.mapname] = new(data.mapname, data.mode);
                     switch (data.outcome)
                     {
@@ -57,6 +76,11 @@
             {
                 map_stats_grid.Rows.Add(entry.mapname, entry.mode, entry.wins, entry.losses, entry.draws, entry.total, entry.winrate);
             }
+        }
+
+        private void ResetStatGrids()
+        {
+            map_stats_grid.Rows.Clear();
         }
     }
 }
