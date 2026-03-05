@@ -12,6 +12,7 @@ namespace Overwatch_Map_Statistics_v3
         public static List<string> statprofiles = [];
         public static Dictionary<string, string> maptomode = [];
         public static List<string> roles = ["Open Queue", "DPS", "Tank", "Support"];
+        public static bool showconfirmationdialogs = true;
 
         public Main()
         {
@@ -20,6 +21,7 @@ namespace Overwatch_Map_Statistics_v3
 
         private void Main_Load(object sender, EventArgs e)
         {
+            LoadSettings();
             session_date_picker.Value = DateTime.Today;
             CheckAndCreateFiles();
         }
@@ -144,7 +146,7 @@ namespace Overwatch_Map_Statistics_v3
                     "Friendly Cheater",
                     "Enemy DC",
                     "Enemy Cheater",
-                    "One Sided",
+                    "Lopsided",
                 ];
                 File.WriteAllLines("notes.txt", notes);
                 allnotes.AddRange(notes);
@@ -262,8 +264,6 @@ namespace Overwatch_Map_Statistics_v3
                 }
                 string entry = $"{mapname} - {role} - {outcome}";
                 if (notes.Count > 0) entry += $" - {string.Join(" | ", notes)}";
-                //if (notes.Count > 0) entry = $"{mapname} - {role} - {outcome} - {string.Join(" | ", notes)}";
-                //else entry = $"{mapname} - {role} - {outcome}";
                 session_entries_listbox.Items.Add(entry);
                 ResetCurrentEntry();
                 UpdateRecordLabel();
@@ -274,16 +274,28 @@ namespace Overwatch_Map_Statistics_v3
             }
         }
 
+        private bool RequestConfirmation(string message, string title = "")
+        {
+            if (showconfirmationdialogs)
+            {
+                var result = MessageBox.Show(message, title, MessageBoxButtons.YesNo);
+                if (result == DialogResult.No) return false;
+            }
+            return true;
+        }
+
         private void remove_sel_entry_button_Click(object sender, EventArgs e)
         {
             int index = session_entries_listbox.SelectedIndex;
             if (index == -1) return;
+            if (!RequestConfirmation("Are you sure you want to delete the selected entry?")) return;
             session_entries_listbox.Items.RemoveAt(index);
             UpdateRecordLabel();
         }
 
         private void reset_entry_button_Click(object sender, EventArgs e)
         {
+            if (!RequestConfirmation("Are you sure you want to reset the session?")) return;
             session_entries_listbox.Items.Clear();
             session_date_picker.Value = DateTime.Today;
             UpdateRecordLabel();
@@ -319,6 +331,7 @@ namespace Overwatch_Map_Statistics_v3
         {
             int index = modelist_box.SelectedIndex;
             if (index == -1) return;
+            if (!RequestConfirmation("Are you sure you want to delete the selected mode?")) return;
             string? mode = modelist_box.Items[index]?.ToString();
             modelist_box.Items.RemoveAt(index);
             allmodes.RemoveAll(entry => entry == mode);
@@ -347,6 +360,7 @@ namespace Overwatch_Map_Statistics_v3
         {
             int index = maplist_box.SelectedIndex;
             if (index == -1) return;
+            if (!RequestConfirmation("Are you sure you want to delete the selected map?")) return;
             string? mapname = maplist_box.Items[index].ToString();
             allmaps.RemoveAll(entry => entry.fullname == mapname);
             UpdateMapsDisplayLists();
@@ -372,6 +386,7 @@ namespace Overwatch_Map_Statistics_v3
         {
             int index = outcomes_listbox.SelectedIndex;
             if (index == -1) return;
+            if (!RequestConfirmation("Are you sure you want to delete the selected outcome?")) return;
             string? name = outcomes_listbox.Items[index]?.ToString();
             alloutcomes.RemoveAll(entry => entry == name);
             UpdateOutcomesDisplayLists();
@@ -397,6 +412,7 @@ namespace Overwatch_Map_Statistics_v3
         {
             int index = notes_listbox.SelectedIndex;
             if (index == -1) return;
+            if (!RequestConfirmation("Are you sure you want to delete the selected note?")) return;
             string? name = notes_listbox.Items[index]?.ToString();
             allnotes.RemoveAll(entry => entry == name);
             UpdateNotesDisplayLists();
@@ -616,12 +632,13 @@ namespace Overwatch_Map_Statistics_v3
             }
             string serializeddata = JsonConvert.SerializeObject(session);
             WriteSessionToFile(serializeddata);
-            //using (StreamWriter writer = new("records.json", true))
-            //{
-            //    writer.WriteLine(serializeddata);
-            //}
             var result = MessageBox.Show("Successfully saved stats. Close program?", "", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes) Close();
+            if (result == DialogResult.Yes) CloseProgram();
+        }
+
+        private void CloseProgram()
+        {
+            Close();
         }
 
         public static void WriteSessionToFile(params string[] serializeddata)
@@ -651,8 +668,33 @@ namespace Overwatch_Map_Statistics_v3
             }
             WriteSessionToFile([.. serialized]);
             MessageBox.Show("Converted legacy stats");
-            //Stats_Viewer stats_Viewer = new(entries);
-            //stats_Viewer.Show();
+        }
+
+        private void confirm_dialogs_checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            showconfirmationdialogs = confirm_dialogs_checkbox.Checked;
+        }
+
+        private void SaveSettings()
+        {
+            Dictionary<string, bool> settings = [];
+            settings.Add("dialogs", showconfirmationdialogs);
+            File.WriteAllText("settings.json", JsonConvert.SerializeObject(settings));
+        }
+
+        private void LoadSettings()
+        {
+            if (!File.Exists("settings.json")) return;
+            string file = File.ReadAllText("settings.json");
+            Dictionary<string, bool>? settings = JsonConvert.DeserializeObject<Dictionary<string, bool>>(file);
+            if (settings == null) return;
+            showconfirmationdialogs = settings["dialogs"];
+            confirm_dialogs_checkbox.Checked = showconfirmationdialogs;
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveSettings();
         }
     }
 }

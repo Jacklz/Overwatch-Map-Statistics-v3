@@ -93,6 +93,8 @@
             label10 = new Label();
             statprofile_textbox = new TextBox();
             statprofiles_checkedlistbox = new CheckedListBox();
+            settings_page = new TabPage();
+            confirm_dialogs_checkbox = new CheckBox();
             tabControl1.SuspendLayout();
             session_page.SuspendLayout();
             maps_page.SuspendLayout();
@@ -101,6 +103,7 @@
             notes_page.SuspendLayout();
             profiles_page.SuspendLayout();
             stats_page.SuspendLayout();
+            settings_page.SuspendLayout();
             SuspendLayout();
             // 
             // maplist_combobox
@@ -194,6 +197,7 @@
             tabControl1.Controls.Add(notes_page);
             tabControl1.Controls.Add(profiles_page);
             tabControl1.Controls.Add(stats_page);
+            tabControl1.Controls.Add(settings_page);
             tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -748,6 +752,29 @@
             statprofiles_checkedlistbox.Size = new Size(220, 292);
             statprofiles_checkedlistbox.TabIndex = 0;
             // 
+            // settings_page
+            // 
+            settings_page.Controls.Add(confirm_dialogs_checkbox);
+            settings_page.Location = new Point(4, 24);
+            settings_page.Name = "settings_page";
+            settings_page.Size = new Size(540, 307);
+            settings_page.TabIndex = 7;
+            settings_page.Text = "Settings";
+            settings_page.UseVisualStyleBackColor = true;
+            // 
+            // confirm_dialogs_checkbox
+            // 
+            confirm_dialogs_checkbox.AutoSize = true;
+            confirm_dialogs_checkbox.Checked = true;
+            confirm_dialogs_checkbox.CheckState = CheckState.Checked;
+            confirm_dialogs_checkbox.Location = new Point(8, 13);
+            confirm_dialogs_checkbox.Name = "confirm_dialogs_checkbox";
+            confirm_dialogs_checkbox.Size = new Size(168, 19);
+            confirm_dialogs_checkbox.TabIndex = 0;
+            confirm_dialogs_checkbox.Text = "Show confirmation dialogs";
+            confirm_dialogs_checkbox.UseVisualStyleBackColor = true;
+            confirm_dialogs_checkbox.CheckedChanged += confirm_dialogs_checkbox_CheckedChanged;
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -759,6 +786,7 @@
             Name = "Main";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Overwatch Map Statistics v3.0 By Jacklz";
+            FormClosing += Main_FormClosing;
             Load += Main_Load;
             tabControl1.ResumeLayout(false);
             session_page.ResumeLayout(false);
@@ -775,6 +803,8 @@
             profiles_page.PerformLayout();
             stats_page.ResumeLayout(false);
             stats_page.PerformLayout();
+            settings_page.ResumeLayout(false);
+            settings_page.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -845,5 +875,7 @@
         private Label label15;
         private Label label14;
         private Button view_legacy_stats;
+        private TabPage settings_page;
+        private CheckBox confirm_dialogs_checkbox;
     }
 }
