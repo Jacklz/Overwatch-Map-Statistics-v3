@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Spreadsheet;
 using Newtonsoft.Json;
 
 namespace Overwatch_Map_Statistics_v3
@@ -558,10 +559,6 @@ namespace Overwatch_Map_Statistics_v3
                 if (record == null) continue;
                 if (profiles.Contains(record.statprofilename))
                 {
-                    //foreach (var entry in record.mapdata)
-                    //{
-                    //    entry.mode = maptomode[entry.mapname];
-                    //}
                     entries.Add(record);
                 }
             }
@@ -609,12 +606,46 @@ namespace Overwatch_Map_Statistics_v3
                 session.AddMapResult(mapdata);
             }
             string serializeddata = JsonConvert.SerializeObject(session);
-            using (StreamWriter writer = new("records.json", true))
-            {
-                writer.WriteLine(serializeddata);
-            }
+            WriteSessionToFile(serializeddata);
+            //using (StreamWriter writer = new("records.json", true))
+            //{
+            //    writer.WriteLine(serializeddata);
+            //}
             var result = MessageBox.Show("Successfully saved stats. Close program?", "", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes) Close();
+        }
+
+        public static void WriteSessionToFile(params string[] serializeddata)
+        {
+            using (StreamWriter writer = new("records.json", true))
+            {
+                foreach (var entry in serializeddata)
+                {
+                    writer.WriteLine(entry);
+                }               
+            }
+        }
+
+        private void view_legacy_stats_Click(object sender, EventArgs e)
+        {
+            List<SessionRecordEntry> entries = [];
+            if (File.Exists("maprecords.json"))
+            {
+                foreach (string line in File.ReadAllLines("maprecords.json"))
+                {
+                    LegacyRecordStat? entry = JsonConvert.DeserializeObject<LegacyRecordStat>(line);
+                    if (entry != null) entries.Add(new(entry));
+                }
+            }
+            List<string> serialized = [];
+            foreach (var entry in entries)
+            {
+                serialized.Add(JsonConvert.SerializeObject(entry));
+            }
+            WriteSessionToFile([..serialized]);
+            MessageBox.Show("Converted legacy stats");
+            //Stats_Viewer stats_Viewer = new(entries);
+            //stats_Viewer.Show();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Overwatch_Map_Statistics_v3
+﻿namespace Overwatch_Map_Statistics_v3
 {
     internal class MapResult : Map
     {
@@ -15,12 +13,17 @@ namespace Overwatch_Map_Statistics_v3
             this.role = role;
         }
 
-        [JsonConstructor]
-        public MapResult(string mapname, string role, string outcome, List<string> notes) : base(mapname, Main.maptomode[mapname])
+        public MapResult Clone()
         {
-            this.outcome = outcome;
-            this.notes = notes;
-            this.role = role;
+            return new(mapname, mode, role, outcome, [.. notes]);
         }
+
+        //[JsonConstructor]
+        //public MapResult(string mapname, string role, string outcome, List<string> notes) : base(mapname, Main.maptomode[mapname])
+        //{
+        //    this.outcome = outcome;
+        //    this.notes = notes;
+        //    this.role = role;
+        //}
     }
 }

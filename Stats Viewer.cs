@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using Newtonsoft.Json;
 
 namespace Overwatch_Map_Statistics_v3
 {
@@ -13,6 +14,7 @@ namespace Overwatch_Map_Statistics_v3
         private bool allowupdate = false;
         private readonly HashSet<string> checkedprofiles = [];
         private readonly HashSet<string> checkedroles = [];
+        private readonly List<SessionRecordEntry> filteredentries = [];
 
         public Stats_Viewer(List<SessionRecordEntry> entries)
         {
@@ -31,17 +33,44 @@ namespace Overwatch_Map_Statistics_v3
 
         private void LoadRoles()
         {
-            Main.roles.ForEach(role => { role_checkedlistbox.Items.Add(role); });
+            HashSet<string> roles = [];
+            foreach (var entry in stats)
+            {
+                foreach (var element in entry.mapdata)
+                {
+                    roles.Add(element.role);
+                }
+            }
+            foreach (var entry in roles)
+            {
+                role_checkedlistbox.Items.Add(entry);
+            }
+            //Main.roles.ForEach(role => { role_checkedlistbox.Items.Add(role); });
             role_checkedlistbox.SetItemChecked(0, true);
         }
 
+        //load profiles contained within the stat profile instead of all saved profiles
+        //from profiles.txt
         private void LoadProfiles()
         {
-            Main.profiles.ForEach(profile => { profile_checkedlistbox.Items.Add(profile); });
+            HashSet<string> profiles = [];
+            foreach (var entry in stats)
+            {
+                profiles.Add(entry.profilename);
+            }
+            foreach (var entry in profiles)
+            {
+                profile_checkedlistbox.Items.Add(entry);
+            }
             for (int a = 0; a < profile_checkedlistbox.Items.Count; a++)
             {
                 profile_checkedlistbox.SetItemChecked(a, true);
             }
+            //Main.profiles.ForEach(profile => { profile_checkedlistbox.Items.Add(profile); });
+            //for (int a = 0; a < profile_checkedlistbox.Items.Count; a++)
+            //{
+            //    profile_checkedlistbox.SetItemChecked(a, true);
+            //}
         }
 
         private void SetDates()
@@ -55,10 +84,12 @@ namespace Overwatch_Map_Statistics_v3
 
         private void LoadStats()
         {
+            filteredentries.Clear();
             foreach (var entry in stats)
             {
                 if (!checkedprofiles.Contains(entry.profilename)) continue;
                 if (entry.date > end_date.Value || entry.date < start_date.Value) continue;
+                filteredentries.Add(entry);
                 foreach (var data in entry.mapdata)
                 {
                     if (!checkedroles.Contains(data.role)) continue;
@@ -105,6 +136,7 @@ namespace Overwatch_Map_Statistics_v3
             mapstats.Clear();
             modestats.Clear();
             daystats.Clear();
+            filteredentries.Clear();
             LoadStats();
         }
 
@@ -166,6 +198,9 @@ namespace Overwatch_Map_Statistics_v3
         {
             Dictionary<string, DataGridView> stats = [];
             stats.Add("Map Stats", map_stats_grid);
+            stats.Add("Totals", totals_grid);
+            stats.Add("Mode Totals", mode_stats_grid);
+            stats.Add("Day Stats", day_stats_grid);
             ExportToExcel(stats, "recordsheet.xlsx");
             MessageBox.Show("Successfully exported current state of grids to file 'recordsheet.xlsx'");
         }
@@ -195,6 +230,19 @@ namespace Overwatch_Map_Statistics_v3
                 ws.Columns().AdjustToContents();
             }
             workbook.SaveAs(filePath);
+        }
+
+        private void save_selection_Click(object sender, EventArgs e)
+        {
+            List<SessionRecordEntry> newentries = [..filteredentries.Select(entry => entry.Clone())];
+            List<string> serializeddata = [];
+            foreach (SessionRecordEntry entry in newentries)
+            {
+                entry.statprofilename = "test";
+                serializeddata.Add(JsonConvert.SerializeObject(entry));
+            }
+            Main.WriteSessionToFile([..serializeddata]);
+            MessageBox.Show("Successfully saved selected data to new stat profile");
         }
     }
 }

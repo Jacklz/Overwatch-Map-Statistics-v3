@@ -39,6 +39,8 @@
             save_button = new Button();
             tabControl1 = new TabControl();
             session_page = new TabPage();
+            label15 = new Label();
+            label14 = new Label();
             label13 = new Label();
             label12 = new Label();
             role_combobox = new ComboBox();
@@ -82,6 +84,7 @@
             label9 = new Label();
             profiles_listbox = new ListBox();
             stats_page = new TabPage();
+            view_legacy_stats = new Button();
             check_all_statprofiles_button = new Button();
             uncheck_all_statprofiles_button = new Button();
             view_stats_button = new Button();
@@ -90,8 +93,6 @@
             label10 = new Label();
             statprofile_textbox = new TextBox();
             statprofiles_checkedlistbox = new CheckedListBox();
-            label14 = new Label();
-            label15 = new Label();
             tabControl1.SuspendLayout();
             session_page.SuspendLayout();
             maps_page.SuspendLayout();
@@ -229,6 +230,24 @@
             session_page.TabIndex = 0;
             session_page.Text = "Session";
             session_page.UseVisualStyleBackColor = true;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(335, 250);
+            label15.Name = "label15";
+            label15.Size = new Size(67, 15);
+            label15.TabIndex = 22;
+            label15.Text = "Stat profile:";
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(355, 221);
+            label14.Name = "label14";
+            label14.Size = new Size(44, 15);
+            label14.TabIndex = 21;
+            label14.Text = "Profile:";
             // 
             // label13
             // 
@@ -629,6 +648,7 @@
             // 
             // stats_page
             // 
+            stats_page.Controls.Add(view_legacy_stats);
             stats_page.Controls.Add(check_all_statprofiles_button);
             stats_page.Controls.Add(uncheck_all_statprofiles_button);
             stats_page.Controls.Add(view_stats_button);
@@ -643,6 +663,16 @@
             stats_page.TabIndex = 6;
             stats_page.Text = "Stat Profiles";
             stats_page.UseVisualStyleBackColor = true;
+            // 
+            // view_legacy_stats
+            // 
+            view_legacy_stats.Location = new Point(234, 246);
+            view_legacy_stats.Name = "view_legacy_stats";
+            view_legacy_stats.Size = new Size(202, 23);
+            view_legacy_stats.TabIndex = 8;
+            view_legacy_stats.Text = "Convert Legacy Stats";
+            view_legacy_stats.UseVisualStyleBackColor = true;
+            view_legacy_stats.Click += view_legacy_stats_Click;
             // 
             // check_all_statprofiles_button
             // 
@@ -668,7 +698,7 @@
             // 
             view_stats_button.Location = new Point(234, 275);
             view_stats_button.Name = "view_stats_button";
-            view_stats_button.Size = new Size(75, 23);
+            view_stats_button.Size = new Size(88, 23);
             view_stats_button.TabIndex = 5;
             view_stats_button.Text = "View Stats";
             view_stats_button.UseVisualStyleBackColor = true;
@@ -717,24 +747,6 @@
             statprofiles_checkedlistbox.Name = "statprofiles_checkedlistbox";
             statprofiles_checkedlistbox.Size = new Size(220, 292);
             statprofiles_checkedlistbox.TabIndex = 0;
-            // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Location = new Point(355, 221);
-            label14.Name = "label14";
-            label14.Size = new Size(44, 15);
-            label14.TabIndex = 21;
-            label14.Text = "Profile:";
-            // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.Location = new Point(335, 250);
-            label15.Name = "label15";
-            label15.Size = new Size(67, 15);
-            label15.TabIndex = 22;
-            label15.Text = "Stat profile:";
             // 
             // Main
             // 
@@ -834,5 +846,6 @@
         private Label label13;
         private Label label15;
         private Label label14;
+        private Button view_legacy_stats;
     }
 }

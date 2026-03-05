@@ -5,9 +5,7 @@ namespace Overwatch_Map_Statistics_v3
     public class Map
     {
         public readonly string mapname;
-
-        [JsonIgnore]
-        public string mode;
+        public readonly string mode;
 
         [JsonIgnore]
         public string fullname;
