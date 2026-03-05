@@ -758,7 +758,7 @@
             MaximizeBox = false;
             Name = "Main";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Overwatch Map Statistics v3.0";
+            Text = "Overwatch Map Statistics v3.0 By Jacklz";
             Load += Main_Load;
             tabControl1.ResumeLayout(false);
             session_page.ResumeLayout(false);
