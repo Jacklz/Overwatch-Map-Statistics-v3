@@ -1,6 +1,5 @@
 ﻿using ClosedXML.Excel;
 using Newtonsoft.Json;
-using System.Diagnostics;
 
 namespace Overwatch_Map_Statistics_v3
 {
@@ -53,12 +52,9 @@ namespace Overwatch_Map_Statistics_v3
             {
                 role_checkedlistbox.Items.Add(entry);
             }
-            //Main.roles.ForEach(role => { role_checkedlistbox.Items.Add(role); });
             role_checkedlistbox.SetItemChecked(0, true);
         }
 
-        //load profiles contained within the stat profile instead of all saved profiles
-        //from profiles.txt
         private void LoadProfiles()
         {
             HashSet<string> profiles = [];
@@ -74,11 +70,6 @@ namespace Overwatch_Map_Statistics_v3
             {
                 profile_checkedlistbox.SetItemChecked(a, true);
             }
-            //Main.profiles.ForEach(profile => { profile_checkedlistbox.Items.Add(profile); });
-            //for (int a = 0; a < profile_checkedlistbox.Items.Count; a++)
-            //{
-            //    profile_checkedlistbox.SetItemChecked(a, true);
-            //}
         }
 
         private void SetDates()
@@ -93,11 +84,13 @@ namespace Overwatch_Map_Statistics_v3
         private void LoadStats()
         {
             filteredentries.Clear();
-            foreach (var entry in stats)
+            List<RecordStat> records = [];
+            foreach (SessionRecordEntry entry in stats)
             {
                 if (!checkedprofiles.Contains(entry.profilename)) continue;
                 if (entry.date > end_date.Value || entry.date < start_date.Value) continue;
                 filteredentries.Add(entry);
+                data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetMiscOutcomes(), entry.GetTotal(), "...", entry);
                 foreach (var data in entry.mapdata)
                 {
                     if (!checkedroles.Contains(data.role)) continue;
@@ -125,11 +118,22 @@ namespace Overwatch_Map_Statistics_v3
             {
                 map_stats_grid.Rows.Add(entry.map.mapname, entry.map.mode, entry.wins, entry.losses, entry.draws, entry.miscoutcomes.Count, entry.total, entry.winrate);
             }
+            int totalwins = 0;
+            int totallosses = 0;
+            int totaldraws = 0;
+            int totalmisc = 0;
             foreach (var entry in modestats.Values)
             {
                 mode_stats_grid.Rows.Add(entry.mode, entry.wins, entry.losses, entry.draws, entry.miscoutcomes.Count, entry.total, entry.winrate);
+                totalwins += entry.wins;
+                totallosses += entry.losses;
+                totaldraws += entry.draws;
+                totalmisc += entry.miscoutcomes.Count;
             }
-            foreach (var entry in daystats.Values)
+            int totalgames = totalwins + totallosses + totaldraws;
+            double winrate = Math.Round((double)totalwins / (double)(totalwins + totallosses), 4) * 100;
+            totals_grid.Rows.Add(totalwins, totallosses, totaldraws, totalmisc, totalgames, winrate);
+            foreach (var entry in daystats.Values.OrderBy(day => day.day))
             {
                 day_stats_grid.Rows.Add(entry.day.ToString(), entry.wins, entry.losses, entry.draws, entry.miscoutcomes.Count, entry.total, entry.winrate);
             }
@@ -142,6 +146,8 @@ namespace Overwatch_Map_Statistics_v3
             map_stats_grid.Rows.Clear();
             mode_stats_grid.Rows.Clear();
             day_stats_grid.Rows.Clear();
+            data_entries_grid.Rows.Clear();
+            totals_grid.Rows.Clear();
             mapstats.Clear();
             modestats.Clear();
             daystats.Clear();
@@ -277,6 +283,22 @@ namespace Overwatch_Map_Statistics_v3
         private void end_date_ValueChanged(object sender, EventArgs e)
         {
             ResetStatGrids();
+        }
+
+        private void data_entries_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            switch (e.ColumnIndex)
+            {
+                case 6:
+
+                    break;
+                case 8:
+                    var data = (SessionRecordEntry?)data_entries_grid.Rows[e.RowIndex].Cells[8].Value;
+                    if (data == null) return;
+                    Session_Viewer session_Viewer = new(data);
+                    session_Viewer.Show();
+                    break;
+            }            
         }
     }
 }

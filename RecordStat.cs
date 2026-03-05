@@ -3,53 +3,28 @@
     internal class RecordStat
     {
         public readonly DayStat DayStat;
-        public readonly MapStat MapStat;
-        public readonly ModeStat ModeStat;
+        public readonly Dictionary<string, MapStat> mapstats = [];
+        public readonly Dictionary<string, ModeStat> modestats = [];
 
-        public RecordStat(string map, string mode, DayOfWeek day)
+        public RecordStat(DateTime date, List<MapResult> results)
         {
-            DayStat = new(day);
-            MapStat = new(map, mode);
-            ModeStat = new(mode);
-        }
-
-        public void HandleOutcome(string outcome)
-        {
-            switch (outcome)
+            DayStat = new(date.DayOfWeek);
+            foreach (var data in results)
             {
-                case "Win": AddWin(1); break;
-                case "Loss": AddLoss(1); break;
-                case "Draw": AddDraw(1); break;
-                default: AddMiscOutcome(outcome, 1); break;
+                if (!mapstats.TryGetValue(data.mapname, out var mapstat))
+                {
+                    mapstat = new(data.mapname, data.mode);
+                    mapstats[data.mapname] = mapstat;
+                }
+                mapstat.HandleOutcome(data.outcome);
+                if (!modestats.TryGetValue(data.mode, out var modestat))
+                {
+                    modestat = new(data.mode);
+                    modestats[data.mode] = modestat;
+                }
+                modestat.HandleOutcome(data.outcome);
+                DayStat.HandleOutcome(data.outcome);
             }
-        }
-
-        private void AddDraw(int count)
-        {
-            DayStat.AddDraw(count);
-            MapStat.AddDraw(count);
-            ModeStat.AddDraw(count);
-        }
-
-        private void AddLoss(int count)
-        {
-            DayStat.AddLoss(count);
-            MapStat.AddLoss(count);
-            ModeStat.AddLoss(count);
-        }
-
-        private void AddWin(int count)
-        {
-            DayStat.AddWin(count);
-            MapStat.AddWin(count);
-            ModeStat.AddWin(count);
-        }
-
-        private void AddMiscOutcome(string outcome, int count)
-        {
-            DayStat.AddMiscOutcome(outcome, count);
-            MapStat.AddMiscOutcome(outcome, count);
-            ModeStat.AddMiscOutcome(outcome, count);
         }
     }
 }

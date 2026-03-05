@@ -788,7 +788,6 @@
         private Label label3;
         private Button add_entry_button;
         private Button reset_session_button;
-        private Button view_session_entries_button;
         private Button save_button;
         private TabControl tabControl1;
         private TabPage session_page;
@@ -833,7 +832,6 @@
         private TextBox statprofile_textbox;
         private CheckedListBox statprofiles_checkedlistbox;
         private Button view_stats_button;
-        private ComboBox comboBox2;
         private ComboBox save_profile_combobox;
         private DateTimePicker session_date_picker;
         private ComboBox save_statprofile_combobox;

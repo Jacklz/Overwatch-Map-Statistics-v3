@@ -48,7 +48,7 @@
 
         private void CalculateWinrate()
         {
-            winrate = Math.Round(((double)wins / (double)(wins + losses)) * 100, 2);
+            winrate = Math.Round(((double)wins / (double)(wins + losses)) * 100, 4);
         }
 
         public struct MiscOutcomes

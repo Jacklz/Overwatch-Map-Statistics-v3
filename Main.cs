@@ -199,8 +199,8 @@ namespace Overwatch_Map_Statistics_v3
                 var maps = File.ReadLines("maps.txt");
                 foreach (var map in maps)
                 {
-                    string mapname = map.Substring(0, map.IndexOf("-")).Trim();
-                    string maptype = map.Substring(map.IndexOf("-") + 1).Trim();
+                    string mapname = map[..map.IndexOf('-')].Trim();
+                    string maptype = map[(map.IndexOf('-') + 1)..].Trim();
                     allmaps.Add(new(mapname, maptype));
                     maptomode[mapname] = maptype;
                 }
@@ -486,7 +486,7 @@ namespace Overwatch_Map_Statistics_v3
             }
         }
 
-        private void DeleteProfileData(string profilename, bool statprofile)
+        private static void DeleteProfileData(string profilename, bool statprofile)
         {
             if (!File.Exists("records.json"))
             {
@@ -626,12 +626,10 @@ namespace Overwatch_Map_Statistics_v3
 
         public static void WriteSessionToFile(params string[] serializeddata)
         {
-            using (StreamWriter writer = new("records.json", true))
+            using StreamWriter writer = new("records.json", true);
+            foreach (var entry in serializeddata)
             {
-                foreach (var entry in serializeddata)
-                {
-                    writer.WriteLine(entry);
-                }
+                writer.WriteLine(entry);
             }
         }
 

@@ -42,6 +42,46 @@ namespace Overwatch_Map_Statistics_v3
             }
         }
 
+        public RecordStat Consolidate()
+        {
+            return new(date, mapdata);
+        }
+
+        public int GetTotal()
+        {
+            return GetWins() + GetLosses() + GetDraws();
+        }
+
+        public int GetNetWins()
+        {
+            return GetWins() - GetLosses();
+        }
+
+        public int GetWins()
+        {
+            return GetOutcomeCount("Win");
+        }
+
+        public int GetLosses()
+        {
+            return GetOutcomeCount("Loss");
+        }
+
+        public int GetDraws()
+        {
+            return GetOutcomeCount("Draw");
+        }
+
+        public int GetMiscOutcomes()
+        {
+            return mapdata.Where(entry => entry.outcome != "Win" && entry.outcome != "Loss" && entry.outcome != "Draw").Count();
+        }
+
+        private int GetOutcomeCount(string outcome)
+        {
+            return mapdata.Where(entry => entry.outcome == outcome).Count();
+        }
+
         public void AddMapResult(MapResult mapdata)
         {
             this.mapdata.Add(mapdata);
