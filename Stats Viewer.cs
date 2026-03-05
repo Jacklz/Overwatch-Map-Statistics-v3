@@ -1,29 +1,37 @@
 ﻿using ClosedXML.Excel;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace Overwatch_Map_Statistics_v3
 {
     partial class Stats_Viewer : Form
     {
         private readonly List<SessionRecordEntry> stats = [];
-        private readonly Dictionary<string, RecordStat> mapstats = [];
-        private readonly Dictionary<string, RecordStat> modestats = [];
-        private readonly Dictionary<string, RecordStat> daystats = [];
+        private readonly Dictionary<string, MapStat> mapstats = [];
+        private readonly Dictionary<string, ModeStat> modestats = [];
+        private readonly Dictionary<string, DayStat> daystats = [];
         private DateTime orgstart;
         private DateTime orgend;
         private bool allowupdate = false;
         private readonly HashSet<string> checkedprofiles = [];
         private readonly HashSet<string> checkedroles = [];
         private readonly List<SessionRecordEntry> filteredentries = [];
+        private readonly Main instance;
+        private readonly List<string> statprofiles = [];
 
-        public Stats_Viewer(List<SessionRecordEntry> entries)
+        public Stats_Viewer(List<SessionRecordEntry> entries, Main instance, List<string> statprofiles)
         {
             InitializeComponent();
             stats.AddRange(entries);
+            this.instance = instance;
+            this.statprofiles.AddRange(statprofiles);
         }
 
         private void Stats_Viewer_Load(object sender, EventArgs e)
         {
+            string plural = "";
+            if (statprofiles.Count > 1) plural = "s";
+            Text = $"Stat profile{plural}: {string.Join(",", statprofiles)}";
             LoadRoles();
             LoadProfiles();
             SetDates();
@@ -95,33 +103,33 @@ namespace Overwatch_Map_Statistics_v3
                     if (!checkedroles.Contains(data.role)) continue;
                     if (!mapstats.TryGetValue(data.mapname, out var mapstat))
                     {
-                        mapstat = new(data.mapname, data.mode, entry.date.DayOfWeek);
+                        mapstat = new(data.mapname, data.mode);
                         mapstats[data.mapname] = mapstat;
                     }
                     mapstat.HandleOutcome(data.outcome);
                     if (!modestats.TryGetValue(data.mode, out var modestat))
                     {
-                        modestat = new(data.mapname, data.mode, entry.date.DayOfWeek);
+                        modestat = new(data.mode);
                         modestats[data.mode] = modestat;
                     }
                     modestat.HandleOutcome(data.outcome);
                     if (!daystats.TryGetValue(entry.date.DayOfWeek.ToString(), out var daystat))
                     {
-                        daystat = new(data.mapname, data.mode, entry.date.DayOfWeek);
+                        daystat = new(entry.date.DayOfWeek);
                         daystats[entry.date.DayOfWeek.ToString()] = daystat;
                     }
                     daystat.HandleOutcome(data.outcome);
                 }
             }
-            foreach (var entry in mapstats.Values.OrderBy(stat => stat.MapStat.map.mapname).Select(stat => stat.MapStat))
+            foreach (var entry in mapstats.Values.OrderBy(stat => stat.map.mapname))
             {
                 map_stats_grid.Rows.Add(entry.map.mapname, entry.map.mode, entry.wins, entry.losses, entry.draws, entry.miscoutcomes.Count, entry.total, entry.winrate);
             }
-            foreach (var entry in modestats.Values.Select(stat => stat.ModeStat))
+            foreach (var entry in modestats.Values)
             {
                 mode_stats_grid.Rows.Add(entry.mode, entry.wins, entry.losses, entry.draws, entry.miscoutcomes.Count, entry.total, entry.winrate);
             }
-            foreach (var entry in daystats.Values.Select(stat => stat.DayStat))
+            foreach (var entry in daystats.Values)
             {
                 day_stats_grid.Rows.Add(entry.day.ToString(), entry.wins, entry.losses, entry.draws, entry.miscoutcomes.Count, entry.total, entry.winrate);
             }
@@ -130,6 +138,7 @@ namespace Overwatch_Map_Statistics_v3
         private void ResetStatGrids()
         {
             if (!allowupdate) return;
+            //Debug.WriteLine("updating stats");
             map_stats_grid.Rows.Clear();
             mode_stats_grid.Rows.Clear();
             day_stats_grid.Rows.Clear();
@@ -142,8 +151,10 @@ namespace Overwatch_Map_Statistics_v3
 
         private void reset_dates_button_Click(object sender, EventArgs e)
         {
+            allowupdate = false;
             start_date.Value = orgstart;
             end_date.Value = orgend;
+            allowupdate = true;
             ResetStatGrids();
         }
 
@@ -234,15 +245,38 @@ namespace Overwatch_Map_Statistics_v3
 
         private void save_selection_Click(object sender, EventArgs e)
         {
-            List<SessionRecordEntry> newentries = [..filteredentries.Select(entry => entry.Clone())];
+            string newname = newstat_profilename_textbox.Text;
+            if (newname.Length == 0)
+            {
+                MessageBox.Show("Enter a name!");
+                return;
+            }
+            if (Main.statprofiles.Contains(newname))
+            {
+                MessageBox.Show("This stat profile already exists!");
+                return;
+            }
+            Main.statprofiles.Add(newname);
+            instance.UpdateStatDisplayLists();
+            List<SessionRecordEntry> newentries = [.. filteredentries.Select(entry => entry.Clone())];
             List<string> serializeddata = [];
             foreach (SessionRecordEntry entry in newentries)
             {
-                entry.statprofilename = "test";
+                entry.statprofilename = newname;
                 serializeddata.Add(JsonConvert.SerializeObject(entry));
             }
-            Main.WriteSessionToFile([..serializeddata]);
+            Main.WriteSessionToFile([.. serializeddata]);
             MessageBox.Show("Successfully saved selected data to new stat profile");
+        }
+
+        private void start_date_ValueChanged(object sender, EventArgs e)
+        {
+            ResetStatGrids();
+        }
+
+        private void end_date_ValueChanged(object sender, EventArgs e)
+        {
+            ResetStatGrids();
         }
     }
 }

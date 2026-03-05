@@ -1,4 +1,3 @@
-using DocumentFormat.OpenXml.Spreadsheet;
 using Newtonsoft.Json;
 
 namespace Overwatch_Map_Statistics_v3
@@ -85,7 +84,7 @@ namespace Overwatch_Map_Statistics_v3
             UpdateStatDisplayLists();
         }
 
-        private void UpdateStatDisplayLists()
+        public void UpdateStatDisplayLists()
         {
             statprofiles_checkedlistbox.Items.Clear();
             save_statprofile_combobox.Items.Clear();
@@ -413,6 +412,11 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name for the profile");
                 return;
             }
+            if (profiles.Contains(name))
+            {
+                MessageBox.Show("This profile already exists!");
+                return;
+            }
             profiles.Add(name);
             UpdateProfileDisplayLists();
             File.WriteAllLines("profiles.txt", profiles);
@@ -453,6 +457,11 @@ namespace Overwatch_Map_Statistics_v3
             if (name.Length == 0)
             {
                 MessageBox.Show("Enter a name for the stat profile");
+                return;
+            }
+            if (statprofiles.Contains(name))
+            {
+                MessageBox.Show("This stat profile already exists!");
                 return;
             }
             statprofiles.Add(name);
@@ -537,12 +546,12 @@ namespace Overwatch_Map_Statistics_v3
 
         private void view_stats_button_Click(object sender, EventArgs e)
         {
-            List<string> profiles = [];
+            List<string> statprofiles = [];
             foreach (var entry in statprofiles_checkedlistbox.CheckedItems)
             {
-                profiles.Add(entry.ToString());
+                statprofiles.Add(entry.ToString());
             }
-            if (profiles.Count == 0)
+            if (statprofiles.Count == 0)
             {
                 MessageBox.Show("Select a stat profile!");
                 return;
@@ -557,12 +566,12 @@ namespace Overwatch_Map_Statistics_v3
             {
                 SessionRecordEntry? record = JsonConvert.DeserializeObject<SessionRecordEntry>(line);
                 if (record == null) continue;
-                if (profiles.Contains(record.statprofilename))
+                if (statprofiles.Contains(record.statprofilename))
                 {
                     entries.Add(record);
                 }
             }
-            Stats_Viewer stats_Viewer = new(entries);
+            Stats_Viewer stats_Viewer = new(entries, this, statprofiles);
             stats_Viewer.Show();
         }
 
@@ -622,7 +631,7 @@ namespace Overwatch_Map_Statistics_v3
                 foreach (var entry in serializeddata)
                 {
                     writer.WriteLine(entry);
-                }               
+                }
             }
         }
 
@@ -642,7 +651,7 @@ namespace Overwatch_Map_Statistics_v3
             {
                 serialized.Add(JsonConvert.SerializeObject(entry));
             }
-            WriteSessionToFile([..serialized]);
+            WriteSessionToFile([.. serialized]);
             MessageBox.Show("Converted legacy stats");
             //Stats_Viewer stats_Viewer = new(entries);
             //stats_Viewer.Show();

@@ -9,6 +9,17 @@
         public double winrate;
         public Dictionary<string, MiscOutcomes> miscoutcomes = [];
 
+        public void HandleOutcome(string outcome)
+        {
+            switch (outcome)
+            {
+                case "Win": AddWin(1); break;
+                case "Loss": AddLoss(1); break;
+                case "Draw": AddDraw(1); break;
+                default: AddMiscOutcome(outcome, 1); break;
+            }
+        }
+
         public void AddWin(int wins)
         {
             this.wins += wins;

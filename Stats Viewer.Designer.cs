@@ -27,13 +27,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle20 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
             map_stats_grid = new DataGridView();
             map_column = new DataGridViewTextBoxColumn();
             mode_column = new DataGridViewTextBoxColumn();
@@ -72,6 +72,9 @@
             day_winrate = new DataGridViewTextBoxColumn();
             data_entries_page = new TabPage();
             data_selection_page = new TabPage();
+            label5 = new Label();
+            newstat_profilename_textbox = new TextBox();
+            save_selection = new Button();
             reset_dates_button = new Button();
             uncheck_all_roles_button = new Button();
             check_all_roles_button = new Button();
@@ -86,7 +89,6 @@
             role_checkedlistbox = new CheckedListBox();
             label3 = new Label();
             profile_checkedlistbox = new CheckedListBox();
-            save_selection = new Button();
             ((System.ComponentModel.ISupportInitialize)map_stats_grid).BeginInit();
             tabControl1.SuspendLayout();
             map_stats_page.SuspendLayout();
@@ -104,17 +106,17 @@
             map_stats_grid.AllowUserToDeleteRows = false;
             map_stats_grid.AllowUserToResizeColumns = false;
             map_stats_grid.AllowUserToResizeRows = false;
-            dataGridViewCellStyle15.BackColor = Color.LightGray;
-            map_stats_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle8.BackColor = Color.LightGray;
+            map_stats_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle8;
             map_stats_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle16.BackColor = SystemColors.Control;
-            dataGridViewCellStyle16.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle16.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle16.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle16.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle16.WrapMode = DataGridViewTriState.True;
-            map_stats_grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = SystemColors.Control;
+            dataGridViewCellStyle9.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+            map_stats_grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             map_stats_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             map_stats_grid.Columns.AddRange(new DataGridViewColumn[] { map_column, mode_column, wins_column, loss_column, draw_column, misc_column, totals_column, winrate_column });
             map_stats_grid.Location = new Point(6, 6);
@@ -139,24 +141,24 @@
             // 
             // wins_column
             // 
-            dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            wins_column.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            wins_column.DefaultCellStyle = dataGridViewCellStyle10;
             wins_column.HeaderText = "Wins";
             wins_column.Name = "wins_column";
             wins_column.ReadOnly = true;
             // 
             // loss_column
             // 
-            dataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            loss_column.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            loss_column.DefaultCellStyle = dataGridViewCellStyle11;
             loss_column.HeaderText = "Losses";
             loss_column.Name = "loss_column";
             loss_column.ReadOnly = true;
             // 
             // draw_column
             // 
-            dataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            draw_column.DefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            draw_column.DefaultCellStyle = dataGridViewCellStyle12;
             draw_column.HeaderText = "Draws";
             draw_column.Name = "draw_column";
             draw_column.ReadOnly = true;
@@ -169,18 +171,18 @@
             // 
             // totals_column
             // 
-            dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            totals_column.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            totals_column.DefaultCellStyle = dataGridViewCellStyle13;
             totals_column.HeaderText = "Total";
             totals_column.Name = "totals_column";
             totals_column.ReadOnly = true;
             // 
             // winrate_column
             // 
-            dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle21.Format = "N2";
-            dataGridViewCellStyle21.NullValue = null;
-            winrate_column.DefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.Format = "N2";
+            dataGridViewCellStyle14.NullValue = null;
+            winrate_column.DefaultCellStyle = dataGridViewCellStyle14;
             winrate_column.HeaderText = "Win %";
             winrate_column.Name = "winrate_column";
             winrate_column.ReadOnly = true;
@@ -372,6 +374,8 @@
             // 
             // data_selection_page
             // 
+            data_selection_page.Controls.Add(label5);
+            data_selection_page.Controls.Add(newstat_profilename_textbox);
             data_selection_page.Controls.Add(save_selection);
             data_selection_page.Controls.Add(reset_dates_button);
             data_selection_page.Controls.Add(uncheck_all_roles_button);
@@ -393,6 +397,32 @@
             data_selection_page.TabIndex = 4;
             data_selection_page.Text = "Data Selection";
             data_selection_page.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(226, 430);
+            label5.Name = "label5";
+            label5.Size = new Size(42, 15);
+            label5.TabIndex = 17;
+            label5.Text = "Name:";
+            // 
+            // newstat_profilename_textbox
+            // 
+            newstat_profilename_textbox.Location = new Point(226, 451);
+            newstat_profilename_textbox.Name = "newstat_profilename_textbox";
+            newstat_profilename_textbox.Size = new Size(145, 23);
+            newstat_profilename_textbox.TabIndex = 16;
+            // 
+            // save_selection
+            // 
+            save_selection.Location = new Point(9, 451);
+            save_selection.Name = "save_selection";
+            save_selection.Size = new Size(211, 23);
+            save_selection.TabIndex = 15;
+            save_selection.Text = "Save selection as stat profile";
+            save_selection.UseVisualStyleBackColor = true;
+            save_selection.Click += save_selection_Click;
             // 
             // reset_dates_button
             // 
@@ -460,6 +490,7 @@
             end_date.Name = "end_date";
             end_date.Size = new Size(200, 23);
             end_date.TabIndex = 8;
+            end_date.ValueChanged += end_date_ValueChanged;
             // 
             // label2
             // 
@@ -476,6 +507,7 @@
             start_date.Name = "start_date";
             start_date.Size = new Size(200, 23);
             start_date.TabIndex = 6;
+            start_date.ValueChanged += start_date_ValueChanged;
             // 
             // label1
             // 
@@ -521,16 +553,6 @@
             profile_checkedlistbox.Size = new Size(211, 184);
             profile_checkedlistbox.TabIndex = 0;
             profile_checkedlistbox.ItemCheck += profile_checkedlistbox_ItemCheck;
-            // 
-            // save_selection
-            // 
-            save_selection.Location = new Point(9, 451);
-            save_selection.Name = "save_selection";
-            save_selection.Size = new Size(211, 23);
-            save_selection.TabIndex = 15;
-            save_selection.Text = "Save selection as stat profile";
-            save_selection.UseVisualStyleBackColor = true;
-            save_selection.Click += save_selection_Click;
             // 
             // Stats_Viewer
             // 
@@ -618,5 +640,7 @@
         private DataGridViewTextBoxColumn day_totals;
         private DataGridViewTextBoxColumn day_winrate;
         private Button save_selection;
+        private Label label5;
+        private TextBox newstat_profilename_textbox;
     }
 }
