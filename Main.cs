@@ -144,7 +144,7 @@ namespace Overwatch_Map_Statistics_v3
                     "Friendly Cheater",
                     "Enemy DC",
                     "Enemy Cheater",
-                    "Stomp",
+                    "One Sided",
                 ];
                 File.WriteAllLines("notes.txt", notes);
                 allnotes.AddRange(notes);

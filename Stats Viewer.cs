@@ -114,6 +114,7 @@ namespace Overwatch_Map_Statistics_v3
                     daystat.HandleOutcome(data.outcome);
                 }
             }
+            UpdateDataEntriesCount();
             foreach (var entry in mapstats.Values.OrderBy(stat => stat.map.mapname))
             {
                 map_stats_grid.Rows.Add(entry.map.mapname, entry.map.mode, entry.wins, entry.losses, entry.draws, entry.miscoutcomes.Count, entry.total, entry.winrate);
@@ -146,6 +147,7 @@ namespace Overwatch_Map_Statistics_v3
             map_stats_grid.Rows.Clear();
             mode_stats_grid.Rows.Clear();
             day_stats_grid.Rows.Clear();
+            UpdateDataEntriesCount();
             data_entries_grid.Rows.Clear();
             totals_grid.Rows.Clear();
             mapstats.Clear();
@@ -287,18 +289,34 @@ namespace Overwatch_Map_Statistics_v3
 
         private void data_entries_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            var data = (SessionRecordEntry?)data_entries_grid.Rows[e.RowIndex].Cells[8].Value;
+            if (data == null) return;
             switch (e.ColumnIndex)
             {
-                case 6:
+                case 5:
 
                     break;
-                case 8:
-                    var data = (SessionRecordEntry?)data_entries_grid.Rows[e.RowIndex].Cells[8].Value;
-                    if (data == null) return;
+                case 7:
                     Session_Viewer session_Viewer = new(data);
                     session_Viewer.Show();
                     break;
-            }            
+            }
+        }
+
+        private void map_search_textbox_TextChanged(object sender, EventArgs e)
+        {
+            data_entries_grid.Rows.Clear();
+            foreach (var entry in filteredentries)
+            {
+                if (!entry.mapdata.Where(data => data.mapname.Contains(map_search_textbox.Text, StringComparison.OrdinalIgnoreCase)).Any()) continue;
+                data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetMiscOutcomes(), entry.GetTotal(), "...", entry);
+            }
+            UpdateDataEntriesCount();
+        }
+
+        private void UpdateDataEntriesCount()
+        {
+            entries_count_label.Text = $"Entries: {data_entries_grid.Rows.Count}";
         }
     }
 }

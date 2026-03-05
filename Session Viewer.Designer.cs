@@ -143,7 +143,7 @@
             Padding = new Padding(10);
             ShowIcon = false;
             ShowInTaskbar = false;
-            StartPosition = FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Session Viewer";
             Load += Session_Viewer_Load;
             ((System.ComponentModel.ISupportInitialize)session_grid).EndInit();

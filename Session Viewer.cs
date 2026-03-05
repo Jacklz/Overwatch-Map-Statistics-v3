@@ -8,6 +8,7 @@
         {
             InitializeComponent();
             this.entry = entry;
+            Text = $"Viewing session: {entry.date.ToShortDateString()}";
         }
 
         private void Session_Viewer_Load(object sender, EventArgs e)
