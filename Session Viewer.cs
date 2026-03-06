@@ -15,7 +15,7 @@
         {
             foreach (var stat in entry.Consolidate().mapstats.Values)
             {
-                session_grid.Rows.Add(stat.map.mapname, stat.wins - stat.losses, stat.wins, stat.losses, stat.draws, stat.miscoutcomes.Count, stat.total, stat.winrate);
+                session_grid.Rows.Add(stat.map.mapname, stat.wins - stat.losses, stat.wins, stat.losses, stat.draws, stat.GetMiscCount(), stat.total, stat.winrate);
             }
         }
     }

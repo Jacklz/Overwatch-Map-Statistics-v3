@@ -147,6 +147,10 @@ namespace Overwatch_Map_Statistics_v3
                     "Enemy DC",
                     "Enemy Cheater",
                     "Lopsided",
+                    "Expected",
+                    "Reversal",
+                    "Uphill Battle",
+                    "Consolation",
                 ];
                 File.WriteAllLines("notes.txt", notes);
                 allnotes.AddRange(notes);
@@ -695,6 +699,41 @@ namespace Overwatch_Map_Statistics_v3
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveSettings();
+        }
+
+        private void gen_rand_stats_button_Click(object sender, EventArgs e)
+        {
+            List<SessionRecordEntry> randomrecords = [];
+            for (int b = 0; b < 200; b++)
+            {
+                DateTime datebegin = new(2023, 1, 1);
+                DateTime dateend = new(2026, 1, 1);
+                int range = (dateend - datebegin).Days;
+                DateTime randomdate = datebegin.AddDays(Random.Shared.Next(range));
+                SessionRecordEntry record = new("randomprofile", "random", randomdate);
+                int gamesperentry = Random.Shared.Next(5, 9);
+                for (int a = 0; a < gamesperentry; a++)
+                {
+                    Map map = allmaps[Random.Shared.Next(allmaps.Count)];
+                    string outcome = alloutcomes[Random.Shared.Next(alloutcomes.Count)];
+                    List<string> notes = [];
+                    int notecount = Random.Shared.Next(0, 4);
+                    for (int c = 0; c < notecount; c++)
+                    {
+                        notes.Add(allnotes[Random.Shared.Next(allnotes.Count)]);
+                    }
+                    MapResult result = new(map.mapname, map.mode, "Open Queue", outcome, notes);
+                    record.AddMapResult(result);
+                }
+                randomrecords.Add(record);
+            }
+            List<string> serialized = [];
+            foreach (var entry in randomrecords)
+            {
+                serialized.Add(JsonConvert.SerializeObject(entry));
+            }
+            WriteSessionToFile([.. serialized]);
+            MessageBox.Show("Generated 200 random stats");
         }
     }
 }

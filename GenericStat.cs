@@ -7,7 +7,7 @@
         public int draws;
         public int total;
         public double winrate;
-        public Dictionary<string, MiscOutcomes> miscoutcomes = [];
+        private readonly Dictionary<string, MiscOutcomes> miscoutcomes = [];
 
         public void HandleOutcome(string outcome)
         {
@@ -40,6 +40,11 @@
             CalculateWinrate();
         }
 
+        public int GetMiscCount()
+        {
+            return miscoutcomes.Values.Select(entry => entry.count).Sum();
+        }
+
         public void AddMiscOutcome(string outcome, int count)
         {
             if (miscoutcomes.TryGetValue(outcome, out MiscOutcomes value)) value.Add(count);
@@ -51,7 +56,7 @@
             winrate = Math.Round(((double)wins / (double)(wins + losses)) * 100, 4);
         }
 
-        public struct MiscOutcomes
+        public class MiscOutcomes
         {
             public string outcome;
             public int count;

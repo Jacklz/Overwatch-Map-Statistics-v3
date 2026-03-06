@@ -95,6 +95,7 @@
             statprofiles_checkedlistbox = new CheckedListBox();
             settings_page = new TabPage();
             confirm_dialogs_checkbox = new CheckBox();
+            gen_rand_stats_button = new Button();
             tabControl1.SuspendLayout();
             session_page.SuspendLayout();
             maps_page.SuspendLayout();
@@ -652,6 +653,7 @@
             // 
             // stats_page
             // 
+            stats_page.Controls.Add(gen_rand_stats_button);
             stats_page.Controls.Add(view_legacy_stats);
             stats_page.Controls.Add(check_all_statprofiles_button);
             stats_page.Controls.Add(uncheck_all_statprofiles_button);
@@ -670,9 +672,9 @@
             // 
             // view_legacy_stats
             // 
-            view_legacy_stats.Location = new Point(234, 246);
+            view_legacy_stats.Location = new Point(395, 232);
             view_legacy_stats.Name = "view_legacy_stats";
-            view_legacy_stats.Size = new Size(202, 23);
+            view_legacy_stats.Size = new Size(130, 23);
             view_legacy_stats.TabIndex = 8;
             view_legacy_stats.Text = "Convert Legacy Stats";
             view_legacy_stats.UseVisualStyleBackColor = true;
@@ -774,6 +776,16 @@
             confirm_dialogs_checkbox.Text = "Show confirmation dialogs";
             confirm_dialogs_checkbox.UseVisualStyleBackColor = true;
             confirm_dialogs_checkbox.CheckedChanged += confirm_dialogs_checkbox_CheckedChanged;
+            // 
+            // gen_rand_stats_button
+            // 
+            gen_rand_stats_button.Location = new Point(395, 261);
+            gen_rand_stats_button.Name = "gen_rand_stats_button";
+            gen_rand_stats_button.Size = new Size(130, 23);
+            gen_rand_stats_button.TabIndex = 9;
+            gen_rand_stats_button.Text = "Gen Random Stats";
+            gen_rand_stats_button.UseVisualStyleBackColor = true;
+            gen_rand_stats_button.Click += gen_rand_stats_button_Click;
             // 
             // Main
             // 
@@ -877,5 +889,6 @@
         private Button view_legacy_stats;
         private TabPage settings_page;
         private CheckBox confirm_dialogs_checkbox;
+        private Button gen_rand_stats_button;
     }
 }

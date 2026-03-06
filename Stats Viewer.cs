@@ -32,10 +32,19 @@ namespace Overwatch_Map_Statistics_v3
             if (statprofiles.Count > 1) plural = "s";
             Text = $"Stat profile{plural}: {string.Join(",", statprofiles)}";
             LoadRoles();
+            LoadNotes();
             LoadProfiles();
             SetDates();
             LoadStats();
             allowupdate = true;
+        }
+
+        private void LoadNotes()
+        {
+            foreach (var entry in Main.allnotes)
+            {
+                notes_grid.Rows.Add(entry);
+            }
         }
 
         private void LoadRoles()
@@ -91,6 +100,7 @@ namespace Overwatch_Map_Statistics_v3
                 if (entry.date > end_date.Value || entry.date < start_date.Value) continue;
                 filteredentries.Add(entry);
                 data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetMiscOutcomes(), entry.GetTotal(), "...", entry);
+                //need to also handle notes
                 foreach (var data in entry.mapdata)
                 {
                     if (!checkedroles.Contains(data.role)) continue;
@@ -117,7 +127,7 @@ namespace Overwatch_Map_Statistics_v3
             UpdateDataEntriesCount();
             foreach (var entry in mapstats.Values.OrderBy(stat => stat.map.mapname))
             {
-                map_stats_grid.Rows.Add(entry.map.mapname, entry.map.mode, entry.wins, entry.losses, entry.draws, entry.miscoutcomes.Count, entry.total, entry.winrate);
+                map_stats_grid.Rows.Add(entry.map.mapname, entry.map.mode, entry.wins, entry.losses, entry.draws, entry.GetMiscCount(), entry.total, entry.winrate);
             }
             int totalwins = 0;
             int totallosses = 0;
@@ -125,18 +135,18 @@ namespace Overwatch_Map_Statistics_v3
             int totalmisc = 0;
             foreach (var entry in modestats.Values)
             {
-                mode_stats_grid.Rows.Add(entry.mode, entry.wins, entry.losses, entry.draws, entry.miscoutcomes.Count, entry.total, entry.winrate);
+                mode_stats_grid.Rows.Add(entry.mode, entry.wins, entry.losses, entry.draws, entry.GetMiscCount(), entry.total, entry.winrate);
                 totalwins += entry.wins;
                 totallosses += entry.losses;
                 totaldraws += entry.draws;
-                totalmisc += entry.miscoutcomes.Count;
+                totalmisc += entry.GetMiscCount();
             }
             int totalgames = totalwins + totallosses + totaldraws;
             double winrate = Math.Round((double)totalwins / (double)(totalwins + totallosses), 4) * 100;
             totals_grid.Rows.Add(totalwins, totallosses, totaldraws, totalmisc, totalgames, winrate);
             foreach (var entry in daystats.Values.OrderBy(day => day.day))
             {
-                day_stats_grid.Rows.Add(entry.day.ToString(), entry.wins, entry.losses, entry.draws, entry.miscoutcomes.Count, entry.total, entry.winrate);
+                day_stats_grid.Rows.Add(entry.day.ToString(), entry.wins, entry.losses, entry.draws, entry.GetMiscCount(), entry.total, entry.winrate);
             }
         }
 
@@ -289,6 +299,7 @@ namespace Overwatch_Map_Statistics_v3
 
         private void data_entries_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex == -1) return;
             var data = (SessionRecordEntry?)data_entries_grid.Rows[e.RowIndex].Cells[8].Value;
             if (data == null) return;
             switch (e.ColumnIndex)
