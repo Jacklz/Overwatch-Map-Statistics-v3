@@ -27,6 +27,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
@@ -131,6 +132,7 @@
             role_checkedlistbox = new CheckedListBox();
             label3 = new Label();
             profile_checkedlistbox = new CheckedListBox();
+            hotkey_check_timer = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)map_stats_grid).BeginInit();
             tabControl1.SuspendLayout();
             map_stats_page.SuspendLayout();
@@ -828,6 +830,12 @@
             profile_checkedlistbox.TabIndex = 0;
             profile_checkedlistbox.ItemCheck += profile_checkedlistbox_ItemCheck;
             // 
+            // hotkey_check_timer
+            // 
+            hotkey_check_timer.Enabled = true;
+            hotkey_check_timer.Interval = 50;
+            hotkey_check_timer.Tick += hotkey_check_timer_Tick;
+            // 
             // Stats_Viewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -936,5 +944,6 @@
         private DataGridView notes_grid;
         private DataGridViewTextBoxColumn notes_notename;
         private DataGridViewTextBoxColumn note_count;
+        private System.Windows.Forms.Timer hotkey_check_timer;
     }
 }

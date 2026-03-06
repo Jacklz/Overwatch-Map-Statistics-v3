@@ -84,6 +84,7 @@
             label9 = new Label();
             profiles_listbox = new ListBox();
             stats_page = new TabPage();
+            gen_rand_stats_button = new Button();
             view_legacy_stats = new Button();
             check_all_statprofiles_button = new Button();
             uncheck_all_statprofiles_button = new Button();
@@ -95,7 +96,6 @@
             statprofiles_checkedlistbox = new CheckedListBox();
             settings_page = new TabPage();
             confirm_dialogs_checkbox = new CheckBox();
-            gen_rand_stats_button = new Button();
             tabControl1.SuspendLayout();
             session_page.SuspendLayout();
             maps_page.SuspendLayout();
@@ -670,6 +670,16 @@
             stats_page.Text = "Stat Profiles";
             stats_page.UseVisualStyleBackColor = true;
             // 
+            // gen_rand_stats_button
+            // 
+            gen_rand_stats_button.Location = new Point(395, 261);
+            gen_rand_stats_button.Name = "gen_rand_stats_button";
+            gen_rand_stats_button.Size = new Size(130, 23);
+            gen_rand_stats_button.TabIndex = 9;
+            gen_rand_stats_button.Text = "Gen Random Stats";
+            gen_rand_stats_button.UseVisualStyleBackColor = true;
+            gen_rand_stats_button.Click += gen_rand_stats_button_Click;
+            // 
             // view_legacy_stats
             // 
             view_legacy_stats.Location = new Point(395, 232);
@@ -776,16 +786,6 @@
             confirm_dialogs_checkbox.Text = "Show confirmation dialogs";
             confirm_dialogs_checkbox.UseVisualStyleBackColor = true;
             confirm_dialogs_checkbox.CheckedChanged += confirm_dialogs_checkbox_CheckedChanged;
-            // 
-            // gen_rand_stats_button
-            // 
-            gen_rand_stats_button.Location = new Point(395, 261);
-            gen_rand_stats_button.Name = "gen_rand_stats_button";
-            gen_rand_stats_button.Size = new Size(130, 23);
-            gen_rand_stats_button.TabIndex = 9;
-            gen_rand_stats_button.Text = "Gen Random Stats";
-            gen_rand_stats_button.UseVisualStyleBackColor = true;
-            gen_rand_stats_button.Click += gen_rand_stats_button_Click;
             // 
             // Main
             // 

@@ -1,5 +1,9 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Vml;
 using Newtonsoft.Json;
+using System.Diagnostics;
+using System.Media;
+using System.Runtime.InteropServices;
 
 namespace Overwatch_Map_Statistics_v3
 {
@@ -328,6 +332,43 @@ namespace Overwatch_Map_Statistics_v3
         private void UpdateDataEntriesCount()
         {
             entries_count_label.Text = $"Entries: {data_entries_grid.Rows.Count}";
+        }
+
+        [DllImport("user32.dll")]
+        private static extern short GetAsyncKeyState(int vKey);
+        public static bool IsKeyDown(Keys key)
+        {
+            return (GetAsyncKeyState((int)key) & 0x8000) != 0;
+        }
+
+        private int cooldown = 0;
+        private void hotkey_check_timer_Tick(object sender, EventArgs e)
+        {
+            string file = "mapselectionwinrates.txt";
+            if (cooldown > 0) cooldown--;
+            if (IsKeyDown(Keys.F8) && cooldown == 0)
+            {
+                if (File.Exists(file))
+                {
+                    if (File.ReadAllText(file).Length > 0)
+                    {
+                        //SystemSounds.Hand.Play();
+                        File.WriteAllText(file, "");
+                        cooldown = 20;
+                        return;
+                    }
+                }
+                var maps = ScreenshotManager.CaptureMaps();
+                //var maps = ScreenshotManager.GetMapsFromImage();
+                string line = "";
+                foreach (var map in maps)
+                {
+                    line += $"Win %: {mapstats[map].winrate}      ";//$"Map: {map} Win %: {mapstats[map].winrate}";
+                }
+                File.WriteAllText(file, line);
+                //SystemSounds.Beep.Play();
+                cooldown = 20;
+            }
         }
     }
 }
