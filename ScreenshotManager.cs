@@ -38,9 +38,14 @@ namespace Overwatch_Map_Statistics_v3
                     using (var page = engine.Process(img))
                     {
                         string text = page.GetText();
+                        Main.LogText($"Raw text: {text}");
                         foreach (var map in Main.allmaps)
                         {
-                            if (text.Contains(map.mapname, StringComparison.OrdinalIgnoreCase)) confirmedmaps.Add(map.mapname);
+                            if (text.Contains(map.mapname, StringComparison.OrdinalIgnoreCase))
+                            {
+                                confirmedmaps.Add(map.mapname);
+                                Main.LogText($"Map: {map.mapname}");
+                            }
                         }
                         confirmedmaps = confirmedmaps.OrderBy(map => text.IndexOf(map, StringComparison.OrdinalIgnoreCase)).ToHashSet();
                     }

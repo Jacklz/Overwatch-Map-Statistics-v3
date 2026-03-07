@@ -13,6 +13,7 @@ namespace Overwatch_Map_Statistics_v3
         public static Dictionary<string, string> maptomode = [];
         public static List<string> roles = ["Open Queue", "DPS", "Tank", "Support"];
         public static bool showconfirmationdialogs = true;
+        public static Action<string>? LogText;
 
         public Main()
         {
@@ -24,6 +25,7 @@ namespace Overwatch_Map_Statistics_v3
             LoadSettings();
             session_date_picker.Value = DateTime.Today;
             CheckAndCreateFiles();
+            LogText = (text) => { LogText_internal(text); };
         }
 
         private void CheckAndCreateFiles()
@@ -643,6 +645,11 @@ namespace Overwatch_Map_Statistics_v3
         private void CloseProgram()
         {
             Close();
+        }
+
+        private void LogText_internal(string text)
+        {
+            log_box.Items.Add(text);
         }
 
         public static void WriteSessionToFile(params string[] serializeddata)

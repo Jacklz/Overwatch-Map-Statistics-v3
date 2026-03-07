@@ -1,8 +1,5 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Vml;
 using Newtonsoft.Json;
-using System.Diagnostics;
-using System.Media;
 using System.Runtime.InteropServices;
 
 namespace Overwatch_Map_Statistics_v3
@@ -360,12 +357,12 @@ namespace Overwatch_Map_Statistics_v3
                 }
                 var maps = ScreenshotManager.CaptureMaps();
                 //var maps = ScreenshotManager.GetMapsFromImage();
-                string line = "";
+                List<string> lines = [];
                 foreach (var map in maps)
                 {
-                    line += $"Win %: {mapstats[map].winrate}      ";//$"Map: {map} Win %: {mapstats[map].winrate}";
+                    lines.Add($"{map} Win %: {mapstats[map].winrate}");
                 }
-                File.WriteAllText(file, line);
+                File.WriteAllText(file, string.Join("|", lines));
                 //SystemSounds.Beep.Play();
                 cooldown = 20;
             }
