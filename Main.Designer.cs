@@ -98,6 +98,7 @@
             label16 = new Label();
             log_box = new ListBox();
             confirm_dialogs_checkbox = new CheckBox();
+            clear_log_button = new Button();
             tabControl1.SuspendLayout();
             session_page.SuspendLayout();
             maps_page.SuspendLayout();
@@ -768,6 +769,7 @@
             // 
             // settings_page
             // 
+            settings_page.Controls.Add(clear_log_button);
             settings_page.Controls.Add(label16);
             settings_page.Controls.Add(log_box);
             settings_page.Controls.Add(confirm_dialogs_checkbox);
@@ -781,7 +783,7 @@
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(8, 50);
+            label16.Location = new Point(8, 58);
             label16.Name = "label16";
             label16.Size = new Size(69, 15);
             label16.TabIndex = 2;
@@ -791,9 +793,9 @@
             // 
             log_box.FormattingEnabled = true;
             log_box.HorizontalScrollbar = true;
-            log_box.Location = new Point(8, 68);
+            log_box.Location = new Point(8, 83);
             log_box.Name = "log_box";
-            log_box.Size = new Size(318, 229);
+            log_box.Size = new Size(514, 214);
             log_box.TabIndex = 1;
             // 
             // confirm_dialogs_checkbox
@@ -808,6 +810,16 @@
             confirm_dialogs_checkbox.Text = "Show confirmation dialogs";
             confirm_dialogs_checkbox.UseVisualStyleBackColor = true;
             confirm_dialogs_checkbox.CheckedChanged += confirm_dialogs_checkbox_CheckedChanged;
+            // 
+            // clear_log_button
+            // 
+            clear_log_button.Location = new Point(83, 54);
+            clear_log_button.Name = "clear_log_button";
+            clear_log_button.Size = new Size(75, 23);
+            clear_log_button.TabIndex = 3;
+            clear_log_button.Text = "Clear log";
+            clear_log_button.UseVisualStyleBackColor = true;
+            clear_log_button.Click += clear_log_button_Click;
             // 
             // Main
             // 
@@ -914,5 +926,6 @@
         private Button gen_rand_stats_button;
         private Label label16;
         private ListBox log_box;
+        private Button clear_log_button;
     }
 }

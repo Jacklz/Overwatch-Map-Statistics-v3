@@ -650,6 +650,7 @@ namespace Overwatch_Map_Statistics_v3
         private void LogText_internal(string text)
         {
             log_box.Items.Add(text);
+            log_box.SelectedIndex = log_box.Items.Count - 1;
         }
 
         public static void WriteSessionToFile(params string[] serializeddata)
@@ -741,6 +742,11 @@ namespace Overwatch_Map_Statistics_v3
             }
             WriteSessionToFile([.. serialized]);
             MessageBox.Show("Generated 200 random stats");
+        }
+
+        private void clear_log_button_Click(object sender, EventArgs e)
+        {
+            log_box.Items.Clear();
         }
     }
 }

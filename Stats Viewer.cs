@@ -339,16 +339,18 @@ namespace Overwatch_Map_Statistics_v3
         }
 
         private int cooldown = 0;
+        private string file = "mapselectionwinrates.txt";
         private void hotkey_check_timer_Tick(object sender, EventArgs e)
-        {
-            string file = "mapselectionwinrates.txt";
+        {                    
             if (cooldown > 0) cooldown--;
             if (IsKeyDown(Keys.F8) && cooldown == 0)
             {
+                Main.LogText("Key pressed");
                 if (File.Exists(file))
                 {
                     if (File.ReadAllText(file).Length > 0)
                     {
+                        Main.LogText("resetting winrate file");
                         //SystemSounds.Hand.Play();
                         File.WriteAllText(file, "");
                         cooldown = 20;
@@ -362,6 +364,7 @@ namespace Overwatch_Map_Statistics_v3
                 {
                     lines.Add($"{map} Win %: {mapstats[map].winrate}");
                 }
+                Main.LogText("writing winrates");
                 File.WriteAllText(file, string.Join("|", lines));
                 //SystemSounds.Beep.Play();
                 cooldown = 20;
