@@ -319,21 +319,9 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name!");
                 return;
             }
-            if (Main.statprofiles.Contains(newname))
-            {
-                MessageBox.Show("This stat profile already exists!");
-                return;
-            }
-            Main.statprofiles.Add(newname);
             instance.UpdateStatDisplayLists();
             List<SessionRecordEntry> newentries = [.. filteredentries.Select(entry => entry.Clone())];
-            List<string> serializeddata = [];
-            foreach (SessionRecordEntry entry in newentries)
-            {
-                entry.statprofilename = newname;
-                serializeddata.Add(JsonConvert.SerializeObject(entry));
-            }
-            Main.WriteSessionToFile([.. serializeddata]);
+            StatProfileManager.SaveStatProfileData(newname, false, [.. newentries]);
             MessageBox.Show("Successfully saved selected data to new stat profile");
         }
 

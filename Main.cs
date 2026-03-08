@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Overwatch_Map_Statistics_v3
 {
@@ -26,6 +25,7 @@ namespace Overwatch_Map_Statistics_v3
             LoadSettings();
             session_date_picker.Value = DateTime.Today;
             PrepareDirectory();
+            UpdateAllDisplayLists();
             //CheckAndCreateFiles();
             LogText = (text) => { LogText_internal(text); };
         }
@@ -36,6 +36,16 @@ namespace Overwatch_Map_Statistics_v3
             StatProfileManager.LoadStatProfiles();
             Directory.CreateDirectory("Text data");
             EntriesManager.CreateAllFiles();
+        }
+
+        private void UpdateAllDisplayLists()
+        {
+            UpdateMapsDisplayLists();
+            UpdateModesDisplayLists();
+            UpdateNotesDisplayLists();
+            UpdateOutcomesDisplayLists();
+            UpdateProfileDisplayLists();
+            UpdateStatDisplayLists();
         }
 
         //private void CheckAndCreateFiles()
@@ -333,7 +343,7 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a mode name!");
                 return;
             }
-            EntriesManager.ModifyEntry(EntriesManager.EntryType.mode, "mode", false);
+            EntriesManager.ModifyEntry(EntriesManager.EntryType.mode, mode, false);
             UpdateModesDisplayLists();
             mode_name_textbox.Clear();
         }
@@ -371,7 +381,7 @@ namespace Overwatch_Map_Statistics_v3
             if (index == -1) return;
             if (!RequestConfirmation("Are you sure you want to delete the selected map?")) return;
             string? mapname = maplist_box.Items[index].ToString();
-            EntriesManager.RemoveMap(map => map.mapname == mapname);
+            EntriesManager.RemoveMap(map => map.fullname == mapname);
             UpdateMapsDisplayLists();
             maplist_box.SelectedIndex = -1;
         }
@@ -630,7 +640,7 @@ namespace Overwatch_Map_Statistics_v3
                 session.AddMapResult(mapdata);
             }
             string serializeddata = JsonConvert.SerializeObject(session);
-            WriteSessionToFile(serializeddata);
+            StatProfileManager.SaveStatProfileData(statprofile, false, session);
             var result = MessageBox.Show("Successfully saved stats. Close program?", "", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes) CloseProgram();
         }
@@ -671,7 +681,7 @@ namespace Overwatch_Map_Statistics_v3
             {
                 serialized.Add(JsonConvert.SerializeObject(entry));
             }
-            WriteSessionToFile([.. serialized]);
+            StatProfileManager.SaveStatProfileData(entries[0].statprofilename, true, [.. entries]);
             MessageBox.Show("Converted legacy stats");
         }
 
@@ -731,12 +741,7 @@ namespace Overwatch_Map_Statistics_v3
                 }
                 randomrecords.Add(record);
             }
-            List<string> serialized = [];
-            foreach (var entry in randomrecords)
-            {
-                serialized.Add(JsonConvert.SerializeObject(entry));
-            }
-            WriteSessionToFile([.. serialized]);
+            StatProfileManager.SaveStatProfileData(randomrecords[0].statprofilename, true, [.. randomrecords]);
             MessageBox.Show("Generated 200 random stats");
         }
 

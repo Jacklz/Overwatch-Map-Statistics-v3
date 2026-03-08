@@ -39,7 +39,7 @@ namespace Overwatch_Map_Statistics_v3
             MessageBox.Show("Successfully created new stat profile");
         }
 
-        public static void SaveStatProfileData(string statprofile, List<SessionRecordEntry> entries, bool overwrite)
+        public static void SaveStatProfileData(string statprofile, bool overwrite, params SessionRecordEntry[] entries)
         {
             string path = Path.Combine(dir, $"{statprofile}.json");
             using StreamWriter writer = new(path, !overwrite);

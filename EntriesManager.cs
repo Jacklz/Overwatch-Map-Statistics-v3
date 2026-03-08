@@ -54,7 +54,7 @@
 
         private static void UpdateFile(string filename, SortedSet<string> entries)
         {
-            string path = Path.Combine(dir, filename);
+            string path = Path.Combine(dir, $"{filename}.txt");
             File.WriteAllLines(path, entries);
         }
 
