@@ -1,6 +1,5 @@
-﻿using ClosedXML.Excel;
-using Newtonsoft.Json;
-using System.Runtime.InteropServices;
+﻿using Newtonsoft.Json;
+using System.Text;
 
 namespace Overwatch_Map_Statistics_v3
 {
@@ -226,44 +225,94 @@ namespace Overwatch_Map_Statistics_v3
 
         private void export_stats_button_Click(object sender, EventArgs e)
         {
-            Dictionary<string, DataGridView> stats = [];
-            stats.Add("Map Stats", map_stats_grid);
-            stats.Add("Totals", totals_grid);
-            stats.Add("Mode Totals", mode_stats_grid);
-            stats.Add("Day Stats", day_stats_grid);
-            ExportToExcel(stats, "recordsheet.xlsx");
-            MessageBox.Show("Successfully exported current state of grids to file 'recordsheet.xlsx'");
+            ExportCsv(map_stats_grid, "stats.csv");
+            //Dictionary<string, DataGridView> stats = [];
+            //stats.Add("Map Stats", map_stats_grid);
+            //stats.Add("Totals", totals_grid);
+            //stats.Add("Mode Totals", mode_stats_grid);
+            //stats.Add("Day Stats", day_stats_grid);
+            //ExportToExcel(stats, "recordsheet.xlsx");
+            //MessageBox.Show("Successfully exported current state of grids to file 'recordsheet.xlsx'");
         }
 
-        public static void ExportToExcel(Dictionary<string, DataGridView> dataGrids, string filePath)
+        public static void ExportCsv(DataGridView dgv, string path)
         {
-            using var workbook = new XLWorkbook();
-            foreach (var kvp in dataGrids)
-            {
-                string sheetName = kvp.Key;
-                DataGridView dgv = kvp.Value;
-                var ws = workbook.Worksheets.Add(sheetName);
-                // Headers
-                for (int col = 0; col < dgv.Columns.Count; col++)
-                {
-                    ws.Cell(1, col + 1).Value = dgv.Columns[col].HeaderText;
-                }
-                // Rows
-                for (int row = 0; row < dgv.Rows.Count; row++)
-                {
-                    if (dgv.Rows[row].IsNewRow) continue;
-                    for (int col = 0; col < dgv.Columns.Count; col++)
-                    {
-                        ws.Cell(row + 2, col + 1).Value = dgv.Rows[row].Cells[col].Value?.ToString() ?? "";
-                    }
-                }
-                ws.Columns().AdjustToContents();
-            }
-            workbook.SaveAs(filePath);
+            var lines = new List<string>();
+
+            lines.Add(string.Join(",", dgv.Columns
+                .Cast<DataGridViewColumn>()
+                .Select(c => Escape(c.HeaderText))));
+
+            lines.AddRange(dgv.Rows
+                .Cast<DataGridViewRow>()
+                .Where(r => !r.IsNewRow)
+                .Select(r => string.Join(",", r.Cells
+                    .Cast<DataGridViewCell>()
+                    .Select(c => Escape(c.Value?.ToString() ?? "")))));
+
+            File.WriteAllLines(path, lines, Encoding.UTF8);
         }
 
+        static string Escape(string s)
+        {
+            if (s.Contains('"')) s = s.Replace("\"", "\"\"");
+            if (s.Contains(',') || s.Contains('"') || s.Contains('\n')) s = $"\"{s}\"";
+            return s;
+        }
+
+        //public static void ExportToExcel(Dictionary<string, DataGridView> grids, string file)
+        //{
+        //    using var workbook = new XLWorkbook();
+        //    foreach (var kvp in grids)
+        //    {
+        //        string sheetName = kvp.Key;
+        //        DataGridView dgv = kvp.Value;
+        //        var ws = workbook.Worksheets.Add(sheetName);
+        //        // Headers
+        //        for (int col = 0; col < dgv.Columns.Count; col++)
+        //        {
+        //            ws.Cell(1, col + 1).Value = dgv.Columns[col].HeaderText;
+        //        }
+        //        // Rows
+        //        for (int row = 0; row < dgv.Rows.Count; row++)
+        //        {
+        //            if (dgv.Rows[row].IsNewRow) continue;
+        //            for (int col = 0; col < dgv.Columns.Count; col++)
+        //            {
+        //                ws.Cell(row + 2, col + 1).Value = dgv.Rows[row].Cells[col].Value?.ToString() ?? "";
+        //            }
+        //        }
+        //        ws.Columns().AdjustToContents();
+        //    }
+        //    workbook.SaveAs(file);
+        //}
+
+        //private void testdeserialize()
+        //{
+        //    foreach (var entry in File.ReadAllLines("testserialize.json"))
+        //    {
+        //        SessionRecordEntry? record = System.Text.Json.JsonSerializer.Deserialize<SessionRecordEntry>(entry);
+        //        if (record == null) continue;
+        //        Main.LogText(record.mapdata[0].mapname);
+        //    }
+        //}
+        
+        
         private void save_selection_Click(object sender, EventArgs e)
         {
+            //testdeserialize();
+            //return;
+            //List<string> test = [];
+            //var options = new JsonSerializerOptions
+            //{
+            //    IncludeFields = true,
+            //};
+            //foreach (var entry in filteredentries)
+            //{
+            //    test.Add(System.Text.Json.JsonSerializer.Serialize(entry, options));
+            //}
+            //File.WriteAllLines("testserialize.json", test);
+            //return;
             string newname = newstat_profilename_textbox.Text;
             if (newname.Length == 0)
             {
@@ -331,44 +380,41 @@ namespace Overwatch_Map_Statistics_v3
             entries_count_label.Text = $"Entries: {data_entries_grid.Rows.Count}";
         }
 
-        [DllImport("user32.dll")]
-        private static extern short GetAsyncKeyState(int vKey);
-        public static bool IsKeyDown(Keys key)
-        {
-            return (GetAsyncKeyState((int)key) & 0x8000) != 0;
-        }
+        //[DllImport("user32.dll")]
+        //private static extern short GetAsyncKeyState(int vKey);
+        //public static bool IsKeyDown(Keys key)
+        //{
+        //    return (GetAsyncKeyState((int)key) & 0x8000) != 0;
+        //}
 
-        private int cooldown = 0;
-        private string file = "mapselectionwinrates.txt";
-        private void hotkey_check_timer_Tick(object sender, EventArgs e)
-        {                    
-            if (cooldown > 0) cooldown--;
-            if (IsKeyDown(Keys.F8) && cooldown == 0)
-            {
-                Main.LogText("Key pressed");
-                if (File.Exists(file))
-                {
-                    if (File.ReadAllText(file).Length > 0)
-                    {
-                        Main.LogText("resetting winrate file");
-                        //SystemSounds.Hand.Play();
-                        File.WriteAllText(file, "");
-                        cooldown = 20;
-                        return;
-                    }
-                }
-                var maps = ScreenshotManager.CaptureMaps();
-                //var maps = ScreenshotManager.GetMapsFromImage();
-                List<string> lines = [];
-                foreach (var map in maps)
-                {
-                    lines.Add($"{map} Win %: {mapstats[map].winrate}");
-                }
-                Main.LogText("writing winrates");
-                File.WriteAllText(file, string.Join("|", lines));
-                //SystemSounds.Beep.Play();
-                cooldown = 20;
-            }
-        }
+        //private int cooldown = 0;
+        //private void hotkey_check_timer_Tick(object sender, EventArgs e)
+        //{
+        //    if (cooldown > 0) cooldown--;
+        //    if (IsKeyDown(Keys.F8) && cooldown == 0)
+        //    {
+        //        Main.LogText("Key pressed");
+        //        for (int a = 0; a < ScreenshotManager.maps.Count; a++)
+        //        {
+        //            string file = $"map{a}winrate.txt";
+        //            if (!File.Exists(file)) continue;
+        //            if (File.ReadAllText(file).Length > 0)
+        //            {
+        //                Main.LogText($"resetting {file}");
+        //                File.WriteAllText(file, "");
+        //                cooldown = 20;
+        //            }
+        //        }
+        //        var maps = ScreenshotManager.CaptureMaps().ToList();
+        //        for (int a = 0; a < maps.Count; a++)
+        //        {
+        //            string file = $"map{a}winrate.txt";
+        //            string map = maps[a];
+        //            Main.LogText($"writing winrate for {map} to {file}");
+        //            File.WriteAllText(file, $"Win %: {mapstats[map].winrate}");
+        //        }
+        //        cooldown = 20;
+        //    }
+        //}
     }
 }
