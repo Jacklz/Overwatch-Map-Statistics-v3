@@ -24,7 +24,7 @@ namespace Overwatch_Map_Statistics_v3
         {
             LoadSettings();
             session_date_picker.Value = DateTime.Today;
-            PrepareDirectory();
+            PrepareDirectory();       
             UpdateAllDisplayLists();
             //CheckAndCreateFiles();
             LogText = (text) => { LogText_internal(text); };
@@ -40,6 +40,7 @@ namespace Overwatch_Map_Statistics_v3
 
         private void UpdateAllDisplayLists()
         {
+            UpdateRoleDisplayList();
             UpdateMapsDisplayLists();
             UpdateModesDisplayLists();
             UpdateNotesDisplayLists();
@@ -116,6 +117,15 @@ namespace Overwatch_Map_Statistics_v3
             {
                 statprofiles_checkedlistbox.Items.Add(profile);
                 save_statprofile_combobox.Items.Add(profile);
+            }
+        }
+
+        public void UpdateRoleDisplayList()
+        {
+            role_combobox.Items.Clear();
+            foreach (var role in EntriesManager.allroles)
+            {
+                role_combobox.Items.Add(role);
             }
         }
 
@@ -243,12 +253,14 @@ namespace Overwatch_Map_Statistics_v3
         {
             maplist_combobox.Items.Clear();
             maplist_box.Items.Clear();
+            maptomode.Clear();
             EntriesManager.allmaps.Sort((m1, m2) =>
             {
                 return m1.mapname.CompareTo(m2.mapname);
             });
             foreach (var map in EntriesManager.allmaps)
             {
+                maptomode[map.mapname] = map.mode;
                 maplist_combobox.Items.Add(map.mapname);
                 maplist_box.Items.Add(map.fullname);
             }
@@ -581,20 +593,10 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Select a stat profile!");
                 return;
             }
-            if (!File.Exists("records.json"))
-            {
-                MessageBox.Show("Could not open stats as no records.json file was found");
-                return;
-            }
             List<SessionRecordEntry> entries = [];
-            foreach (var line in File.ReadAllLines("records.json"))
+            foreach (var profile in statprofiles)
             {
-                SessionRecordEntry? record = JsonConvert.DeserializeObject<SessionRecordEntry>(line);
-                if (record == null) continue;
-                if (statprofiles.Contains(record.statprofilename))
-                {
-                    entries.Add(record);
-                }
+                entries.AddRange(StatProfileManager.GetStatsFromStatProfile(profile));
             }
             Stats_Viewer stats_Viewer = new(entries, this, statprofiles);
             stats_Viewer.Show();
@@ -682,6 +684,7 @@ namespace Overwatch_Map_Statistics_v3
                 serialized.Add(JsonConvert.SerializeObject(entry));
             }
             StatProfileManager.SaveStatProfileData(entries[0].statprofilename, true, [.. entries]);
+            UpdateStatDisplayLists();
             MessageBox.Show("Converted legacy stats");
         }
 
@@ -742,6 +745,7 @@ namespace Overwatch_Map_Statistics_v3
                 randomrecords.Add(record);
             }
             StatProfileManager.SaveStatProfileData(randomrecords[0].statprofilename, true, [.. randomrecords]);
+            UpdateStatDisplayLists();
             MessageBox.Show("Generated 200 random stats");
         }
 

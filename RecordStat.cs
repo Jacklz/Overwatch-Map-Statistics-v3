@@ -26,5 +26,10 @@
                 //DayStat.HandleOutcome(data.outcome);
             }
         }
+
+        public void Combine(RecordStat stat)
+        {
+
+        }
     }
 }

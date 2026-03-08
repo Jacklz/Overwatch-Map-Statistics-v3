@@ -26,6 +26,7 @@ namespace Overwatch_Map_Statistics_v3
             this.statprofiles.AddRange(statprofiles);
         }
 
+        //need to account for an empty stats list
         private void Stats_Viewer_Load(object sender, EventArgs e)
         {
             string plural = "";
@@ -318,10 +319,10 @@ namespace Overwatch_Map_Statistics_v3
             {
                 MessageBox.Show("Enter a name!");
                 return;
-            }
-            instance.UpdateStatDisplayLists();
+            }            
             List<SessionRecordEntry> newentries = [.. filteredentries.Select(entry => entry.Clone())];
             StatProfileManager.SaveStatProfileData(newname, false, [.. newentries]);
+            instance.UpdateStatDisplayLists();
             MessageBox.Show("Successfully saved selected data to new stat profile");
         }
 

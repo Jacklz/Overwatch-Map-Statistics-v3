@@ -93,6 +93,7 @@
         {
             SortedSet<string> notes =
             [
+                "Cheater",
                 "Friendly DC",
                 "Friendly cheater",
                 "Enemy DC",

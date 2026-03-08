@@ -22,25 +22,26 @@ namespace Overwatch_Map_Statistics_v3
             statprofiles.Remove(statprofile);
             string path = Path.Combine(dir, $"{statprofile}.json");
             File.Delete(path);
-            MessageBox.Show($"Successfully deleted stat profile '{statprofile}'");
+            //MessageBox.Show($"Successfully deleted stat profile '{statprofile}'");
         }
 
         public static void CreateStatProfile(string statprofile)
         {
             if (!statprofiles.Add(statprofile))
             {
-                MessageBox.Show($"Cannot add stat profile '{statprofile}'. It already exists.", "Duplicate entry");
-                SystemSounds.Hand.Play();
+                //MessageBox.Show($"Cannot add stat profile '{statprofile}'. It already exists.", "Duplicate entry");
+                //SystemSounds.Hand.Play();
                 return;
             }
             string path = Path.Combine(dir, $"{statprofile}.json");
             File.WriteAllLines(path, []);
             statprofiles.Add(statprofile);
-            MessageBox.Show("Successfully created new stat profile");
+            //MessageBox.Show("Successfully created new stat profile");
         }
 
         public static void SaveStatProfileData(string statprofile, bool overwrite, params SessionRecordEntry[] entries)
         {
+            CreateStatProfile(statprofile);
             string path = Path.Combine(dir, $"{statprofile}.json");
             using StreamWriter writer = new(path, !overwrite);
             foreach (var entry in entries)
