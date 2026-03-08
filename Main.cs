@@ -1,18 +1,18 @@
 using Newtonsoft.Json;
-using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Overwatch_Map_Statistics_v3
 {
     public partial class Main : Form
     {
-        public static List<string> allmodes = [];
-        public static List<Map> allmaps = [];
-        public static List<string> allnotes = [];
-        public static List<string> alloutcomes = [];
-        public static List<string> profiles = [];
-        public static List<string> statprofiles = [];
+        //public static List<string> allmodes = [];
+        //public static List<Map> allmaps = [];
+        //public static List<string> allnotes = [];
+        //public static List<string> alloutcomes = [];
+        //public static List<string> profiles = [];
+        //public static List<string> statprofiles = [];
         public static Dictionary<string, string> maptomode = [];
-        public static List<string> roles = ["Open Queue", "DPS", "Tank", "Support"];
+        //public static List<string> roles = ["Open Queue", "DPS", "Tank", "Support"];
         public static bool showconfirmationdialogs = true;
         public static Action<string>? LogText;
 
@@ -102,12 +102,11 @@ namespace Overwatch_Map_Statistics_v3
         {
             statprofiles_checkedlistbox.Items.Clear();
             save_statprofile_combobox.Items.Clear();
-            statprofiles.Sort();
-            statprofiles.ForEach(profile =>
+            foreach (var profile in StatProfileManager.statprofiles)
             {
                 statprofiles_checkedlistbox.Items.Add(profile);
                 save_statprofile_combobox.Items.Add(profile);
-            });
+            }
         }
 
         //private void LoadOutcomes()
@@ -136,12 +135,11 @@ namespace Overwatch_Map_Statistics_v3
         {
             outcomes_listbox.Items.Clear();
             outcome_combobox.Items.Clear();
-            alloutcomes.Sort();
-            alloutcomes.ForEach(outcome =>
+            foreach (var outcome in EntriesManager.alloutcomes)
             {
                 outcomes_listbox.Items.Add(outcome);
                 outcome_combobox.Items.Add(outcome);
-            });
+            }
         }
 
         //private void LoadNotes()
@@ -174,12 +172,11 @@ namespace Overwatch_Map_Statistics_v3
         {
             notes_listbox.Items.Clear();
             notes_checkedlistbox.Items.Clear();
-            allnotes.Sort();
-            allnotes.ForEach(note =>
+            foreach (var note in EntriesManager.allnotes)
             {
                 notes_listbox.Items.Add(note);
                 notes_checkedlistbox.Items.Add(note);
-            });
+            }
         }
 
         //private void LoadMapModes()
@@ -202,12 +199,11 @@ namespace Overwatch_Map_Statistics_v3
         {
             map_type_combo.Items.Clear();
             modelist_box.Items.Clear();
-            allmodes.Sort();
-            allmodes.ForEach(mode =>
+            foreach (var mode in EntriesManager.allmodes)
             {
                 map_type_combo.Items.Add(mode);
                 modelist_box.Items.Add(mode);
-            });
+            }
         }
 
         //private void LoadMaps()
@@ -237,15 +233,15 @@ namespace Overwatch_Map_Statistics_v3
         {
             maplist_combobox.Items.Clear();
             maplist_box.Items.Clear();
-            allmaps.Sort((m1, m2) =>
+            EntriesManager.allmaps.Sort((m1, m2) =>
             {
                 return m1.mapname.CompareTo(m2.mapname);
             });
-            allmaps.ForEach(map =>
+            foreach (var map in EntriesManager.allmaps)
             {
                 maplist_combobox.Items.Add(map.mapname);
                 maplist_box.Items.Add(map.fullname);
-            });
+            }
         }
 
         //private void LoadProfiles()
@@ -337,9 +333,8 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a mode name!");
                 return;
             }
-            allmodes.Add(mode);
+            EntriesManager.ModifyEntry(EntriesManager.EntryType.mode, "mode", false);
             UpdateModesDisplayLists();
-            File.WriteAllLines("modes.txt", allmodes);
             mode_name_textbox.Clear();
         }
 
@@ -350,9 +345,8 @@ namespace Overwatch_Map_Statistics_v3
             if (!RequestConfirmation("Are you sure you want to delete the selected mode?")) return;
             string? mode = modelist_box.Items[index]?.ToString();
             modelist_box.Items.RemoveAt(index);
-            allmodes.RemoveAll(entry => entry == mode);
+            EntriesManager.ModifyEntry(EntriesManager.EntryType.mode, mode, true);
             UpdateModesDisplayLists();
-            File.WriteAllLines("modes.txt", allmodes);
         }
 
         private void add_map_button_Click(object sender, EventArgs e)
@@ -365,9 +359,8 @@ namespace Overwatch_Map_Statistics_v3
                 return;
             }
             string? maptype = map_type_combo.Items[index]?.ToString();
-            allmaps.Add(new(mapname, maptype));
+            EntriesManager.ModifyMaps(new Map(mapname, maptype), false);
             UpdateMapsDisplayLists();
-            File.WriteAllLines("maps.txt", allmaps.Select(entry => entry.fullname));
             map_name_textbox.Clear();
             map_type_combo.SelectedIndex = -1;
         }
@@ -378,9 +371,8 @@ namespace Overwatch_Map_Statistics_v3
             if (index == -1) return;
             if (!RequestConfirmation("Are you sure you want to delete the selected map?")) return;
             string? mapname = maplist_box.Items[index].ToString();
-            allmaps.RemoveAll(entry => entry.fullname == mapname);
+            EntriesManager.RemoveMap(map => map.mapname == mapname);
             UpdateMapsDisplayLists();
-            File.WriteAllLines("maps.txt", allmaps.Select(entry => entry.fullname));
             maplist_box.SelectedIndex = -1;
         }
 
@@ -392,9 +384,8 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name for the outcome");
                 return;
             }
-            alloutcomes.Add(name);
+            EntriesManager.ModifyEntry(EntriesManager.EntryType.outcome, name, false);
             UpdateOutcomesDisplayLists();
-            File.WriteAllLines("outcomes.txt", alloutcomes);
             outcome_textbox.Clear();
         }
 
@@ -404,9 +395,8 @@ namespace Overwatch_Map_Statistics_v3
             if (index == -1) return;
             if (!RequestConfirmation("Are you sure you want to delete the selected outcome?")) return;
             string? name = outcomes_listbox.Items[index]?.ToString();
-            alloutcomes.RemoveAll(entry => entry == name);
+            EntriesManager.ModifyEntry(EntriesManager.EntryType.outcome, name, true);
             UpdateOutcomesDisplayLists();
-            File.WriteAllLines("outcomes.txt", alloutcomes);
             outcomes_listbox.SelectedIndex = -1;
         }
 
@@ -418,9 +408,8 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name for the note");
                 return;
             }
-            allnotes.Add(name);
+            EntriesManager.ModifyEntry(EntriesManager.EntryType.note, name, false);
             UpdateNotesDisplayLists();
-            File.WriteAllLines("notes.txt", allnotes);
             note_textbox.Clear();
         }
 
@@ -430,9 +419,8 @@ namespace Overwatch_Map_Statistics_v3
             if (index == -1) return;
             if (!RequestConfirmation("Are you sure you want to delete the selected note?")) return;
             string? name = notes_listbox.Items[index]?.ToString();
-            allnotes.RemoveAll(entry => entry == name);
+            EntriesManager.ModifyEntry(EntriesManager.EntryType.outcome, name, true);
             UpdateNotesDisplayLists();
-            File.WriteAllLines("notes.txt", allnotes);
             notes_listbox.SelectedIndex = -1;
         }
 
@@ -444,14 +432,13 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name for the profile");
                 return;
             }
-            if (profiles.Contains(name))
-            {
-                MessageBox.Show("This profile already exists!");
-                return;
-            }
-            profiles.Add(name);
+            //if (profiles.Contains(name))
+            //{
+            //    MessageBox.Show("This profile already exists!");
+            //    return;
+            //}
+            EntriesManager.ModifyEntry(EntriesManager.EntryType.profile, name, false);
             UpdateProfileDisplayLists();
-            File.WriteAllLines("profiles.txt", profiles);
             profilename_textbox.Clear();
         }
 
@@ -463,11 +450,10 @@ namespace Overwatch_Map_Statistics_v3
             var result = MessageBox.Show("Removing this profile will also delete all stat profiles associated with it. Are you sure?", "Warning", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                profiles.RemoveAll(entry => entry == name);
+                EntriesManager.ModifyEntry(EntriesManager.EntryType.profile, name, true);
                 UpdateProfileDisplayLists();
-                File.WriteAllLines("profiles.txt", profiles);
                 profiles_listbox.SelectedIndex = -1;
-                DeleteProfileData(name, false);
+                //DeleteProfileData(name, false);
             }
         }
 
@@ -475,12 +461,11 @@ namespace Overwatch_Map_Statistics_v3
         {
             profiles_listbox.Items.Clear();
             save_profile_combobox.Items.Clear();
-            profiles.Sort();
-            profiles.ForEach(entry =>
+            foreach (var profile in EntriesManager.allprofiles)
             {
-                profiles_listbox.Items.Add(entry);
-                save_profile_combobox.Items.Add(entry);
-            });
+                profiles_listbox.Items.Add(profile);
+                save_profile_combobox.Items.Add(profile);
+            }
         }
 
         private void add_statprofile_button_Click(object sender, EventArgs e)
@@ -491,14 +476,13 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name for the stat profile");
                 return;
             }
-            if (statprofiles.Contains(name))
-            {
-                MessageBox.Show("This stat profile already exists!");
-                return;
-            }
-            statprofiles.Add(name);
+            //if (statprofiles.Contains(name))
+            //{
+            //    MessageBox.Show("This stat profile already exists!");
+            //    return;
+            //}
+            StatProfileManager.CreateStatProfile(name);
             UpdateStatDisplayLists();
-            File.WriteAllLines("statprofiles.txt", statprofiles);
             statprofile_textbox.Clear();
         }
 
@@ -510,11 +494,10 @@ namespace Overwatch_Map_Statistics_v3
             var result = MessageBox.Show("Removing this stat profile will also delete the stats associated with it. Are you sure?", "Warning", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                statprofiles.RemoveAll(entry => entry == name);
+                StatProfileManager.RemoveStatProfile(name);
                 UpdateStatDisplayLists();
-                File.WriteAllLines("statprofiles.txt", statprofiles);
                 statprofiles_checkedlistbox.SelectedIndex = -1;
-                DeleteProfileData(name, true);
+                //DeleteProfileData(name, true);
             }
         }
 
@@ -663,14 +646,14 @@ namespace Overwatch_Map_Statistics_v3
             log_box.SelectedIndex = log_box.Items.Count - 1;
         }
 
-        public static void WriteSessionToFile(params string[] serializeddata)
-        {
-            using StreamWriter writer = new("records.json", true);
-            foreach (var entry in serializeddata)
-            {
-                writer.WriteLine(entry);
-            }
-        }
+        //public static void WriteSessionToFile(params string[] serializeddata)
+        //{
+        //    using StreamWriter writer = new("records.json", true);
+        //    foreach (var entry in serializeddata)
+        //    {
+        //        writer.WriteLine(entry);
+        //    }
+        //}
 
         private void view_legacy_stats_Click(object sender, EventArgs e)
         {
@@ -722,6 +705,9 @@ namespace Overwatch_Map_Statistics_v3
         private void gen_rand_stats_button_Click(object sender, EventArgs e)
         {
             List<SessionRecordEntry> randomrecords = [];
+            var allmaps = EntriesManager.allmaps;
+            var alloutcomes = EntriesManager.alloutcomes.ToList();
+            var allnotes = EntriesManager.allnotes.ToList();
             for (int b = 0; b < 200; b++)
             {
                 DateTime datebegin = new(2023, 1, 1);

@@ -7,7 +7,7 @@ namespace Overwatch_Map_Statistics_v3
     {
         private static readonly string dir = "Stat profiles";
 
-        public static HashSet<string> statprofiles = [];
+        public static SortedSet<string> statprofiles = [];
 
         public static void LoadStatProfiles()
         {
@@ -15,6 +15,14 @@ namespace Overwatch_Map_Statistics_v3
             {
                 statprofiles.Add(entry);
             }
+        }
+
+        public static void RemoveStatProfile(string statprofile)
+        {
+            statprofiles.Remove(statprofile);
+            string path = Path.Combine(dir, $"{statprofile}.json");
+            File.Delete(path);
+            MessageBox.Show($"Successfully deleted stat profile '{statprofile}'");
         }
 
         public static void CreateStatProfile(string statprofile)

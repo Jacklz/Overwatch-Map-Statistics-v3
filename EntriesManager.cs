@@ -4,11 +4,11 @@
     {
         private static readonly string dir = "Text data";
 
-        public static List<string> allroles = [];
-        public static List<string> allmodes = [];
-        public static List<string> alloutcomes = [];
-        public static List<string> allnotes = [];
-        public static List<string> allprofiles = [];
+        public static SortedSet<string> allroles = [];
+        public static SortedSet<string> allmodes = [];
+        public static SortedSet<string> alloutcomes = [];
+        public static SortedSet<string> allnotes = [];
+        public static SortedSet<string> allprofiles = [];
         public static List<Map> allmaps = [];
 
         public static void CreateAllFiles()
@@ -21,7 +21,44 @@
             CreateProfiles();
         }
 
-        private static List<string> CheckOrCreateFile(string filename, List<string> entries)
+        public static void ModifyMaps(Map map, bool remove)
+        {
+            if (remove) allmaps.RemoveAll(entry => entry.fullname == map.fullname);
+            else allmaps.Add(map);
+            UpdateFile("maps", [.. allmaps.Select(entry => entry.fullname)]);
+        }
+
+        public static void RemoveMap(Predicate<Map> map)
+        {
+            allmaps.RemoveAll(map);
+            UpdateFile("maps", [.. allmaps.Select(entry => entry.fullname)]);
+        }
+
+        public enum EntryType { role, mode, outcome, note, profile }
+        public static void ModifyEntry(EntryType entrytype, string entry, bool remove)
+        {
+            SortedSet<string> list = [];
+            string filename = "";
+            switch (entrytype)
+            {
+                case EntryType.role: filename = "roles"; list = allroles; break;
+                case EntryType.mode: filename = "modes"; list = allmodes; break;
+                case EntryType.outcome: filename = "outcomes"; list = alloutcomes; break;
+                case EntryType.note: filename = "notes"; list = allnotes; break;
+                case EntryType.profile: filename = "profiles"; list = allprofiles; break;
+            }
+            if (remove) list.Remove(entry);
+            else list.Add(entry);
+            UpdateFile(filename, list);
+        }
+
+        private static void UpdateFile(string filename, SortedSet<string> entries)
+        {
+            string path = Path.Combine(dir, filename);
+            File.WriteAllLines(path, entries);
+        }
+
+        private static SortedSet<string> CheckOrCreateFile(string filename, SortedSet<string> entries)
         {
             string path = Path.Combine(dir, $"{filename}.txt");
             if (File.Exists(path)) return [.. File.ReadAllLines(path)];
@@ -36,25 +73,25 @@
 
         private static void CreateRoles()
         {
-            List<string> roles = ["Open Queue", "DPS", "Tank", "Support"];
+            SortedSet<string> roles = ["Open Queue", "DPS", "Tank", "Support"];
             allroles = CheckOrCreateFile("roles", roles);
         }
 
         private static void CreateModes()
         {
-            List<string> modes = ["Flashpoint", "Koth", "Hybrid", "Escort", "Push"];
+            SortedSet<string> modes = ["Flashpoint", "Koth", "Hybrid", "Escort", "Push"];
             allmodes = CheckOrCreateFile("modes", modes);
         }
 
         private static void CreateOutcomes()
         {
-            List<string> outcomes = ["Win", "Loss", "Draw", "Canceled", "Server Closed"];
+            SortedSet<string> outcomes = ["Win", "Loss", "Draw", "Canceled", "Server Closed"];
             alloutcomes = CheckOrCreateFile("outcomes", outcomes);
         }
 
         private static void CreateNotes()
         {
-            List<string> notes =
+            SortedSet<string> notes =
             [
                 "Friendly DC",
                 "Friendly cheater",

@@ -41,7 +41,7 @@ namespace Overwatch_Map_Statistics_v3
 
         private void LoadNotes()
         {
-            foreach (var entry in Main.allnotes)
+            foreach (var entry in EntriesManager.allnotes)
             {
                 notes_grid.Rows.Add(entry);
             }
