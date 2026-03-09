@@ -47,7 +47,7 @@
 
         public void AddMiscOutcome(string outcome, int count)
         {
-            if (miscoutcomes.TryGetValue(outcome, out MiscOutcomes value)) value.Add(count);
+            if (miscoutcomes.TryGetValue(outcome, out MiscOutcomes? value)) value.Add(count);
             else miscoutcomes[outcome] = new(outcome, count);
         }
 

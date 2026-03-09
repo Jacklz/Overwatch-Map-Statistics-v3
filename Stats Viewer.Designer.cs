@@ -271,6 +271,10 @@
             // 
             // notes_grid
             // 
+            notes_grid.AllowUserToAddRows = false;
+            notes_grid.AllowUserToDeleteRows = false;
+            notes_grid.AllowUserToResizeColumns = false;
+            notes_grid.AllowUserToResizeRows = false;
             dataGridViewCellStyle8.BackColor = Color.LightGray;
             notes_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle8;
             notes_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -278,6 +282,7 @@
             notes_grid.Columns.AddRange(new DataGridViewColumn[] { notes_notename, note_count });
             notes_grid.Location = new Point(3, 221);
             notes_grid.Name = "notes_grid";
+            notes_grid.ReadOnly = true;
             notes_grid.Size = new Size(314, 252);
             notes_grid.TabIndex = 2;
             // 
@@ -285,11 +290,13 @@
             // 
             notes_notename.HeaderText = "Note";
             notes_notename.Name = "notes_notename";
+            notes_notename.ReadOnly = true;
             // 
             // note_count
             // 
             note_count.HeaderText = "Count";
             note_count.Name = "note_count";
+            note_count.ReadOnly = true;
             // 
             // mode_stats_grid
             // 
@@ -837,7 +844,6 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(4, 3, 4, 3);
             MaximizeBox = false;
-            MinimizeBox = false;
             Name = "Stats_Viewer";
             Padding = new Padding(10);
             ShowIcon = false;

@@ -138,13 +138,13 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(4, 3, 4, 3);
             MaximizeBox = false;
-            MinimizeBox = false;
             Name = "Session_Viewer";
             Padding = new Padding(10);
             ShowIcon = false;
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Session Viewer";
+            TopMost = true;
             Load += Session_Viewer_Load;
             ((System.ComponentModel.ISupportInitialize)session_grid).EndInit();
             ResumeLayout(false);

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Media;
+﻿using System.Media;
 
 namespace Overwatch_Map_Statistics_v3
 {
@@ -46,7 +45,7 @@ namespace Overwatch_Map_Statistics_v3
             using StreamWriter writer = new(path, !overwrite);
             foreach (var entry in entries)
             {
-                writer.WriteLine(JsonConvert.SerializeObject(entry));
+                writer.WriteLine(JsonManager.SerializeObject(entry)); //JsonConvert.SerializeObject(entry));
             }
         }
 
@@ -64,7 +63,8 @@ namespace Overwatch_Map_Statistics_v3
                 }
                 foreach (string line in File.ReadAllLines(path))
                 {
-                    SessionRecordEntry? entry = JsonConvert.DeserializeObject<SessionRecordEntry>(line);
+                    SessionRecordEntry? entry = JsonManager.DeserializeObject<SessionRecordEntry>(line);
+                    //JsonConvert.DeserializeObject<SessionRecordEntry>(line);
                     if (entry == null) continue;
                     records.Add(entry);
                 }

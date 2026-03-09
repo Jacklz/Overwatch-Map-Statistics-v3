@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace Overwatch_Map_Statistics_v3
 {
     public partial class Main : Form
@@ -24,7 +22,7 @@ namespace Overwatch_Map_Statistics_v3
         {
             LoadSettings();
             session_date_picker.Value = DateTime.Today;
-            PrepareDirectory();       
+            PrepareDirectory();
             UpdateAllDisplayLists();
             //CheckAndCreateFiles();
             LogText = (text) => { LogText_internal(text); };
@@ -523,31 +521,31 @@ namespace Overwatch_Map_Statistics_v3
             }
         }
 
-        private static void DeleteProfileData(string profilename, bool statprofile)
-        {
-            if (!File.Exists("records.json"))
-            {
-                MessageBox.Show("Could not delete profile data, records.json file was not found");
-                return;
-            }
-            List<SessionRecordEntry> records = [];
-            foreach (string line in File.ReadAllLines("records.json"))
-            {
-                SessionRecordEntry? entry = JsonConvert.DeserializeObject<SessionRecordEntry>(line);
-                if (entry == null) continue;
-                if (statprofile)
-                {
-                    if (entry.statprofilename != profilename) records.Add(entry);
-                }
-                else
-                {
-                    if (entry.profilename != profilename) records.Add(entry);
-                }
-            }
-            List<string> serializedrecords = [];
-            records.ForEach(record => serializedrecords.Add(JsonConvert.SerializeObject(record)));
-            File.WriteAllLines("records.json", serializedrecords);
-        }
+        //private static void DeleteProfileData(string profilename, bool statprofile)
+        //{
+        //    if (!File.Exists("records.json"))
+        //    {
+        //        MessageBox.Show("Could not delete profile data, records.json file was not found");
+        //        return;
+        //    }
+        //    List<SessionRecordEntry> records = [];
+        //    foreach (string line in File.ReadAllLines("records.json"))
+        //    {
+        //        SessionRecordEntry? entry = JsonConvert.DeserializeObject<SessionRecordEntry>(line);
+        //        if (entry == null) continue;
+        //        if (statprofile)
+        //        {
+        //            if (entry.statprofilename != profilename) records.Add(entry);
+        //        }
+        //        else
+        //        {
+        //            if (entry.profilename != profilename) records.Add(entry);
+        //        }
+        //    }
+        //    List<string> serializedrecords = [];
+        //    records.ForEach(record => serializedrecords.Add(JsonConvert.SerializeObject(record)));
+        //    File.WriteAllLines("records.json", serializedrecords);
+        //}
 
         private void UpdateRecordLabel()
         {
@@ -641,7 +639,6 @@ namespace Overwatch_Map_Statistics_v3
                 MapResult mapdata = new(mapname, mapmode, role, outcome, notes2);
                 session.AddMapResult(mapdata);
             }
-            string serializeddata = JsonConvert.SerializeObject(session);
             StatProfileManager.SaveStatProfileData(statprofile, false, session);
             var result = MessageBox.Show("Successfully saved stats. Close program?", "", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes) CloseProgram();
@@ -674,14 +671,16 @@ namespace Overwatch_Map_Statistics_v3
             {
                 foreach (string line in File.ReadAllLines("maprecords.json"))
                 {
-                    LegacyRecordStat? entry = JsonConvert.DeserializeObject<LegacyRecordStat>(line);
+                    LegacyRecordStat? entry = JsonManager.DeserializeObject<LegacyRecordStat>(line);
+                    //JsonConvert.DeserializeObject<LegacyRecordStat>(line);
                     if (entry != null) entries.Add(new(entry));
                 }
             }
             List<string> serialized = [];
             foreach (var entry in entries)
             {
-                serialized.Add(JsonConvert.SerializeObject(entry));
+                //serialized.Add(JsonConvert.SerializeObject(entry));
+                serialized.Add(JsonManager.SerializeObject(entry));
             }
             StatProfileManager.SaveStatProfileData(entries[0].statprofilename, true, [.. entries]);
             UpdateStatDisplayLists();
@@ -697,14 +696,15 @@ namespace Overwatch_Map_Statistics_v3
         {
             Dictionary<string, bool> settings = [];
             settings.Add("dialogs", showconfirmationdialogs);
-            File.WriteAllText("settings.json", JsonConvert.SerializeObject(settings));
+            File.WriteAllText("settings.json", JsonManager.SerializeObject(settings));//  JsonConvert.SerializeObject(settings));
         }
 
         private void LoadSettings()
         {
             if (!File.Exists("settings.json")) return;
             string file = File.ReadAllText("settings.json");
-            Dictionary<string, bool>? settings = JsonConvert.DeserializeObject<Dictionary<string, bool>>(file);
+            Dictionary<string, bool>? settings = JsonManager.DeserializeObject<Dictionary<string, bool>>(file);
+            //JsonConvert.DeserializeObject<Dictionary<string, bool>>(file);
             if (settings == null) return;
             showconfirmationdialogs = settings["dialogs"];
             confirm_dialogs_checkbox.Checked = showconfirmationdialogs;
