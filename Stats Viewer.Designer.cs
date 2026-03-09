@@ -734,7 +734,7 @@
             export_stats_button.Name = "export_stats_button";
             export_stats_button.Size = new Size(211, 23);
             export_stats_button.TabIndex = 11;
-            export_stats_button.Text = "Export stats to xlsx";
+            export_stats_button.Text = "Export stats to csv";
             export_stats_button.UseVisualStyleBackColor = true;
             export_stats_button.Click += export_stats_button_Click;
             // 

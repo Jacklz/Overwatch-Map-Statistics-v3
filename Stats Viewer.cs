@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Text;
+﻿using System.Text;
 
 namespace Overwatch_Map_Statistics_v3
 {
@@ -226,35 +225,34 @@ namespace Overwatch_Map_Statistics_v3
 
         private void export_stats_button_Click(object sender, EventArgs e)
         {
-            ExportCsv(map_stats_grid, "stats.csv");
-            //Dictionary<string, DataGridView> stats = [];
-            //stats.Add("Map Stats", map_stats_grid);
-            //stats.Add("Totals", totals_grid);
-            //stats.Add("Mode Totals", mode_stats_grid);
-            //stats.Add("Day Stats", day_stats_grid);
-            //ExportToExcel(stats, "recordsheet.xlsx");
-            //MessageBox.Show("Successfully exported current state of grids to file 'recordsheet.xlsx'");
+            ExportStatsToCSV(map_stats_grid, totals_grid, mode_stats_grid, day_stats_grid);
+            MessageBox.Show("Successfully exported the current state of grids");
         }
 
-        public static void ExportCsv(DataGridView dgv, string path)
+        private static void ExportStatsToCSV(params DataGridView[] grids)
         {
-            var lines = new List<string>();
+            Directory.CreateDirectory("Exported stats");
+            string time = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            string export = Path.Combine("Exported stats", time);
+            Directory.CreateDirectory(export);
+            foreach (var grid in grids)
+            {
+                string path = Path.Combine("Exported stats", time, $"{grid.Name}.csv");
+                ExportCsv(grid, path);
+            }
+        }
 
-            lines.Add(string.Join(",", dgv.Columns
-                .Cast<DataGridViewColumn>()
-                .Select(c => Escape(c.HeaderText))));
-
-            lines.AddRange(dgv.Rows
-                .Cast<DataGridViewRow>()
-                .Where(r => !r.IsNewRow)
-                .Select(r => string.Join(",", r.Cells
-                    .Cast<DataGridViewCell>()
-                    .Select(c => Escape(c.Value?.ToString() ?? "")))));
-
+        private static void ExportCsv(DataGridView grid, string path)
+        {
+            var lines = new List<string>
+            {
+                string.Join(",", grid.Columns.Cast<DataGridViewColumn>().Select(c => Escape(c.HeaderText)))
+            };
+            lines.AddRange(grid.Rows.Cast<DataGridViewRow>().Where(r => !r.IsNewRow).Select(r => string.Join(",", r.Cells.Cast<DataGridViewCell>().Select(c => Escape(c.Value?.ToString() ?? "")))));
             File.WriteAllLines(path, lines, Encoding.UTF8);
         }
 
-        static string Escape(string s)
+        private static string Escape(string s)
         {
             if (s.Contains('"')) s = s.Replace("\"", "\"\"");
             if (s.Contains(',') || s.Contains('"') || s.Contains('\n')) s = $"\"{s}\"";
@@ -288,38 +286,14 @@ namespace Overwatch_Map_Statistics_v3
         //    workbook.SaveAs(file);
         //}
 
-        //private void testdeserialize()
-        //{
-        //    foreach (var entry in File.ReadAllLines("testserialize.json"))
-        //    {
-        //        SessionRecordEntry? record = System.Text.Json.JsonSerializer.Deserialize<SessionRecordEntry>(entry);
-        //        if (record == null) continue;
-        //        Main.LogText(record.mapdata[0].mapname);
-        //    }
-        //}
-        
-        
         private void save_selection_Click(object sender, EventArgs e)
         {
-            //testdeserialize();
-            //return;
-            //List<string> test = [];
-            //var options = new JsonSerializerOptions
-            //{
-            //    IncludeFields = true,
-            //};
-            //foreach (var entry in filteredentries)
-            //{
-            //    test.Add(System.Text.Json.JsonSerializer.Serialize(entry, options));
-            //}
-            //File.WriteAllLines("testserialize.json", test);
-            //return;
             string newname = newstat_profilename_textbox.Text;
             if (newname.Length == 0)
             {
                 MessageBox.Show("Enter a name!");
                 return;
-            }            
+            }
             List<SessionRecordEntry> newentries = [.. filteredentries.Select(entry => entry.Clone())];
             StatProfileManager.SaveStatProfileData(newname, false, [.. newentries]);
             instance.UpdateStatDisplayLists();
@@ -368,42 +342,5 @@ namespace Overwatch_Map_Statistics_v3
         {
             entries_count_label.Text = $"Entries: {data_entries_grid.Rows.Count}";
         }
-
-        //[DllImport("user32.dll")]
-        //private static extern short GetAsyncKeyState(int vKey);
-        //public static bool IsKeyDown(Keys key)
-        //{
-        //    return (GetAsyncKeyState((int)key) & 0x8000) != 0;
-        //}
-
-        //private int cooldown = 0;
-        //private void hotkey_check_timer_Tick(object sender, EventArgs e)
-        //{
-        //    if (cooldown > 0) cooldown--;
-        //    if (IsKeyDown(Keys.F8) && cooldown == 0)
-        //    {
-        //        Main.LogText("Key pressed");
-        //        for (int a = 0; a < ScreenshotManager.maps.Count; a++)
-        //        {
-        //            string file = $"map{a}winrate.txt";
-        //            if (!File.Exists(file)) continue;
-        //            if (File.ReadAllText(file).Length > 0)
-        //            {
-        //                Main.LogText($"resetting {file}");
-        //                File.WriteAllText(file, "");
-        //                cooldown = 20;
-        //            }
-        //        }
-        //        var maps = ScreenshotManager.CaptureMaps().ToList();
-        //        for (int a = 0; a < maps.Count; a++)
-        //        {
-        //            string file = $"map{a}winrate.txt";
-        //            string map = maps[a];
-        //            Main.LogText($"writing winrate for {map} to {file}");
-        //            File.WriteAllText(file, $"Win %: {mapstats[map].winrate}");
-        //        }
-        //        cooldown = 20;
-        //    }
-        //}
     }
 }

@@ -469,7 +469,7 @@ namespace Overwatch_Map_Statistics_v3
             int index = profiles_listbox.SelectedIndex;
             if (index == -1) return;
             string? name = profiles_listbox.Items[index]?.ToString();
-            var result = MessageBox.Show("Removing this profile will also delete all stat profiles associated with it. Are you sure?", "Warning", MessageBoxButtons.YesNo);
+            var result = MessageBox.Show($"Are you sure you want to delete profile '{name}'", "Warning", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
                 EntriesManager.ModifyEntry(EntriesManager.EntryType.profile, name, true);
