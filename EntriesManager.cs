@@ -9,6 +9,7 @@
         public static SortedSet<string> alloutcomes = [];
         public static SortedSet<string> allnotes = [];
         public static SortedSet<string> allprofiles = [];
+        public static Dictionary<string, string> maptomode = [];
         public static List<Map> allmaps = [];
 
         public static void CreateAllFiles()
@@ -93,6 +94,7 @@
         {
             SortedSet<string> notes =
             [
+                "Leaver compensation",
                 "Cheater",
                 "Friendly DC",
                 "Friendly cheater",

@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Overwatch_Map_Statistics_v3
+﻿namespace Overwatch_Map_Statistics_v3
 {
     internal class SessionRecordEntry
     {
@@ -9,7 +7,8 @@ namespace Overwatch_Map_Statistics_v3
         public DateTime date;
         public List<MapResult> mapdata = [];
 
-        [JsonConstructor]
+        //[JsonConstructor]
+        [System.Text.Json.Serialization.JsonConstructor]
         public SessionRecordEntry(string profilename, string statprofilename, DateTime date)
         {
             this.profilename = profilename;

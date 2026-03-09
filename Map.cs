@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Overwatch_Map_Statistics_v3
 {
@@ -15,6 +15,6 @@ namespace Overwatch_Map_Statistics_v3
             this.mapname = mapname;
             this.mode = mode;
             fullname = $"{mapname} - {mode}";
-        }   
+        }
     }
 }

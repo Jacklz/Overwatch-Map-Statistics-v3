@@ -2,16 +2,8 @@ namespace Overwatch_Map_Statistics_v3
 {
     public partial class Main : Form
     {
-        //public static List<string> allmodes = [];
-        //public static List<Map> allmaps = [];
-        //public static List<string> allnotes = [];
-        //public static List<string> alloutcomes = [];
-        //public static List<string> profiles = [];
-        //public static List<string> statprofiles = [];
         public static Dictionary<string, string> maptomode = [];
-        //public static List<string> roles = ["Open Queue", "DPS", "Tank", "Support"];
         public static bool showconfirmationdialogs = true;
-        public static Action<string>? LogText;
 
         public Main()
         {
@@ -24,8 +16,6 @@ namespace Overwatch_Map_Statistics_v3
             session_date_picker.Value = DateTime.Today;
             PrepareDirectory();
             UpdateAllDisplayLists();
-            //CheckAndCreateFiles();
-            LogText = (text) => { LogText_internal(text); };
         }
 
         private void PrepareDirectory()
@@ -47,66 +37,6 @@ namespace Overwatch_Map_Statistics_v3
             UpdateStatDisplayLists();
         }
 
-        //private void CheckAndCreateFiles()
-        //{
-        //    LoadMapModes();
-        //    LoadMaps();
-        //    LoadProfiles();
-        //    LoadNotes();
-        //    LoadOutcomes();
-        //    LoadStatProfiles();
-        //    LoadRoles();
-        //    CheckRecordsForExtraProfiles();
-        //}
-
-        //private void LoadRoles()
-        //{
-        //    roles.ForEach(role => { role_combobox.Items.Add(role); });
-        //    role_combobox.SelectedIndex = 0;
-        //}
-
-        //private void CheckRecordsForExtraProfiles()
-        //{
-        //    if (File.Exists("records.json"))
-        //    {
-        //        int newprofiles = 0;
-        //        int newstats = 0;
-        //        foreach (string line in File.ReadAllLines("records.json"))
-        //        {
-        //            SessionRecordEntry? entry = JsonConvert.DeserializeObject<SessionRecordEntry>(line);
-        //            if (entry == null) continue;
-        //            if (!profiles.Contains(entry.profilename))
-        //            {
-        //                profiles.Add(entry.profilename);
-        //                newprofiles++;
-        //            }
-        //            if (!statprofiles.Contains(entry.statprofilename))
-        //            {
-        //                statprofiles.Add(entry.statprofilename);
-        //                newstats++;
-        //            }
-        //        }
-        //        if (newprofiles > 0)
-        //        {
-        //            UpdateProfileDisplayLists();
-        //        }
-        //        if (newstats > 0)
-        //        {
-        //            UpdateStatDisplayLists();
-        //        }
-        //    }
-        //}
-
-        //private void LoadStatProfiles()
-        //{
-        //    if (File.Exists("statprofiles.txt"))
-        //    {
-        //        statprofiles.AddRange(File.ReadAllLines("statprofiles.txt"));
-        //    }
-        //    else File.Create("statprofiles.txt");
-        //    UpdateStatDisplayLists();
-        //}
-
         public void UpdateStatDisplayLists()
         {
             statprofiles_checkedlistbox.Items.Clear();
@@ -127,28 +57,6 @@ namespace Overwatch_Map_Statistics_v3
             }
         }
 
-        //private void LoadOutcomes()
-        //{
-        //    if (File.Exists("outcomes.txt"))
-        //    {
-        //        alloutcomes.AddRange(File.ReadAllLines("outcomes.txt"));
-        //    }
-        //    else
-        //    {
-        //        List<string> outcomes =
-        //        [
-        //            "Win",
-        //            "Loss",
-        //            "Draw",
-        //            "Canceled",
-        //            "Server Closed",
-        //        ];
-        //        File.WriteAllLines("outcomes.txt", outcomes);
-        //        alloutcomes.AddRange(outcomes);
-        //    }
-        //    UpdateOutcomesDisplayLists();
-        //}
-
         private void UpdateOutcomesDisplayLists()
         {
             outcomes_listbox.Items.Clear();
@@ -159,32 +67,6 @@ namespace Overwatch_Map_Statistics_v3
                 outcome_combobox.Items.Add(outcome);
             }
         }
-
-        //private void LoadNotes()
-        //{
-        //    if (File.Exists("notes.txt"))
-        //    {
-        //        allnotes.AddRange(File.ReadAllLines("notes.txt"));
-        //    }
-        //    else
-        //    {
-        //        List<string> notes =
-        //        [
-        //            "Friendly DC",
-        //            "Friendly Cheater",
-        //            "Enemy DC",
-        //            "Enemy Cheater",
-        //            "Lopsided",
-        //            "Expected",
-        //            "Reversal",
-        //            "Uphill Battle",
-        //            "Consolation",
-        //        ];
-        //        File.WriteAllLines("notes.txt", notes);
-        //        allnotes.AddRange(notes);
-        //    }
-        //    UpdateNotesDisplayLists();
-        //}
 
         private void UpdateNotesDisplayLists()
         {
@@ -197,22 +79,6 @@ namespace Overwatch_Map_Statistics_v3
             }
         }
 
-        //private void LoadMapModes()
-        //{
-        //    if (File.Exists("modes.txt"))
-        //    {
-        //        var modes = File.ReadAllLines("modes.txt");
-        //        allmodes.AddRange(modes);
-        //    }
-        //    else
-        //    {
-        //        var modes = Map.GetAllModes();
-        //        File.WriteAllLines("modes.txt", modes);
-        //        allmodes.AddRange(modes);
-        //    }
-        //    UpdateModesDisplayLists();
-        //}
-
         private void UpdateModesDisplayLists()
         {
             map_type_combo.Items.Clear();
@@ -223,29 +89,6 @@ namespace Overwatch_Map_Statistics_v3
                 modelist_box.Items.Add(mode);
             }
         }
-
-        //private void LoadMaps()
-        //{
-        //    if (File.Exists("maps.txt"))
-        //    {
-        //        var maps = File.ReadLines("maps.txt");
-        //        foreach (var map in maps)
-        //        {
-        //            string mapname = map[..map.IndexOf('-')].Trim();
-        //            string maptype = map[(map.IndexOf('-') + 1)..].Trim();
-        //            allmaps.Add(new(mapname, maptype));
-        //            maptomode[mapname] = maptype;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        var maps = Map.GetAllMaps();
-        //        File.WriteAllLines("maps.txt", maps.Select(map => map.fullname));
-        //        allmaps.AddRange(maps);
-        //        maps.ForEach(map => { maptomode[map.mapname] = map.mode; });
-        //    }
-        //    UpdateMapsDisplayLists();
-        //}
 
         private void UpdateMapsDisplayLists()
         {
@@ -263,16 +106,6 @@ namespace Overwatch_Map_Statistics_v3
                 maplist_box.Items.Add(map.fullname);
             }
         }
-
-        //private void LoadProfiles()
-        //{
-        //    if (File.Exists("profiles.txt"))
-        //    {
-        //        profiles.AddRange(File.ReadAllLines("profiles.txt"));
-        //    }
-        //    else File.Create("profiles.txt");
-        //    UpdateProfileDisplayLists();
-        //}
 
         private void add_entry_button_Click(object sender, EventArgs e)
         {
@@ -297,6 +130,7 @@ namespace Overwatch_Map_Statistics_v3
                 string entry = $"{mapname} - {role} - {outcome}";
                 if (notes.Count > 0) entry += $" - {string.Join(" | ", notes)}";
                 session_entries_listbox.Items.Add(entry);
+                session_entries_listbox.TopIndex = session_entries_listbox.Items.Count - 1;
                 ResetCurrentEntry();
                 UpdateRecordLabel();
             }
@@ -452,11 +286,6 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name for the profile");
                 return;
             }
-            //if (profiles.Contains(name))
-            //{
-            //    MessageBox.Show("This profile already exists!");
-            //    return;
-            //}
             EntriesManager.ModifyEntry(EntriesManager.EntryType.profile, name, false);
             UpdateProfileDisplayLists();
             profilename_textbox.Clear();
@@ -473,7 +302,6 @@ namespace Overwatch_Map_Statistics_v3
                 EntriesManager.ModifyEntry(EntriesManager.EntryType.profile, name, true);
                 UpdateProfileDisplayLists();
                 profiles_listbox.SelectedIndex = -1;
-                //DeleteProfileData(name, false);
             }
         }
 
@@ -496,11 +324,6 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name for the stat profile");
                 return;
             }
-            //if (statprofiles.Contains(name))
-            //{
-            //    MessageBox.Show("This stat profile already exists!");
-            //    return;
-            //}
             StatProfileManager.CreateStatProfile(name);
             UpdateStatDisplayLists();
             statprofile_textbox.Clear();
@@ -517,35 +340,8 @@ namespace Overwatch_Map_Statistics_v3
                 StatProfileManager.RemoveStatProfile(name);
                 UpdateStatDisplayLists();
                 statprofiles_checkedlistbox.SelectedIndex = -1;
-                //DeleteProfileData(name, true);
             }
         }
-
-        //private static void DeleteProfileData(string profilename, bool statprofile)
-        //{
-        //    if (!File.Exists("records.json"))
-        //    {
-        //        MessageBox.Show("Could not delete profile data, records.json file was not found");
-        //        return;
-        //    }
-        //    List<SessionRecordEntry> records = [];
-        //    foreach (string line in File.ReadAllLines("records.json"))
-        //    {
-        //        SessionRecordEntry? entry = JsonConvert.DeserializeObject<SessionRecordEntry>(line);
-        //        if (entry == null) continue;
-        //        if (statprofile)
-        //        {
-        //            if (entry.statprofilename != profilename) records.Add(entry);
-        //        }
-        //        else
-        //        {
-        //            if (entry.profilename != profilename) records.Add(entry);
-        //        }
-        //    }
-        //    List<string> serializedrecords = [];
-        //    records.ForEach(record => serializedrecords.Add(JsonConvert.SerializeObject(record)));
-        //    File.WriteAllLines("records.json", serializedrecords);
-        //}
 
         private void UpdateRecordLabel()
         {
@@ -649,21 +445,6 @@ namespace Overwatch_Map_Statistics_v3
             Close();
         }
 
-        private void LogText_internal(string text)
-        {
-            log_box.Items.Add(text);
-            log_box.SelectedIndex = log_box.Items.Count - 1;
-        }
-
-        //public static void WriteSessionToFile(params string[] serializeddata)
-        //{
-        //    using StreamWriter writer = new("records.json", true);
-        //    foreach (var entry in serializeddata)
-        //    {
-        //        writer.WriteLine(entry);
-        //    }
-        //}
-
         private void view_legacy_stats_Click(object sender, EventArgs e)
         {
             List<SessionRecordEntry> entries = [];
@@ -672,14 +453,12 @@ namespace Overwatch_Map_Statistics_v3
                 foreach (string line in File.ReadAllLines("maprecords.json"))
                 {
                     LegacyRecordStat? entry = JsonManager.DeserializeObject<LegacyRecordStat>(line);
-                    //JsonConvert.DeserializeObject<LegacyRecordStat>(line);
                     if (entry != null) entries.Add(new(entry));
                 }
             }
             List<string> serialized = [];
             foreach (var entry in entries)
             {
-                //serialized.Add(JsonConvert.SerializeObject(entry));
                 serialized.Add(JsonManager.SerializeObject(entry));
             }
             StatProfileManager.SaveStatProfileData(entries[0].statprofilename, true, [.. entries]);
@@ -692,11 +471,11 @@ namespace Overwatch_Map_Statistics_v3
             showconfirmationdialogs = confirm_dialogs_checkbox.Checked;
         }
 
-        private void SaveSettings()
+        private static void SaveSettings()
         {
             Dictionary<string, bool> settings = [];
             settings.Add("dialogs", showconfirmationdialogs);
-            File.WriteAllText("settings.json", JsonManager.SerializeObject(settings));//  JsonConvert.SerializeObject(settings));
+            File.WriteAllText("settings.json", JsonManager.SerializeObject(settings));
         }
 
         private void LoadSettings()
@@ -704,7 +483,6 @@ namespace Overwatch_Map_Statistics_v3
             if (!File.Exists("settings.json")) return;
             string file = File.ReadAllText("settings.json");
             Dictionary<string, bool>? settings = JsonManager.DeserializeObject<Dictionary<string, bool>>(file);
-            //JsonConvert.DeserializeObject<Dictionary<string, bool>>(file);
             if (settings == null) return;
             showconfirmationdialogs = settings["dialogs"];
             confirm_dialogs_checkbox.Checked = showconfirmationdialogs;
@@ -747,11 +525,6 @@ namespace Overwatch_Map_Statistics_v3
             StatProfileManager.SaveStatProfileData(randomrecords[0].statprofilename, true, [.. randomrecords]);
             UpdateStatDisplayLists();
             MessageBox.Show("Generated 200 random stats");
-        }
-
-        private void clear_log_button_Click(object sender, EventArgs e)
-        {
-            log_box.Items.Clear();
         }
     }
 }
