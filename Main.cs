@@ -466,13 +466,8 @@ namespace Overwatch_Map_Statistics_v3
             }
             StatProfileManager.SaveStatProfileData(statprofile, false, session);
             var result = MessageBox.Show("Successfully saved stats. Close program?", "", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes) CloseProgram();
+            if (result == DialogResult.Yes) Close();
             if (Settings.resetaftersave) ResetCurrentSession();
-        }
-
-        private void CloseProgram()
-        {
-            Close();
         }
 
         private void view_legacy_stats_Click(object sender, EventArgs e)
@@ -524,12 +519,18 @@ namespace Overwatch_Map_Statistics_v3
                     field.SetValue(null, value);
                 }
             }
+            UpdateCheckboxesToReflectSettings();
+        }
+
+        private void UpdateCheckboxesToReflectSettings()
+        {
             confirm_dialogs_checkbox.Checked = Settings.showconfirmdialogs;
             reset_after_save_checkbox.Checked = Settings.resetaftersave;
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
+            ResetCurrentSession();
             SaveSettings();
         }
 
