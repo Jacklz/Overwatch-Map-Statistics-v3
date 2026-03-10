@@ -99,6 +99,7 @@ namespace Overwatch_Map_Statistics_v3
                 if (!checkedprofiles.Contains(entry.profilename)) continue;
                 if (entry.date > end_date.Value || entry.date < start_date.Value) continue;
                 filteredentries.Add(entry);
+				//data entries grid doesnt respect selected roles
                 data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetMiscOutcomes(), entry.GetTotal(), "...", entry);
                 //need to also handle notes
                 foreach (var data in entry.mapdata)

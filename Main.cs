@@ -123,9 +123,9 @@ namespace Overwatch_Map_Statistics_v3
                 string? role = role_combobox.Items[roleindex]?.ToString();
                 string? outcome = outcome_combobox.Items[selout]?.ToString();
                 List<string> notes = [];
-                foreach (var note in notes_checkedlistbox.CheckedItems)
+                foreach (string note in notes_checkedlistbox.CheckedItems)
                 {
-                    notes.Add(note.ToString());
+                    notes.Add(note);
                 }
                 string entry = $"{mapname} - {role} - {outcome}";
                 if (notes.Count > 0) entry += $" - {string.Join(" | ", notes)}";
@@ -187,6 +187,11 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a mode name!");
                 return;
             }
+            if (mode.Contains('-'))
+            {
+                MessageBox.Show("Cannot add a mode with '-' contained in its name");
+                return;
+            }
             EntriesManager.ModifyEntry(EntriesManager.EntryType.mode, mode, false);
             UpdateModesDisplayLists();
             mode_name_textbox.Clear();
@@ -210,6 +215,11 @@ namespace Overwatch_Map_Statistics_v3
             if (index == -1 || mapname.Length == 0)
             {
                 MessageBox.Show("Could not add map! Make sure both the map name field and map type are defined");
+                return;
+            }
+            if (mapname.Contains('-'))
+            {
+                MessageBox.Show("Cannot add a map with '-' contained in its name");
                 return;
             }
             string? maptype = map_type_combo.Items[index]?.ToString();
@@ -238,6 +248,11 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name for the outcome");
                 return;
             }
+            if (name.Contains('-'))
+            {
+                MessageBox.Show("Cannot add an outcome with '-' contained in its name");
+                return;
+            }
             EntriesManager.ModifyEntry(EntriesManager.EntryType.outcome, name, false);
             UpdateOutcomesDisplayLists();
             outcome_textbox.Clear();
@@ -262,6 +277,11 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name for the note");
                 return;
             }
+            if (name.Contains('-'))
+            {
+                MessageBox.Show("Cannot add a note with '-' contained in its name");
+                return;
+            }
             EntriesManager.ModifyEntry(EntriesManager.EntryType.note, name, false);
             UpdateNotesDisplayLists();
             note_textbox.Clear();
@@ -273,7 +293,7 @@ namespace Overwatch_Map_Statistics_v3
             if (index == -1) return;
             if (!RequestConfirmation("Are you sure you want to delete the selected note?")) return;
             string? name = notes_listbox.Items[index]?.ToString();
-            EntriesManager.ModifyEntry(EntriesManager.EntryType.outcome, name, true);
+            EntriesManager.ModifyEntry(EntriesManager.EntryType.note, name, true);
             UpdateNotesDisplayLists();
             notes_listbox.SelectedIndex = -1;
         }
@@ -350,10 +370,14 @@ namespace Overwatch_Map_Statistics_v3
             int draws = 0;
             foreach (string entry in session_entries_listbox.Items)
             {
-                string line = entry.ToString();
-                if (line.Contains("Win")) wins++;
-                if (line.Contains("Loss")) losses++;
-                if (line.Contains("Draw")) draws++;
+                string[] parts = entry.Split("-");
+                string outcome = parts[2].Trim();
+                switch (outcome)
+                {
+                    case "Win": wins++; break;
+                    case "Loss": losses++; break;
+                    case "Draw": draws++; break;
+                }
             }
             current_record_label.Text = $"W/L/D: {wins}-{losses}-{draws}";
             File.WriteAllText("today.txt", current_record_label.Text);

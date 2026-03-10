@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             maplist_combobox = new ComboBox();
             label1 = new Label();
             label2 = new Label();
@@ -96,6 +97,7 @@
             statprofiles_checkedlistbox = new CheckedListBox();
             settings_page = new TabPage();
             confirm_dialogs_checkbox = new CheckBox();
+            general_tooltip = new ToolTip(components);
             tabControl1.SuspendLayout();
             session_page.SuspendLayout();
             maps_page.SuspendLayout();
@@ -727,6 +729,7 @@
             remove_statprofile_button.Size = new Size(88, 23);
             remove_statprofile_button.TabIndex = 4;
             remove_statprofile_button.Text = "Remove";
+            general_tooltip.SetToolTip(remove_statprofile_button, "Removes the highlighted entry, not the checked entry");
             remove_statprofile_button.UseVisualStyleBackColor = true;
             remove_statprofile_button.Click += remove_statprofile_button_Click;
             // 
@@ -890,5 +893,6 @@
         private TabPage settings_page;
         private CheckBox confirm_dialogs_checkbox;
         private Button gen_rand_stats_button;
+        private ToolTip general_tooltip;
     }
 }

@@ -62,7 +62,11 @@
         private static SortedSet<string> CheckOrCreateFile(string filename, SortedSet<string> entries)
         {
             string path = Path.Combine(dir, $"{filename}.txt");
-            if (File.Exists(path)) return [.. File.ReadAllLines(path)];
+            if (File.Exists(path))
+            {
+                if (filename == "maps") return [.. File.ReadAllLines(path)];
+                return [.. File.ReadAllLines(path).Select(entry => entry.Replace("-", ""))];
+            }
             else File.WriteAllLines(path, entries);
             return entries;
         }
@@ -96,8 +100,10 @@
             [
                 "Leaver compensation",
                 "Cheater",
+                "Friendly AFK",
                 "Friendly DC",
                 "Friendly cheater",
+                "Enemy AFK",
                 "Enemy DC",
                 "Enemy cheater",
                 "Lopsided",
