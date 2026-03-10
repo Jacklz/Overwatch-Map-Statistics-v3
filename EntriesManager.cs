@@ -14,6 +14,7 @@
 
         public static void CreateAllFiles()
         {
+            Directory.CreateDirectory(dir);
             CreateModes();
             CreateMaps();
             CreateOutcomes();

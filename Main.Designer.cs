@@ -85,6 +85,7 @@
             label9 = new Label();
             profiles_listbox = new ListBox();
             stats_page = new TabPage();
+            recall_stats_button = new Button();
             gen_rand_stats_button = new Button();
             view_legacy_stats = new Button();
             check_all_statprofiles_button = new Button();
@@ -96,8 +97,10 @@
             statprofile_textbox = new TextBox();
             statprofiles_checkedlistbox = new CheckedListBox();
             settings_page = new TabPage();
+            reset_after_save_checkbox = new CheckBox();
             confirm_dialogs_checkbox = new CheckBox();
             general_tooltip = new ToolTip(components);
+            refresh_statprofiles_button = new Button();
             tabControl1.SuspendLayout();
             session_page.SuspendLayout();
             maps_page.SuspendLayout();
@@ -655,6 +658,8 @@
             // 
             // stats_page
             // 
+            stats_page.Controls.Add(refresh_statprofiles_button);
+            stats_page.Controls.Add(recall_stats_button);
             stats_page.Controls.Add(gen_rand_stats_button);
             stats_page.Controls.Add(view_legacy_stats);
             stats_page.Controls.Add(check_all_statprofiles_button);
@@ -671,6 +676,16 @@
             stats_page.TabIndex = 6;
             stats_page.Text = "Stat Profiles";
             stats_page.UseVisualStyleBackColor = true;
+            // 
+            // recall_stats_button
+            // 
+            recall_stats_button.Location = new Point(234, 246);
+            recall_stats_button.Name = "recall_stats_button";
+            recall_stats_button.Size = new Size(88, 23);
+            recall_stats_button.TabIndex = 10;
+            recall_stats_button.Text = "Recall Stats";
+            recall_stats_button.UseVisualStyleBackColor = true;
+            recall_stats_button.Click += recall_stats_button_Click;
             // 
             // gen_rand_stats_button
             // 
@@ -769,6 +784,7 @@
             // 
             // settings_page
             // 
+            settings_page.Controls.Add(reset_after_save_checkbox);
             settings_page.Controls.Add(confirm_dialogs_checkbox);
             settings_page.Location = new Point(4, 24);
             settings_page.Name = "settings_page";
@@ -776,6 +792,17 @@
             settings_page.TabIndex = 7;
             settings_page.Text = "Settings";
             settings_page.UseVisualStyleBackColor = true;
+            // 
+            // reset_after_save_checkbox
+            // 
+            reset_after_save_checkbox.AutoSize = true;
+            reset_after_save_checkbox.Location = new Point(8, 38);
+            reset_after_save_checkbox.Name = "reset_after_save_checkbox";
+            reset_after_save_checkbox.Size = new Size(159, 19);
+            reset_after_save_checkbox.TabIndex = 1;
+            reset_after_save_checkbox.Text = "Reset session after saving";
+            reset_after_save_checkbox.UseVisualStyleBackColor = true;
+            reset_after_save_checkbox.CheckedChanged += reset_after_save_checkbox_CheckedChanged;
             // 
             // confirm_dialogs_checkbox
             // 
@@ -789,6 +816,16 @@
             confirm_dialogs_checkbox.Text = "Show confirmation dialogs";
             confirm_dialogs_checkbox.UseVisualStyleBackColor = true;
             confirm_dialogs_checkbox.CheckedChanged += confirm_dialogs_checkbox_CheckedChanged;
+            // 
+            // refresh_statprofiles_button
+            // 
+            refresh_statprofiles_button.Location = new Point(234, 186);
+            refresh_statprofiles_button.Name = "refresh_statprofiles_button";
+            refresh_statprofiles_button.Size = new Size(88, 23);
+            refresh_statprofiles_button.TabIndex = 11;
+            refresh_statprofiles_button.Text = "Refresh";
+            refresh_statprofiles_button.UseVisualStyleBackColor = true;
+            refresh_statprofiles_button.Click += refresh_statprofiles_button_Click;
             // 
             // Main
             // 
@@ -894,5 +931,8 @@
         private CheckBox confirm_dialogs_checkbox;
         private Button gen_rand_stats_button;
         private ToolTip general_tooltip;
+        private Button recall_stats_button;
+        private CheckBox reset_after_save_checkbox;
+        private Button refresh_statprofiles_button;
     }
 }

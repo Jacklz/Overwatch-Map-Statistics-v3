@@ -2,8 +2,8 @@ namespace Overwatch_Map_Statistics_v3
 {
     public partial class Main : Form
     {
-        public static Dictionary<string, string> maptomode = [];
-        public static bool showconfirmationdialogs = true;
+        internal static Dictionary<string, string> maptomode = [];
+        internal static List<Stats_Viewer> statwindows = [];
 
         public Main()
         {
@@ -18,11 +18,9 @@ namespace Overwatch_Map_Statistics_v3
             UpdateAllDisplayLists();
         }
 
-        private void PrepareDirectory()
+        private static void PrepareDirectory()
         {
-            Directory.CreateDirectory("Stat profiles");
             StatProfileManager.LoadStatProfiles();
-            Directory.CreateDirectory("Text data");
             EntriesManager.CreateAllFiles();
         }
 
@@ -142,7 +140,7 @@ namespace Overwatch_Map_Statistics_v3
 
         private bool RequestConfirmation(string message, string title = "")
         {
-            if (showconfirmationdialogs)
+            if (Settings.showconfirmdialogs)
             {
                 var result = MessageBox.Show(message, title, MessageBoxButtons.YesNo);
                 if (result == DialogResult.No) return false;
@@ -162,10 +160,16 @@ namespace Overwatch_Map_Statistics_v3
         private void reset_entry_button_Click(object sender, EventArgs e)
         {
             if (!RequestConfirmation("Are you sure you want to reset the session?")) return;
+            ResetCurrentSession();
+        }
+
+        private void ResetCurrentSession()
+        {
             session_entries_listbox.Items.Clear();
             session_date_picker.Value = DateTime.Today;
             UpdateRecordLabel();
             ResetCurrentEntry();
+            role_combobox.SelectedIndex = -1;
         }
 
         private void ResetCurrentEntry()
@@ -402,9 +406,9 @@ namespace Overwatch_Map_Statistics_v3
         private void view_stats_button_Click(object sender, EventArgs e)
         {
             List<string> statprofiles = [];
-            foreach (var entry in statprofiles_checkedlistbox.CheckedItems)
+            foreach (string entry in statprofiles_checkedlistbox.CheckedItems)
             {
-                statprofiles.Add(entry.ToString());
+                statprofiles.Add(entry);
             }
             if (statprofiles.Count == 0)
             {
@@ -418,6 +422,7 @@ namespace Overwatch_Map_Statistics_v3
             }
             Stats_Viewer stats_Viewer = new(entries, this, statprofiles);
             stats_Viewer.Show();
+            statwindows.Add(stats_Viewer);
         }
 
         private void exit_button_Click(object sender, EventArgs e)
@@ -462,6 +467,7 @@ namespace Overwatch_Map_Statistics_v3
             StatProfileManager.SaveStatProfileData(statprofile, false, session);
             var result = MessageBox.Show("Successfully saved stats. Close program?", "", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes) CloseProgram();
+            if (Settings.resetaftersave) ResetCurrentSession();
         }
 
         private void CloseProgram()
@@ -492,13 +498,16 @@ namespace Overwatch_Map_Statistics_v3
 
         private void confirm_dialogs_checkbox_CheckedChanged(object sender, EventArgs e)
         {
-            showconfirmationdialogs = confirm_dialogs_checkbox.Checked;
+            Settings.showconfirmdialogs = confirm_dialogs_checkbox.Checked;
         }
 
         private static void SaveSettings()
         {
             Dictionary<string, bool> settings = [];
-            settings.Add("dialogs", showconfirmationdialogs);
+            foreach (var field in Settings.GetSettings())
+            {
+                settings.Add(field.Name, (bool)field.GetValue(null));
+            }
             File.WriteAllText("settings.json", JsonManager.SerializeObject(settings));
         }
 
@@ -508,8 +517,15 @@ namespace Overwatch_Map_Statistics_v3
             string file = File.ReadAllText("settings.json");
             Dictionary<string, bool>? settings = JsonManager.DeserializeObject<Dictionary<string, bool>>(file);
             if (settings == null) return;
-            showconfirmationdialogs = settings["dialogs"];
-            confirm_dialogs_checkbox.Checked = showconfirmationdialogs;
+            foreach (var field in Settings.GetSettings())
+            {
+                if (settings.TryGetValue(field.Name, out bool value))
+                {
+                    field.SetValue(null, value);
+                }
+            }
+            confirm_dialogs_checkbox.Checked = Settings.showconfirmdialogs;
+            reset_after_save_checkbox.Checked = Settings.resetaftersave;
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -549,6 +565,27 @@ namespace Overwatch_Map_Statistics_v3
             StatProfileManager.SaveStatProfileData(randomrecords[0].statprofilename, true, [.. randomrecords]);
             UpdateStatDisplayLists();
             MessageBox.Show("Generated 200 random stats");
+        }
+
+        private void recall_stats_button_Click(object sender, EventArgs e)
+        {
+            foreach (var entry in statwindows)
+            {
+                entry.WindowState = FormWindowState.Normal;
+                entry.TopMost = true;
+                entry.TopMost = false;
+            }
+        }
+
+        private void reset_after_save_checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.resetaftersave = reset_after_save_checkbox.Checked;
+        }
+
+        private void refresh_statprofiles_button_Click(object sender, EventArgs e)
+        {
+            StatProfileManager.LoadStatProfiles();
+            UpdateStatDisplayLists();
         }
     }
 }

@@ -850,6 +850,7 @@
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Stats Viewer";
+            FormClosed += Stats_Viewer_FormClosed;
             Load += Stats_Viewer_Load;
             ((System.ComponentModel.ISupportInitialize)map_stats_grid).EndInit();
             tabControl1.ResumeLayout(false);

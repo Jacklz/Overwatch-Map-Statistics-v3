@@ -2,7 +2,7 @@
 
 namespace Overwatch_Map_Statistics_v3
 {
-    public class Map
+    internal class Map
     {
         public readonly string mapname;
         public readonly string mode;

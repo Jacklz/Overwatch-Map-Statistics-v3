@@ -10,6 +10,8 @@ namespace Overwatch_Map_Statistics_v3
 
         public static void LoadStatProfiles()
         {
+            statprofiles.Clear();
+            Directory.CreateDirectory(dir);
             foreach (var entry in Directory.GetFiles(dir, "*.json").Select(file => Path.GetFileNameWithoutExtension(file)))
             {
                 statprofiles.Add(entry);
@@ -21,21 +23,13 @@ namespace Overwatch_Map_Statistics_v3
             statprofiles.Remove(statprofile);
             string path = Path.Combine(dir, $"{statprofile}.json");
             File.Delete(path);
-            //MessageBox.Show($"Successfully deleted stat profile '{statprofile}'");
         }
 
         public static void CreateStatProfile(string statprofile)
         {
-            if (!statprofiles.Add(statprofile))
-            {
-                //MessageBox.Show($"Cannot add stat profile '{statprofile}'. It already exists.", "Duplicate entry");
-                //SystemSounds.Hand.Play();
-                return;
-            }
+            if (!statprofiles.Add(statprofile)) return;
             string path = Path.Combine(dir, $"{statprofile}.json");
             File.WriteAllLines(path, []);
-            statprofiles.Add(statprofile);
-            //MessageBox.Show("Successfully created new stat profile");
         }
 
         public static void SaveStatProfileData(string statprofile, bool overwrite, params SessionRecordEntry[] entries)
@@ -45,7 +39,7 @@ namespace Overwatch_Map_Statistics_v3
             using StreamWriter writer = new(path, !overwrite);
             foreach (var entry in entries)
             {
-                writer.WriteLine(JsonManager.SerializeObject(entry)); //JsonConvert.SerializeObject(entry));
+                writer.WriteLine(JsonManager.SerializeObject(entry));
             }
         }
 
@@ -64,7 +58,6 @@ namespace Overwatch_Map_Statistics_v3
                 foreach (string line in File.ReadAllLines(path))
                 {
                     SessionRecordEntry? entry = JsonManager.DeserializeObject<SessionRecordEntry>(line);
-                    //JsonConvert.DeserializeObject<SessionRecordEntry>(line);
                     if (entry == null) continue;
                     records.Add(entry);
                 }

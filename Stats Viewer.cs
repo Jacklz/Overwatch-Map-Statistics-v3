@@ -99,7 +99,7 @@ namespace Overwatch_Map_Statistics_v3
                 if (!checkedprofiles.Contains(entry.profilename)) continue;
                 if (entry.date > end_date.Value || entry.date < start_date.Value) continue;
                 filteredentries.Add(entry);
-				//data entries grid doesnt respect selected roles
+                //data entries grid doesnt respect selected roles
                 data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetMiscOutcomes(), entry.GetTotal(), "...", entry);
                 //need to also handle notes
                 foreach (var data in entry.mapdata)
@@ -342,6 +342,11 @@ namespace Overwatch_Map_Statistics_v3
         private void UpdateDataEntriesCount()
         {
             entries_count_label.Text = $"Entries: {data_entries_grid.Rows.Count}";
+        }
+
+        private void Stats_Viewer_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Main.statwindows.Remove(this);
         }
     }
 }
