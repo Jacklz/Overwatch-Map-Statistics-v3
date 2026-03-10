@@ -57,7 +57,7 @@ namespace Overwatch_Map_Statistics_v3
                 string path = Path.Combine(dir, $"{profile}.json");
                 if (!File.Exists(path))
                 {
-                    MessageBox.Show($"Unable to get stats from stat profile '{profile}' because the file '{path}' doesn't exist", "File not found");
+                    MessageBox.Show($"Unable to get stats for stat profile '{profile}' because the file '{path}' doesn't exist", "File not found");
                     SystemSounds.Hand.Play();
                     continue;
                 }

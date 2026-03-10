@@ -29,7 +29,10 @@
 
         public void Combine(RecordStat stat)
         {
-
+            foreach (var entry in stat.mapstats)
+            {
+                mapstats[entry.Key].Combine(entry.Value);
+            }
         }
     }
 }

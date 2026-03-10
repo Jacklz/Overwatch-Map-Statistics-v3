@@ -7,7 +7,18 @@
         public int draws;
         public int total;
         public double winrate;
-        private readonly Dictionary<string, MiscOutcomes> miscoutcomes = [];
+        public readonly Dictionary<string, MiscOutcomes> miscoutcomes = [];
+
+        public void Combine(GenericStat stat)
+        {
+            AddWin(stat.wins);
+            AddLoss(stat.losses);
+            AddDraw(stat.draws);
+            foreach (var outcome in stat.miscoutcomes)
+            {
+                miscoutcomes[outcome.Key].Add(outcome.Value.count);
+            }
+        }
 
         public void HandleOutcome(string outcome)
         {
