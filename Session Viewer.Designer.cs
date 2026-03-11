@@ -42,9 +42,9 @@
             session_wins = new DataGridViewTextBoxColumn();
             session_losses = new DataGridViewTextBoxColumn();
             session_draws = new DataGridViewTextBoxColumn();
-            session_misc = new DataGridViewButtonColumn();
             session_total = new DataGridViewTextBoxColumn();
             session_winrate = new DataGridViewTextBoxColumn();
+            session_details = new DataGridViewButtonColumn();
             session_mapstat = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)session_grid).BeginInit();
             SuspendLayout();
@@ -59,7 +59,7 @@
             session_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             session_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             session_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            session_grid.Columns.AddRange(new DataGridViewColumn[] { session_map, session_netwins, session_wins, session_losses, session_draws, session_misc, session_total, session_winrate, session_mapstat });
+            session_grid.Columns.AddRange(new DataGridViewColumn[] { session_map, session_netwins, session_wins, session_losses, session_draws, session_total, session_winrate, session_details, session_mapstat });
             session_grid.Location = new Point(2, 36);
             session_grid.Name = "session_grid";
             session_grid.ReadOnly = true;
@@ -129,14 +129,6 @@
             session_draws.Name = "session_draws";
             session_draws.ReadOnly = true;
             // 
-            // session_misc
-            // 
-            session_misc.HeaderText = "Misc";
-            session_misc.Name = "session_misc";
-            session_misc.ReadOnly = true;
-            session_misc.Resizable = DataGridViewTriState.True;
-            session_misc.SortMode = DataGridViewColumnSortMode.Automatic;
-            // 
             // session_total
             // 
             dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -154,6 +146,15 @@
             session_winrate.HeaderText = "Win %";
             session_winrate.Name = "session_winrate";
             session_winrate.ReadOnly = true;
+            // 
+            // session_details
+            // 
+            session_details.HeaderText = "Details";
+            session_details.Name = "session_details";
+            session_details.ReadOnly = true;
+            session_details.Resizable = DataGridViewTriState.True;
+            session_details.SortMode = DataGridViewColumnSortMode.Automatic;
+            session_details.Text = "...";
             // 
             // session_mapstat
             // 
@@ -197,9 +198,9 @@
         private DataGridViewTextBoxColumn session_wins;
         private DataGridViewTextBoxColumn session_losses;
         private DataGridViewTextBoxColumn session_draws;
-        private DataGridViewButtonColumn session_misc;
         private DataGridViewTextBoxColumn session_total;
         private DataGridViewTextBoxColumn session_winrate;
+        private DataGridViewButtonColumn session_details;
         private DataGridViewTextBoxColumn session_mapstat;
     }
 }

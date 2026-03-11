@@ -472,23 +472,23 @@ namespace Overwatch_Map_Statistics_v3
 
         private void view_legacy_stats_Click(object sender, EventArgs e)
         {
-            List<SessionRecordEntry> entries = [];
-            if (File.Exists("maprecords.json"))
-            {
-                foreach (string line in File.ReadAllLines("maprecords.json"))
-                {
-                    LegacyRecordStat? entry = JsonManager.DeserializeObject<LegacyRecordStat>(line);
-                    if (entry != null) entries.Add(new(entry));
-                }
-            }
-            List<string> serialized = [];
-            foreach (var entry in entries)
-            {
-                serialized.Add(JsonManager.SerializeObject(entry));
-            }
-            StatProfileManager.SaveStatProfileData(entries[0].statprofilename, true, [.. entries]);
-            UpdateStatDisplayLists();
-            MessageBox.Show("Converted legacy stats");
+            //List<SessionRecordEntry> entries = [];
+            //if (File.Exists("maprecords.json"))
+            //{
+            //    foreach (string line in File.ReadAllLines("maprecords.json"))
+            //    {
+            //        LegacyRecordStat? entry = JsonManager.DeserializeObject<LegacyRecordStat>(line);
+            //        if (entry != null) entries.Add(new(entry));
+            //    }
+            //}
+            //List<string> serialized = [];
+            //foreach (var entry in entries)
+            //{
+            //    serialized.Add(JsonManager.SerializeObject(entry));
+            //}
+            //StatProfileManager.SaveStatProfileData(entries[0].statprofilename, true, [.. entries]);
+            //UpdateStatDisplayLists();
+            //MessageBox.Show("Converted legacy stats");
         }
 
         private void confirm_dialogs_checkbox_CheckedChanged(object sender, EventArgs e)
@@ -536,36 +536,36 @@ namespace Overwatch_Map_Statistics_v3
 
         private void gen_rand_stats_button_Click(object sender, EventArgs e)
         {
-            List<SessionRecordEntry> randomrecords = [];
-            var allmaps = EntriesManager.allmaps;
-            var alloutcomes = EntriesManager.alloutcomes.ToList();
-            var allnotes = EntriesManager.allnotes.ToList();
-            for (int b = 0; b < 200; b++)
-            {
-                DateTime datebegin = new(2023, 1, 1);
-                DateTime dateend = new(2026, 1, 1);
-                int range = (dateend - datebegin).Days;
-                DateTime randomdate = datebegin.AddDays(Random.Shared.Next(range));
-                SessionRecordEntry record = new("randomprofile", "random", randomdate);
-                int gamesperentry = Random.Shared.Next(5, 9);
-                for (int a = 0; a < gamesperentry; a++)
-                {
-                    Map map = allmaps[Random.Shared.Next(allmaps.Count)];
-                    string outcome = alloutcomes[Random.Shared.Next(alloutcomes.Count)];
-                    List<string> notes = [];
-                    int notecount = Random.Shared.Next(0, 4);
-                    for (int c = 0; c < notecount; c++)
-                    {
-                        notes.Add(allnotes[Random.Shared.Next(allnotes.Count)]);
-                    }
-                    MapResult result = new(map.mapname, map.mode, "Open Queue", outcome, notes);
-                    record.AddMapResult(result);
-                }
-                randomrecords.Add(record);
-            }
-            StatProfileManager.SaveStatProfileData(randomrecords[0].statprofilename, true, [.. randomrecords]);
-            UpdateStatDisplayLists();
-            MessageBox.Show("Generated 200 random stats");
+            //List<SessionRecordEntry> randomrecords = [];
+            //var allmaps = EntriesManager.allmaps;
+            //var alloutcomes = EntriesManager.alloutcomes.ToList();
+            //var allnotes = EntriesManager.allnotes.ToList();
+            //for (int b = 0; b < 200; b++)
+            //{
+            //    DateTime datebegin = new(2023, 1, 1);
+            //    DateTime dateend = new(2026, 1, 1);
+            //    int range = (dateend - datebegin).Days;
+            //    DateTime randomdate = datebegin.AddDays(Random.Shared.Next(range));
+            //    SessionRecordEntry record = new("randomprofile", "random", randomdate);
+            //    int gamesperentry = Random.Shared.Next(5, 9);
+            //    for (int a = 0; a < gamesperentry; a++)
+            //    {
+            //        Map map = allmaps[Random.Shared.Next(allmaps.Count)];
+            //        string outcome = alloutcomes[Random.Shared.Next(alloutcomes.Count)];
+            //        List<string> notes = [];
+            //        int notecount = Random.Shared.Next(0, 4);
+            //        for (int c = 0; c < notecount; c++)
+            //        {
+            //            notes.Add(allnotes[Random.Shared.Next(allnotes.Count)]);
+            //        }
+            //        MapResult result = new(map.mapname, map.mode, "Open Queue", outcome, notes);
+            //        record.AddMapResult(result);
+            //    }
+            //    randomrecords.Add(record);
+            //}
+            //StatProfileManager.SaveStatProfileData(randomrecords[0].statprofilename, true, [.. randomrecords]);
+            //UpdateStatDisplayLists();
+            //MessageBox.Show("Generated 200 random stats");
         }
 
         private void recall_stats_button_Click(object sender, EventArgs e)

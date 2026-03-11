@@ -85,6 +85,7 @@
             label9 = new Label();
             profiles_listbox = new ListBox();
             stats_page = new TabPage();
+            refresh_statprofiles_button = new Button();
             recall_stats_button = new Button();
             gen_rand_stats_button = new Button();
             view_legacy_stats = new Button();
@@ -100,7 +101,6 @@
             reset_after_save_checkbox = new CheckBox();
             confirm_dialogs_checkbox = new CheckBox();
             general_tooltip = new ToolTip(components);
-            refresh_statprofiles_button = new Button();
             tabControl1.SuspendLayout();
             session_page.SuspendLayout();
             maps_page.SuspendLayout();
@@ -677,6 +677,16 @@
             stats_page.Text = "Stat Profiles";
             stats_page.UseVisualStyleBackColor = true;
             // 
+            // refresh_statprofiles_button
+            // 
+            refresh_statprofiles_button.Location = new Point(234, 186);
+            refresh_statprofiles_button.Name = "refresh_statprofiles_button";
+            refresh_statprofiles_button.Size = new Size(88, 23);
+            refresh_statprofiles_button.TabIndex = 11;
+            refresh_statprofiles_button.Text = "Refresh";
+            refresh_statprofiles_button.UseVisualStyleBackColor = true;
+            refresh_statprofiles_button.Click += refresh_statprofiles_button_Click;
+            // 
             // recall_stats_button
             // 
             recall_stats_button.Location = new Point(234, 246);
@@ -695,6 +705,7 @@
             gen_rand_stats_button.TabIndex = 9;
             gen_rand_stats_button.Text = "Gen Random Stats";
             gen_rand_stats_button.UseVisualStyleBackColor = true;
+            gen_rand_stats_button.Visible = false;
             gen_rand_stats_button.Click += gen_rand_stats_button_Click;
             // 
             // view_legacy_stats
@@ -705,6 +716,7 @@
             view_legacy_stats.TabIndex = 8;
             view_legacy_stats.Text = "Convert Legacy Stats";
             view_legacy_stats.UseVisualStyleBackColor = true;
+            view_legacy_stats.Visible = false;
             view_legacy_stats.Click += view_legacy_stats_Click;
             // 
             // check_all_statprofiles_button
@@ -816,16 +828,6 @@
             confirm_dialogs_checkbox.Text = "Show confirmation dialogs";
             confirm_dialogs_checkbox.UseVisualStyleBackColor = true;
             confirm_dialogs_checkbox.CheckedChanged += confirm_dialogs_checkbox_CheckedChanged;
-            // 
-            // refresh_statprofiles_button
-            // 
-            refresh_statprofiles_button.Location = new Point(234, 186);
-            refresh_statprofiles_button.Name = "refresh_statprofiles_button";
-            refresh_statprofiles_button.Size = new Size(88, 23);
-            refresh_statprofiles_button.TabIndex = 11;
-            refresh_statprofiles_button.Text = "Refresh";
-            refresh_statprofiles_button.UseVisualStyleBackColor = true;
-            refresh_statprofiles_button.Click += refresh_statprofiles_button_Click;
             // 
             // Main
             // 

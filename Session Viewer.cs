@@ -33,7 +33,7 @@
         {
             foreach (var stat in stats)
             {
-                session_grid.Rows.Add(stat.map.mapname, stat.wins - stat.losses, stat.wins, stat.losses, stat.draws, stat.GetMiscCount(), stat.total, stat.winrate, stat);
+                session_grid.Rows.Add(stat.map.mapname, stat.wins - stat.losses, stat.wins, stat.losses, stat.draws, stat.total, stat.winrate, "...", stat);
             }
         }
 
@@ -45,7 +45,16 @@
 
         private void session_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            
+            if (e.RowIndex == -1) return;
+            var entry = (MapStat?)session_grid.Rows[e.RowIndex].Cells[8].Value;
+            if (entry == null) return;
+            switch (e.ColumnIndex)
+            {
+                case 7:
+                    Generic_Stats_Viewer gsview = new(entry, entry.map.mapname);
+                    gsview.Show();
+                    break;
+            }
         }
     }
 }

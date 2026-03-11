@@ -29,7 +29,7 @@ namespace Overwatch_Map_Statistics_v3
 
         //need to account for an empty stats list
         private void Stats_Viewer_Load(object sender, EventArgs e)
-        {          
+        {
             LoadRoles();
             LoadProfiles();
             SetDates();
@@ -39,7 +39,7 @@ namespace Overwatch_Map_Statistics_v3
 
         private void LoadRoles()
         {
-            HashSet<string> roles = [];
+            SortedSet<string> roles = [];
             foreach (var entry in stats)
             {
                 foreach (var element in entry.mapdata)
@@ -51,12 +51,15 @@ namespace Overwatch_Map_Statistics_v3
             {
                 role_checkedlistbox.Items.Add(entry);
             }
-            role_checkedlistbox.SetItemChecked(0, true);
+            for (int a = 0; a < role_checkedlistbox.Items.Count; a++)
+            {
+                role_checkedlistbox.SetItemChecked(a, true);
+            }
         }
 
         private void LoadProfiles()
         {
-            HashSet<string> profiles = [];
+            SortedSet<string> profiles = [];
             foreach (var entry in stats)
             {
                 profiles.Add(entry.profilename);
@@ -73,6 +76,7 @@ namespace Overwatch_Map_Statistics_v3
 
         private void SetDates()
         {
+            if (stats.Count == 0) return;
             var list = stats.OrderBy(entry => entry.date).ToList();
             start_date.Value = list[0].date;
             end_date.Value = list[^1].date;
@@ -87,10 +91,10 @@ namespace Overwatch_Map_Statistics_v3
             {
                 if (!checkedprofiles.Contains(entry.profilename)) continue;
                 if (entry.date > end_date.Value || entry.date < start_date.Value) continue;
+                string dayofweek = entry.date.DayOfWeek.ToString();
                 filteredentries.Add(entry);
                 //data entries grid doesnt respect selected roles
                 data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetMiscOutcomes(), entry.GetTotal(), "...", entry);
-                //need to also handle notes
                 foreach (var data in entry.mapdata)
                 {
                     if (!checkedroles.Contains(data.role)) continue;
@@ -100,7 +104,7 @@ namespace Overwatch_Map_Statistics_v3
                         mapstats[data.mapname] = mapstat;
                     }
                     mapstat.HandleOutcome(data.outcome);
-                    mapstat.AddNote([..data.notes]);
+                    mapstat.AddNote([.. data.notes]);
                     if (!modestats.TryGetValue(data.mode, out var modestat))
                     {
                         modestat = new(data.mode);
@@ -108,10 +112,10 @@ namespace Overwatch_Map_Statistics_v3
                     }
                     modestat.HandleOutcome(data.outcome);
                     modestat.AddNote([.. data.notes]);
-                    if (!daystats.TryGetValue(entry.date.DayOfWeek.ToString(), out var daystat))
+                    if (!daystats.TryGetValue(dayofweek, out var daystat))
                     {
                         daystat = new(entry.date.DayOfWeek);
-                        daystats[entry.date.DayOfWeek.ToString()] = daystat;
+                        daystats[dayofweek] = daystat;
                     }
                     daystat.HandleOutcome(data.outcome);
                     daystat.AddNote([.. data.notes]);
@@ -125,7 +129,7 @@ namespace Overwatch_Map_Statistics_v3
             UpdateDataEntriesCount();
             foreach (var entry in mapstats.Values.OrderBy(stat => stat.map.mapname))
             {
-                map_stats_grid.Rows.Add(entry.map.mapname, entry.map.mode, entry.wins, entry.losses, entry.draws, entry.GetMiscCount(), entry.total, entry.winrate);
+                map_stats_grid.Rows.Add(entry.map.mapname, entry.map.mode, entry.wins, entry.losses, entry.draws, entry.total, entry.winrate, "...", entry);
             }
             int totalwins = 0;
             int totallosses = 0;
@@ -133,7 +137,7 @@ namespace Overwatch_Map_Statistics_v3
             int totalmisc = 0;
             foreach (var entry in modestats.Values)
             {
-                mode_stats_grid.Rows.Add(entry.mode, entry.wins, entry.losses, entry.draws, entry.GetMiscCount(), entry.total, entry.winrate);
+                mode_stats_grid.Rows.Add(entry.mode, entry.wins, entry.losses, entry.draws, entry.total, entry.winrate, "...", entry);
                 totalwins += entry.wins;
                 totallosses += entry.losses;
                 totaldraws += entry.draws;
@@ -141,10 +145,10 @@ namespace Overwatch_Map_Statistics_v3
             }
             int totalgames = totalwins + totallosses + totaldraws;
             double winrate = Math.Round((double)totalwins / (double)(totalwins + totallosses), 4) * 100;
-            totals_grid.Rows.Add(totalwins, totallosses, totaldraws, totalmisc, totalgames, winrate);
+            totals_grid.Rows.Add(totalwins, totallosses, totaldraws, totalgames, winrate, "...");
             foreach (var entry in daystats.Values.OrderBy(day => day.day))
             {
-                day_stats_grid.Rows.Add(entry.day.ToString(), entry.wins, entry.losses, entry.draws, entry.GetMiscCount(), entry.total, entry.winrate);
+                day_stats_grid.Rows.Add(entry.day.ToString(), entry.wins, entry.losses, entry.draws, entry.total, entry.winrate, "...", entry);
             }
             foreach (var entry in notestats)
             {
@@ -158,8 +162,8 @@ namespace Overwatch_Map_Statistics_v3
             map_stats_grid.Rows.Clear();
             mode_stats_grid.Rows.Clear();
             day_stats_grid.Rows.Clear();
-            UpdateDataEntriesCount();
             data_entries_grid.Rows.Clear();
+            UpdateDataEntriesCount();
             totals_grid.Rows.Clear();
             mapstats.Clear();
             modestats.Clear();
@@ -246,11 +250,34 @@ namespace Overwatch_Map_Statistics_v3
 
         private static void ExportCsv(DataGridView grid, string path)
         {
-            var lines = new List<string>
+            //var lines = new List<string>
+            //{
+            //    string.Join(",", grid.Columns.Cast<DataGridViewColumn>().Select(c => Escape(c.HeaderText)))
+            //};
+            //lines.AddRange(grid.Rows.Cast<DataGridViewRow>().Where(r => !r.IsNewRow).Select(r => string.Join(",", r.Cells.Cast<DataGridViewCell>().Select(c => Escape(c.Value?.ToString() ?? "")))));
+            //File.WriteAllLines(path, lines, Encoding.UTF8);
+            List<string> lines = [];
+            List<string> headers = [];
+            for (int i = 0; i < grid.Columns.Count; i++)
             {
-                string.Join(",", grid.Columns.Cast<DataGridViewColumn>().Select(c => Escape(c.HeaderText)))
-            };
-            lines.AddRange(grid.Rows.Cast<DataGridViewRow>().Where(r => !r.IsNewRow).Select(r => string.Join(",", r.Cells.Cast<DataGridViewCell>().Select(c => Escape(c.Value?.ToString() ?? "")))));
+                if (!grid.Columns[i].Visible) continue;
+                headers.Add(Escape(grid.Columns[i].HeaderText));
+            }
+            lines.Add(string.Join(",", headers));
+            for (int r = 0; r < grid.Rows.Count; r++)
+            {
+                DataGridViewRow row = grid.Rows[r];
+                if (row.IsNewRow) continue;
+                List<string> cells = [];
+                for (int c = 0; c < row.Cells.Count; c++)
+                {
+                    if (!grid.Columns[c].Visible) continue;
+                    DataGridViewCell cell = row.Cells[c];
+                    string? value = cell.Value == null ? "" : cell.Value.ToString();
+                    cells.Add(Escape(value));
+                }
+                lines.Add(string.Join(",", cells));
+            }
             File.WriteAllLines(path, lines, Encoding.UTF8);
         }
 
@@ -319,9 +346,6 @@ namespace Overwatch_Map_Statistics_v3
             if (data == null) return;
             switch (e.ColumnIndex)
             {
-                case 5:
-
-                    break;
                 case 7:
                     Session_Viewer session_Viewer = new(data);
                     session_Viewer.Show();
@@ -348,6 +372,38 @@ namespace Overwatch_Map_Statistics_v3
         private void Stats_Viewer_FormClosed(object sender, FormClosedEventArgs e)
         {
             Main.statwindows.Remove(this);
+        }
+
+        private void map_stats_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            OpenGenStatWindow(map_stats_grid, e, 8, 7);
+        }
+
+        private void mode_stats_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            OpenGenStatWindow(mode_stats_grid, e, 7, 6);
+        }
+
+        private void day_stats_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            OpenGenStatWindow(day_stats_grid, e, 7, 6);
+        }
+
+        private static void OpenGenStatWindow(DataGridView grid, DataGridViewCellEventArgs e, int infocol, int clickcol)
+        {
+            if (e.RowIndex == -1) return;
+            if (e.ColumnIndex != clickcol) return;
+            var entry = grid.Rows[e.RowIndex].Cells[infocol].Value;
+            if (entry == null) return;
+            string title = entry switch
+            {
+                MapStat m => m.map.mapname,
+                ModeStat m => m.mode,
+                DayStat d => d.day.ToString(),
+                _ => ""
+            };
+            Generic_Stats_Viewer gsview = new((GenericStat)entry, title);
+            gsview.Show();
         }
     }
 }

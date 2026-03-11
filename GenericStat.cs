@@ -72,6 +72,8 @@
             else miscoutcomes[outcome] = new(outcome, count);
         }
 
+        //only called when a win or loss is added
+        //no need for div by 0 protection
         private void CalculateWinrate()
         {
             winrate = Math.Round(((double)wins / (double)(wins + losses)) * 100, 2);
