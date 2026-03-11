@@ -43,6 +43,8 @@
             session_misc = new DataGridViewButtonColumn();
             session_total = new DataGridViewTextBoxColumn();
             session_winrate = new DataGridViewTextBoxColumn();
+            consolidate_session_checkbox = new CheckBox();
+            session_entries_count_label = new Label();
             ((System.ComponentModel.ISupportInitialize)session_grid).BeginInit();
             SuspendLayout();
             // 
@@ -57,10 +59,10 @@
             session_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             session_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             session_grid.Columns.AddRange(new DataGridViewColumn[] { session_map, session_netwins, session_wins, session_losses, session_draws, session_misc, session_total, session_winrate });
-            session_grid.Location = new Point(2, 3);
+            session_grid.Location = new Point(2, 36);
             session_grid.Name = "session_grid";
             session_grid.ReadOnly = true;
-            session_grid.Size = new Size(699, 333);
+            session_grid.Size = new Size(699, 300);
             session_grid.TabIndex = 0;
             // 
             // session_map
@@ -129,11 +131,33 @@
             session_winrate.Name = "session_winrate";
             session_winrate.ReadOnly = true;
             // 
+            // consolidate_session_checkbox
+            // 
+            consolidate_session_checkbox.AutoSize = true;
+            consolidate_session_checkbox.Location = new Point(2, 11);
+            consolidate_session_checkbox.Name = "consolidate_session_checkbox";
+            consolidate_session_checkbox.Size = new Size(89, 19);
+            consolidate_session_checkbox.TabIndex = 1;
+            consolidate_session_checkbox.Text = "Consolidate";
+            consolidate_session_checkbox.UseVisualStyleBackColor = true;
+            consolidate_session_checkbox.CheckedChanged += consolidate_session_checkbox_CheckedChanged;
+            // 
+            // session_entries_count_label
+            // 
+            session_entries_count_label.AutoSize = true;
+            session_entries_count_label.Location = new Point(97, 12);
+            session_entries_count_label.Name = "session_entries_count_label";
+            session_entries_count_label.Size = new Size(51, 15);
+            session_entries_count_label.TabIndex = 2;
+            session_entries_count_label.Text = "0 Entries";
+            // 
             // Session_Viewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(704, 339);
+            Controls.Add(session_entries_count_label);
+            Controls.Add(consolidate_session_checkbox);
             Controls.Add(session_grid);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(4, 3, 4, 3);
@@ -148,6 +172,7 @@
             Load += Session_Viewer_Load;
             ((System.ComponentModel.ISupportInitialize)session_grid).EndInit();
             ResumeLayout(false);
+            PerformLayout();
 
         }
 
@@ -162,5 +187,7 @@
         private DataGridViewButtonColumn session_misc;
         private DataGridViewTextBoxColumn session_total;
         private DataGridViewTextBoxColumn session_winrate;
+        private CheckBox consolidate_session_checkbox;
+        private Label session_entries_count_label;
     }
 }

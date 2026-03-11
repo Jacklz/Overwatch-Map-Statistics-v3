@@ -17,13 +17,5 @@
         {
             return new(mapname, mode, role, outcome, [.. notes]);
         }
-
-        //[JsonConstructor]
-        //public MapResult(string mapname, string role, string outcome, List<string> notes) : base(mapname, Main.maptomode[mapname])
-        //{
-        //    this.outcome = outcome;
-        //    this.notes = notes;
-        //    this.role = role;
-        //}
     }
 }

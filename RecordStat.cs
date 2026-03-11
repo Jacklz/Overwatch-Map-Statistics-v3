@@ -17,6 +17,7 @@
                     mapstats[data.mapname] = mapstat;
                 }
                 mapstat.HandleOutcome(data.outcome);
+                mapstat.AddNote([.. data.notes]);
                 //if (!modestats.TryGetValue(data.mode, out var modestat))
                 //{
                 //    modestat = new(data.mode);

@@ -7,7 +7,8 @@
         public int draws;
         public int total;
         public double winrate;
-        public readonly Dictionary<string, MiscOutcomes> miscoutcomes = [];
+        public readonly Dictionary<string, MiscStat> miscoutcomes = [];
+        public readonly Dictionary<string, MiscStat> notes = [];
 
         public void Combine(GenericStat stat)
         {
@@ -28,6 +29,15 @@
                 case "Loss": AddLoss(1); break;
                 case "Draw": AddDraw(1); break;
                 default: AddMiscOutcome(outcome, 1); break;
+            }
+        }
+
+        public void AddNote(params string[] notes)
+        {
+            foreach (var note in notes)
+            {
+                if (this.notes.TryGetValue(note, out var value)) value.Add(1);
+                else this.notes[note] = new(note, 1);
             }
         }
 
@@ -56,9 +66,9 @@
             return miscoutcomes.Values.Select(entry => entry.count).Sum();
         }
 
-        public void AddMiscOutcome(string outcome, int count)
+        private void AddMiscOutcome(string outcome, int count)
         {
-            if (miscoutcomes.TryGetValue(outcome, out MiscOutcomes? value)) value.Add(count);
+            if (miscoutcomes.TryGetValue(outcome, out MiscStat? value)) value.Add(count);
             else miscoutcomes[outcome] = new(outcome, count);
         }
 
@@ -67,14 +77,14 @@
             winrate = Math.Round(((double)wins / (double)(wins + losses)) * 100, 2);
         }
 
-        public class MiscOutcomes
+        public class MiscStat
         {
-            public string outcome;
+            public string description;
             public int count;
 
-            public MiscOutcomes(string outcome, int count)
+            public MiscStat(string description, int count)
             {
-                this.outcome = outcome;
+                this.description = description;
                 this.count = count;
             }
 

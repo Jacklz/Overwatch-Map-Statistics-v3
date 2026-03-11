@@ -8,6 +8,7 @@ namespace Overwatch_Map_Statistics_v3
         private readonly Dictionary<string, MapStat> mapstats = [];
         private readonly Dictionary<string, ModeStat> modestats = [];
         private readonly Dictionary<string, DayStat> daystats = [];
+        private readonly Dictionary<string, int> notestats = [];
         private DateTime orgstart;
         private DateTime orgend;
         private bool allowupdate = false;
@@ -32,19 +33,10 @@ namespace Overwatch_Map_Statistics_v3
             if (statprofiles.Count > 1) plural = "s";
             Text = $"Stat profile{plural}: {string.Join(",", statprofiles)}";
             LoadRoles();
-            LoadNotes();
             LoadProfiles();
             SetDates();
             LoadStats();
             allowupdate = true;
-        }
-
-        private void LoadNotes()
-        {
-            foreach (var entry in EntriesManager.allnotes)
-            {
-                notes_grid.Rows.Add(entry);
-            }
         }
 
         private void LoadRoles()
@@ -93,7 +85,6 @@ namespace Overwatch_Map_Statistics_v3
         private void LoadStats()
         {
             filteredentries.Clear();
-            List<RecordStat> records = [];
             foreach (SessionRecordEntry entry in stats)
             {
                 if (!checkedprofiles.Contains(entry.profilename)) continue;
@@ -111,18 +102,26 @@ namespace Overwatch_Map_Statistics_v3
                         mapstats[data.mapname] = mapstat;
                     }
                     mapstat.HandleOutcome(data.outcome);
+                    mapstat.AddNote([..data.notes]);
                     if (!modestats.TryGetValue(data.mode, out var modestat))
                     {
                         modestat = new(data.mode);
                         modestats[data.mode] = modestat;
                     }
                     modestat.HandleOutcome(data.outcome);
+                    modestat.AddNote([.. data.notes]);
                     if (!daystats.TryGetValue(entry.date.DayOfWeek.ToString(), out var daystat))
                     {
                         daystat = new(entry.date.DayOfWeek);
                         daystats[entry.date.DayOfWeek.ToString()] = daystat;
                     }
                     daystat.HandleOutcome(data.outcome);
+                    daystat.AddNote([.. data.notes]);
+                    foreach (var note in data.notes)
+                    {
+                        if (!notestats.TryGetValue(note, out int value)) notestats[note] = 1;
+                        else notestats[note] = value + 1;
+                    }
                 }
             }
             UpdateDataEntriesCount();
@@ -149,12 +148,15 @@ namespace Overwatch_Map_Statistics_v3
             {
                 day_stats_grid.Rows.Add(entry.day.ToString(), entry.wins, entry.losses, entry.draws, entry.GetMiscCount(), entry.total, entry.winrate);
             }
+            foreach (var entry in notestats)
+            {
+                notes_grid.Rows.Add(entry.Key, entry.Value);
+            }
         }
 
         private void ResetStatGrids()
         {
             if (!allowupdate) return;
-            //Debug.WriteLine("updating stats");
             map_stats_grid.Rows.Clear();
             mode_stats_grid.Rows.Clear();
             day_stats_grid.Rows.Clear();
@@ -164,6 +166,7 @@ namespace Overwatch_Map_Statistics_v3
             mapstats.Clear();
             modestats.Clear();
             daystats.Clear();
+            notestats.Clear();
             filteredentries.Clear();
             LoadStats();
         }

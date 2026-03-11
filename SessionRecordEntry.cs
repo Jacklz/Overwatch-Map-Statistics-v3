@@ -42,9 +42,33 @@ namespace Overwatch_Map_Statistics_v3
             }
         }
 
-        public RecordStat Consolidate()
+        public List<MapStat> Summarize()
         {
-            return new(date, mapdata);
+            List<MapStat> mapstats = [];
+            foreach (var entry in mapdata)
+            {
+                MapStat stat = new(entry.mapname, entry.mode);
+                stat.HandleOutcome(entry.outcome);
+                stat.AddNote([.. entry.notes]);
+                mapstats.Add(stat);
+            }
+            return mapstats;
+        }
+
+        public List<MapStat> Consolidate()
+        {
+            Dictionary<string, MapStat> records = [];
+            foreach (var entry in mapdata)
+            {
+                if (!records.TryGetValue(entry.mapname, out var value))
+                {
+                    value = new(entry.mapname, entry.mode);
+                    records[entry.mapname] = value;
+                }
+                value.HandleOutcome(entry.outcome);
+                value.AddNote([.. entry.notes]);
+            }
+            return [..records.Values];
         }
 
         public int GetTotal()
