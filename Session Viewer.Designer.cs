@@ -35,6 +35,8 @@
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
             session_grid = new DataGridView();
+            consolidate_session_checkbox = new CheckBox();
+            session_entries_count_label = new Label();
             session_map = new DataGridViewTextBoxColumn();
             session_netwins = new DataGridViewTextBoxColumn();
             session_wins = new DataGridViewTextBoxColumn();
@@ -43,8 +45,7 @@
             session_misc = new DataGridViewButtonColumn();
             session_total = new DataGridViewTextBoxColumn();
             session_winrate = new DataGridViewTextBoxColumn();
-            consolidate_session_checkbox = new CheckBox();
-            session_entries_count_label = new Label();
+            session_mapstat = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)session_grid).BeginInit();
             SuspendLayout();
             // 
@@ -58,12 +59,35 @@
             session_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             session_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             session_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            session_grid.Columns.AddRange(new DataGridViewColumn[] { session_map, session_netwins, session_wins, session_losses, session_draws, session_misc, session_total, session_winrate });
+            session_grid.Columns.AddRange(new DataGridViewColumn[] { session_map, session_netwins, session_wins, session_losses, session_draws, session_misc, session_total, session_winrate, session_mapstat });
             session_grid.Location = new Point(2, 36);
             session_grid.Name = "session_grid";
             session_grid.ReadOnly = true;
             session_grid.Size = new Size(699, 300);
             session_grid.TabIndex = 0;
+            session_grid.CellContentClick += session_grid_CellContentClick;
+            // 
+            // consolidate_session_checkbox
+            // 
+            consolidate_session_checkbox.AutoSize = true;
+            consolidate_session_checkbox.Checked = true;
+            consolidate_session_checkbox.CheckState = CheckState.Checked;
+            consolidate_session_checkbox.Location = new Point(2, 11);
+            consolidate_session_checkbox.Name = "consolidate_session_checkbox";
+            consolidate_session_checkbox.Size = new Size(89, 19);
+            consolidate_session_checkbox.TabIndex = 1;
+            consolidate_session_checkbox.Text = "Consolidate";
+            consolidate_session_checkbox.UseVisualStyleBackColor = true;
+            consolidate_session_checkbox.CheckedChanged += consolidate_session_checkbox_CheckedChanged;
+            // 
+            // session_entries_count_label
+            // 
+            session_entries_count_label.AutoSize = true;
+            session_entries_count_label.Location = new Point(97, 12);
+            session_entries_count_label.Name = "session_entries_count_label";
+            session_entries_count_label.Size = new Size(51, 15);
+            session_entries_count_label.TabIndex = 2;
+            session_entries_count_label.Text = "0 Entries";
             // 
             // session_map
             // 
@@ -131,25 +155,12 @@
             session_winrate.Name = "session_winrate";
             session_winrate.ReadOnly = true;
             // 
-            // consolidate_session_checkbox
+            // session_mapstat
             // 
-            consolidate_session_checkbox.AutoSize = true;
-            consolidate_session_checkbox.Location = new Point(2, 11);
-            consolidate_session_checkbox.Name = "consolidate_session_checkbox";
-            consolidate_session_checkbox.Size = new Size(89, 19);
-            consolidate_session_checkbox.TabIndex = 1;
-            consolidate_session_checkbox.Text = "Consolidate";
-            consolidate_session_checkbox.UseVisualStyleBackColor = true;
-            consolidate_session_checkbox.CheckedChanged += consolidate_session_checkbox_CheckedChanged;
-            // 
-            // session_entries_count_label
-            // 
-            session_entries_count_label.AutoSize = true;
-            session_entries_count_label.Location = new Point(97, 12);
-            session_entries_count_label.Name = "session_entries_count_label";
-            session_entries_count_label.Size = new Size(51, 15);
-            session_entries_count_label.TabIndex = 2;
-            session_entries_count_label.Text = "0 Entries";
+            session_mapstat.HeaderText = "map_stat";
+            session_mapstat.Name = "session_mapstat";
+            session_mapstat.ReadOnly = true;
+            session_mapstat.Visible = false;
             // 
             // Session_Viewer
             // 
@@ -179,6 +190,8 @@
         #endregion
 
         private DataGridView session_grid;
+        private CheckBox consolidate_session_checkbox;
+        private Label session_entries_count_label;
         private DataGridViewTextBoxColumn session_map;
         private DataGridViewTextBoxColumn session_netwins;
         private DataGridViewTextBoxColumn session_wins;
@@ -187,7 +200,6 @@
         private DataGridViewButtonColumn session_misc;
         private DataGridViewTextBoxColumn session_total;
         private DataGridViewTextBoxColumn session_winrate;
-        private CheckBox consolidate_session_checkbox;
-        private Label session_entries_count_label;
+        private DataGridViewTextBoxColumn session_mapstat;
     }
 }

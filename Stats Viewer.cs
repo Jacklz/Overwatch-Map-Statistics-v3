@@ -16,22 +16,20 @@ namespace Overwatch_Map_Statistics_v3
         private readonly HashSet<string> checkedroles = [];
         private readonly List<SessionRecordEntry> filteredentries = [];
         private readonly Main instance;
-        private readonly List<string> statprofiles = [];
 
         public Stats_Viewer(List<SessionRecordEntry> entries, Main instance, List<string> statprofiles)
         {
             InitializeComponent();
             stats.AddRange(entries);
             this.instance = instance;
-            this.statprofiles.AddRange(statprofiles);
+            string plural = "";
+            if (statprofiles.Count > 1) plural = "s";
+            Text = $"Stat profile{plural}: {string.Join(",", statprofiles)}";
         }
 
         //need to account for an empty stats list
         private void Stats_Viewer_Load(object sender, EventArgs e)
-        {
-            string plural = "";
-            if (statprofiles.Count > 1) plural = "s";
-            Text = $"Stat profile{plural}: {string.Join(",", statprofiles)}";
+        {          
             LoadRoles();
             LoadProfiles();
             SetDates();

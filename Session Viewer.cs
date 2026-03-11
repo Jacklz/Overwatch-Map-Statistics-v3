@@ -3,8 +3,8 @@
     partial class Session_Viewer : Form
     {
         private readonly SessionRecordEntry entry;
-        private static bool consolidate;
-        private static bool canupdate = false;
+        private static bool consolidate = true;
+        private bool canupdate = false;
 
         public Session_Viewer(SessionRecordEntry entry)
         {
@@ -25,8 +25,7 @@
         {
             if (!canupdate) return;
             session_grid.Rows.Clear();
-            if (consolidate) PopulateGrid(entry.Consolidate());
-            else PopulateGrid(entry.Summarize());
+            PopulateGrid(consolidate == true ? entry.Consolidate() : entry.Summarize());
             session_entries_count_label.Text = $"{session_grid.Rows.Count} Entries";
         }
 
@@ -34,7 +33,7 @@
         {
             foreach (var stat in stats)
             {
-                session_grid.Rows.Add(stat.map.mapname, stat.wins - stat.losses, stat.wins, stat.losses, stat.draws, stat.GetMiscCount(), stat.total, stat.winrate);
+                session_grid.Rows.Add(stat.map.mapname, stat.wins - stat.losses, stat.wins, stat.losses, stat.draws, stat.GetMiscCount(), stat.total, stat.winrate, stat);
             }
         }
 
@@ -42,6 +41,11 @@
         {
             consolidate = consolidate_session_checkbox.Checked;
             LoadStats();
+        }
+
+        private void session_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
         }
     }
 }
