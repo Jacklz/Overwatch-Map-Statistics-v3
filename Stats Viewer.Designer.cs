@@ -63,6 +63,12 @@
             DataGridViewCellStyle dataGridViewCellStyle34 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle35 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle36 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle37 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle38 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle39 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle40 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle41 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle42 = new DataGridViewCellStyle();
             map_stats_grid = new DataGridView();
             map_column = new DataGridViewTextBoxColumn();
             mode_column = new DataGridViewTextBoxColumn();
@@ -94,6 +100,13 @@
             total_details_column = new DataGridViewButtonColumn();
             misc_entry = new DataGridViewTextBoxColumn();
             day_stats_page = new TabPage();
+            popular_grid = new DataGridView();
+            pop_day_col = new DataGridViewTextBoxColumn();
+            pop_most_played_col = new DataGridViewTextBoxColumn();
+            pop_winrate_col = new DataGridViewTextBoxColumn();
+            pop_total_col = new DataGridViewTextBoxColumn();
+            pop_details_col = new DataGridViewButtonColumn();
+            pop_entry_col = new DataGridViewTextBoxColumn();
             day_stats_grid = new DataGridView();
             day_column = new DataGridViewTextBoxColumn();
             day_wins = new DataGridViewTextBoxColumn();
@@ -141,6 +154,7 @@
             ((System.ComponentModel.ISupportInitialize)mode_stats_grid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)totals_grid).BeginInit();
             day_stats_page.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)popular_grid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)day_stats_grid).BeginInit();
             data_entries_page.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)data_entries_grid).BeginInit();
@@ -455,6 +469,7 @@
             // 
             // day_stats_page
             // 
+            day_stats_page.Controls.Add(popular_grid);
             day_stats_page.Controls.Add(day_stats_grid);
             day_stats_page.Location = new Point(4, 24);
             day_stats_page.Name = "day_stats_page";
@@ -463,15 +478,15 @@
             day_stats_page.Text = "Day Stats";
             day_stats_page.UseVisualStyleBackColor = true;
             // 
-            // day_stats_grid
+            // popular_grid
             // 
-            day_stats_grid.AllowUserToAddRows = false;
-            day_stats_grid.AllowUserToDeleteRows = false;
-            day_stats_grid.AllowUserToResizeColumns = false;
-            day_stats_grid.AllowUserToResizeRows = false;
+            popular_grid.AllowUserToAddRows = false;
+            popular_grid.AllowUserToDeleteRows = false;
+            popular_grid.AllowUserToResizeColumns = false;
+            popular_grid.AllowUserToResizeRows = false;
             dataGridViewCellStyle21.BackColor = Color.LightGray;
-            day_stats_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle21;
-            day_stats_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            popular_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle21;
+            popular_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle22.BackColor = SystemColors.Control;
             dataGridViewCellStyle22.Font = new Font("Segoe UI", 9F);
@@ -479,64 +494,135 @@
             dataGridViewCellStyle22.SelectionBackColor = SystemColors.Highlight;
             dataGridViewCellStyle22.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle22.WrapMode = DataGridViewTriState.True;
-            day_stats_grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle22;
+            popular_grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle22;
+            popular_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            popular_grid.Columns.AddRange(new DataGridViewColumn[] { pop_day_col, pop_most_played_col, pop_winrate_col, pop_total_col, pop_details_col, pop_entry_col });
+            popular_grid.Location = new Point(3, 267);
+            popular_grid.Name = "popular_grid";
+            popular_grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            popular_grid.Size = new Size(703, 200);
+            popular_grid.TabIndex = 1;
+            popular_grid.CellContentClick += popular_grid_CellContentClick;
+            // 
+            // pop_day_col
+            // 
+            dataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            pop_day_col.DefaultCellStyle = dataGridViewCellStyle23;
+            pop_day_col.HeaderText = "Day";
+            pop_day_col.Name = "pop_day_col";
+            // 
+            // pop_most_played_col
+            // 
+            dataGridViewCellStyle24.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            pop_most_played_col.DefaultCellStyle = dataGridViewCellStyle24;
+            pop_most_played_col.FillWeight = 150F;
+            pop_most_played_col.HeaderText = "Most Played Map";
+            pop_most_played_col.Name = "pop_most_played_col";
+            // 
+            // pop_winrate_col
+            // 
+            dataGridViewCellStyle25.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            pop_winrate_col.DefaultCellStyle = dataGridViewCellStyle25;
+            pop_winrate_col.FillWeight = 80F;
+            pop_winrate_col.HeaderText = "Win %";
+            pop_winrate_col.Name = "pop_winrate_col";
+            // 
+            // pop_total_col
+            // 
+            dataGridViewCellStyle26.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            pop_total_col.DefaultCellStyle = dataGridViewCellStyle26;
+            pop_total_col.FillWeight = 80F;
+            pop_total_col.HeaderText = "Total Plays";
+            pop_total_col.Name = "pop_total_col";
+            // 
+            // pop_details_col
+            // 
+            pop_details_col.FillWeight = 80F;
+            pop_details_col.HeaderText = "Details";
+            pop_details_col.Name = "pop_details_col";
+            pop_details_col.Resizable = DataGridViewTriState.True;
+            pop_details_col.SortMode = DataGridViewColumnSortMode.Automatic;
+            // 
+            // pop_entry_col
+            // 
+            pop_entry_col.HeaderText = "pop_entry";
+            pop_entry_col.Name = "pop_entry_col";
+            pop_entry_col.Visible = false;
+            // 
+            // day_stats_grid
+            // 
+            day_stats_grid.AllowUserToAddRows = false;
+            day_stats_grid.AllowUserToDeleteRows = false;
+            day_stats_grid.AllowUserToResizeColumns = false;
+            day_stats_grid.AllowUserToResizeRows = false;
+            dataGridViewCellStyle27.BackColor = Color.LightGray;
+            day_stats_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle27;
+            day_stats_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewCellStyle28.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle28.BackColor = SystemColors.Control;
+            dataGridViewCellStyle28.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle28.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle28.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle28.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle28.WrapMode = DataGridViewTriState.True;
+            day_stats_grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle28;
             day_stats_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             day_stats_grid.Columns.AddRange(new DataGridViewColumn[] { day_column, day_wins, day_losses, day_draws, day_totals, day_winrate, day_details, day_entry_column });
             day_stats_grid.Location = new Point(3, 3);
             day_stats_grid.Name = "day_stats_grid";
             day_stats_grid.ReadOnly = true;
             day_stats_grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            day_stats_grid.Size = new Size(703, 201);
+            day_stats_grid.Size = new Size(703, 200);
             day_stats_grid.TabIndex = 0;
             day_stats_grid.CellContentClick += day_stats_grid_CellContentClick;
             // 
             // day_column
             // 
-            dataGridViewCellStyle23.Format = "D";
-            dataGridViewCellStyle23.NullValue = null;
-            day_column.DefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle29.Format = "D";
+            dataGridViewCellStyle29.NullValue = null;
+            day_column.DefaultCellStyle = dataGridViewCellStyle29;
             day_column.HeaderText = "Day";
             day_column.Name = "day_column";
             day_column.ReadOnly = true;
             // 
             // day_wins
             // 
-            dataGridViewCellStyle24.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            day_wins.DefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle30.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            day_wins.DefaultCellStyle = dataGridViewCellStyle30;
             day_wins.HeaderText = "Wins";
             day_wins.Name = "day_wins";
             day_wins.ReadOnly = true;
             // 
             // day_losses
             // 
-            dataGridViewCellStyle25.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            day_losses.DefaultCellStyle = dataGridViewCellStyle25;
+            dataGridViewCellStyle31.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            day_losses.DefaultCellStyle = dataGridViewCellStyle31;
             day_losses.HeaderText = "Losses";
             day_losses.Name = "day_losses";
             day_losses.ReadOnly = true;
             // 
             // day_draws
             // 
-            dataGridViewCellStyle26.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            day_draws.DefaultCellStyle = dataGridViewCellStyle26;
+            dataGridViewCellStyle32.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            day_draws.DefaultCellStyle = dataGridViewCellStyle32;
             day_draws.HeaderText = "Draws";
             day_draws.Name = "day_draws";
             day_draws.ReadOnly = true;
             // 
             // day_totals
             // 
-            dataGridViewCellStyle27.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            day_totals.DefaultCellStyle = dataGridViewCellStyle27;
+            dataGridViewCellStyle33.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            day_totals.DefaultCellStyle = dataGridViewCellStyle33;
             day_totals.HeaderText = "Total";
             day_totals.Name = "day_totals";
             day_totals.ReadOnly = true;
             // 
             // day_winrate
             // 
-            dataGridViewCellStyle28.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle28.Format = "N2";
-            dataGridViewCellStyle28.NullValue = null;
-            day_winrate.DefaultCellStyle = dataGridViewCellStyle28;
+            dataGridViewCellStyle34.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle34.Format = "N2";
+            dataGridViewCellStyle34.NullValue = null;
+            day_winrate.DefaultCellStyle = dataGridViewCellStyle34;
             day_winrate.HeaderText = "Win %";
             day_winrate.Name = "day_winrate";
             day_winrate.ReadOnly = true;
@@ -602,17 +688,17 @@
             data_entries_grid.AllowUserToDeleteRows = false;
             data_entries_grid.AllowUserToResizeColumns = false;
             data_entries_grid.AllowUserToResizeRows = false;
-            dataGridViewCellStyle29.BackColor = Color.LightGray;
-            data_entries_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle29;
+            dataGridViewCellStyle35.BackColor = Color.LightGray;
+            data_entries_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle35;
             data_entries_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle30.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle30.BackColor = SystemColors.Control;
-            dataGridViewCellStyle30.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle30.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle30.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle30.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle30.WrapMode = DataGridViewTriState.True;
-            data_entries_grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle30;
+            dataGridViewCellStyle36.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle36.BackColor = SystemColors.Control;
+            dataGridViewCellStyle36.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle36.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle36.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle36.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle36.WrapMode = DataGridViewTriState.True;
+            data_entries_grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle36;
             data_entries_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             data_entries_grid.Columns.AddRange(new DataGridViewColumn[] { entries_date, entries_netwins, entries_wins, entries_losses, entries_draws, entries_total, entries_details, entries_data });
             data_entries_grid.Location = new Point(3, 58);
@@ -625,49 +711,49 @@
             // 
             // entries_date
             // 
-            dataGridViewCellStyle31.Format = "d";
-            dataGridViewCellStyle31.NullValue = null;
-            entries_date.DefaultCellStyle = dataGridViewCellStyle31;
+            dataGridViewCellStyle37.Format = "d";
+            dataGridViewCellStyle37.NullValue = null;
+            entries_date.DefaultCellStyle = dataGridViewCellStyle37;
             entries_date.HeaderText = "Date";
             entries_date.Name = "entries_date";
             entries_date.ReadOnly = true;
             // 
             // entries_netwins
             // 
-            dataGridViewCellStyle32.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            entries_netwins.DefaultCellStyle = dataGridViewCellStyle32;
+            dataGridViewCellStyle38.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            entries_netwins.DefaultCellStyle = dataGridViewCellStyle38;
             entries_netwins.HeaderText = "Net Wins";
             entries_netwins.Name = "entries_netwins";
             entries_netwins.ReadOnly = true;
             // 
             // entries_wins
             // 
-            dataGridViewCellStyle33.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            entries_wins.DefaultCellStyle = dataGridViewCellStyle33;
+            dataGridViewCellStyle39.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            entries_wins.DefaultCellStyle = dataGridViewCellStyle39;
             entries_wins.HeaderText = "Wins";
             entries_wins.Name = "entries_wins";
             entries_wins.ReadOnly = true;
             // 
             // entries_losses
             // 
-            dataGridViewCellStyle34.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            entries_losses.DefaultCellStyle = dataGridViewCellStyle34;
+            dataGridViewCellStyle40.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            entries_losses.DefaultCellStyle = dataGridViewCellStyle40;
             entries_losses.HeaderText = "Losses";
             entries_losses.Name = "entries_losses";
             entries_losses.ReadOnly = true;
             // 
             // entries_draws
             // 
-            dataGridViewCellStyle35.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            entries_draws.DefaultCellStyle = dataGridViewCellStyle35;
+            dataGridViewCellStyle41.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            entries_draws.DefaultCellStyle = dataGridViewCellStyle41;
             entries_draws.HeaderText = "Draws";
             entries_draws.Name = "entries_draws";
             entries_draws.ReadOnly = true;
             // 
             // entries_total
             // 
-            dataGridViewCellStyle36.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            entries_total.DefaultCellStyle = dataGridViewCellStyle36;
+            dataGridViewCellStyle42.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            entries_total.DefaultCellStyle = dataGridViewCellStyle42;
             entries_total.HeaderText = "Total";
             entries_total.Name = "entries_total";
             entries_total.ReadOnly = true;
@@ -891,6 +977,7 @@
             ((System.ComponentModel.ISupportInitialize)mode_stats_grid).EndInit();
             ((System.ComponentModel.ISupportInitialize)totals_grid).EndInit();
             day_stats_page.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)popular_grid).EndInit();
             ((System.ComponentModel.ISupportInitialize)day_stats_grid).EndInit();
             data_entries_page.ResumeLayout(false);
             data_entries_page.PerformLayout();
@@ -974,5 +1061,12 @@
         private DataGridViewTextBoxColumn winrate_totals_column;
         private DataGridViewButtonColumn total_details_column;
         private DataGridViewTextBoxColumn misc_entry;
+        private DataGridView popular_grid;
+        private DataGridViewTextBoxColumn pop_day_col;
+        private DataGridViewTextBoxColumn pop_most_played_col;
+        private DataGridViewTextBoxColumn pop_winrate_col;
+        private DataGridViewTextBoxColumn pop_total_col;
+        private DataGridViewButtonColumn pop_details_col;
+        private DataGridViewTextBoxColumn pop_entry_col;
     }
 }
