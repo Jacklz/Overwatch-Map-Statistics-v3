@@ -98,7 +98,6 @@
             statprofile_textbox = new TextBox();
             statprofiles_checkedlistbox = new CheckedListBox();
             settings_page = new TabPage();
-            exit_prompt_checkbox = new CheckBox();
             reset_after_save_checkbox = new CheckBox();
             confirm_dialogs_checkbox = new CheckBox();
             general_tooltip = new ToolTip(components);
@@ -797,7 +796,6 @@
             // 
             // settings_page
             // 
-            settings_page.Controls.Add(exit_prompt_checkbox);
             settings_page.Controls.Add(reset_after_save_checkbox);
             settings_page.Controls.Add(confirm_dialogs_checkbox);
             settings_page.Location = new Point(4, 24);
@@ -806,19 +804,6 @@
             settings_page.TabIndex = 7;
             settings_page.Text = "Settings";
             settings_page.UseVisualStyleBackColor = true;
-            // 
-            // exit_prompt_checkbox
-            // 
-            exit_prompt_checkbox.AutoSize = true;
-            exit_prompt_checkbox.Checked = true;
-            exit_prompt_checkbox.CheckState = CheckState.Checked;
-            exit_prompt_checkbox.Location = new Point(8, 63);
-            exit_prompt_checkbox.Name = "exit_prompt_checkbox";
-            exit_prompt_checkbox.Size = new Size(140, 19);
-            exit_prompt_checkbox.TabIndex = 2;
-            exit_prompt_checkbox.Text = "Exit prompt after save";
-            exit_prompt_checkbox.UseVisualStyleBackColor = true;
-            exit_prompt_checkbox.CheckedChanged += exit_prompt_checkbox_CheckedChanged;
             // 
             // reset_after_save_checkbox
             // 
@@ -841,6 +826,7 @@
             confirm_dialogs_checkbox.Size = new Size(168, 19);
             confirm_dialogs_checkbox.TabIndex = 0;
             confirm_dialogs_checkbox.Text = "Show confirmation dialogs";
+            general_tooltip.SetToolTip(confirm_dialogs_checkbox, "Important confirmations not affected");
             confirm_dialogs_checkbox.UseVisualStyleBackColor = true;
             confirm_dialogs_checkbox.CheckedChanged += confirm_dialogs_checkbox_CheckedChanged;
             // 
@@ -951,6 +937,5 @@
         private Button recall_stats_button;
         private CheckBox reset_after_save_checkbox;
         private Button refresh_statprofiles_button;
-        private CheckBox exit_prompt_checkbox;
     }
 }

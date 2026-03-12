@@ -107,35 +107,28 @@ namespace Overwatch_Map_Statistics_v3
 
         private void add_entry_button_Click(object sender, EventArgs e)
         {
-            try
+            int map = maplist_combobox.SelectedIndex;
+            int selout = outcome_combobox.SelectedIndex;
+            int roleindex = role_combobox.SelectedIndex;
+            if (map == -1 || selout == -1 || roleindex == -1)
             {
-                int map = maplist_combobox.SelectedIndex;
-                int selout = outcome_combobox.SelectedIndex;
-                int roleindex = role_combobox.SelectedIndex;
-                if (map == -1 || selout == -1 || roleindex == -1)
-                {
-                    MessageBox.Show("Error adding entry. Make sure the map, role, and outcome fields are set!");
-                    return;
-                }
-                string? mapname = maplist_combobox.Items[map]?.ToString();
-                string? role = role_combobox.Items[roleindex]?.ToString();
-                string? outcome = outcome_combobox.Items[selout]?.ToString();
-                List<string> notes = [];
-                foreach (string note in notes_checkedlistbox.CheckedItems)
-                {
-                    notes.Add(note);
-                }
-                string entry = $"{mapname} - {role} - {outcome}";
-                if (notes.Count > 0) entry += $" - {string.Join(" | ", notes)}";
-                session_entries_listbox.Items.Add(entry);
-                session_entries_listbox.TopIndex = session_entries_listbox.Items.Count - 1;
-                ResetCurrentEntry();
-                UpdateRecordLabel();
+                MessageBox.Show("Error adding entry. Make sure the map, role, and outcome fields are set!");
+                return;
             }
-            catch
+            string? mapname = maplist_combobox.Items[map]?.ToString();
+            string? role = role_combobox.Items[roleindex]?.ToString();
+            string? outcome = outcome_combobox.Items[selout]?.ToString();
+            List<string> notes = [];
+            foreach (string note in notes_checkedlistbox.CheckedItems)
             {
-                MessageBox.Show("An unknown error occurred when attempting to add an entry to the session list");
+                notes.Add(note);
             }
+            string entry = $"{mapname} - {role} - {outcome}";
+            if (notes.Count > 0) entry += $" - {string.Join(" | ", notes)}";
+            session_entries_listbox.Items.Add(entry);
+            session_entries_listbox.TopIndex = session_entries_listbox.Items.Count - 1;
+            ResetCurrentEntry();
+            UpdateRecordLabel();
         }
 
         private bool RequestConfirmation(string message, string title = "")
@@ -218,7 +211,7 @@ namespace Overwatch_Map_Statistics_v3
             int index = map_type_combo.SelectedIndex;
             if (index == -1 || mapname.Length == 0)
             {
-                MessageBox.Show("Could not add map! Make sure both the map name field and map type are defined");
+                MessageBox.Show("Could not add map! Make sure both the map name and map type are defined");
                 return;
             }
             if (mapname.Contains('-'))
@@ -526,7 +519,6 @@ namespace Overwatch_Map_Statistics_v3
         {
             confirm_dialogs_checkbox.Checked = Settings.showconfirmdialogs;
             reset_after_save_checkbox.Checked = Settings.resetaftersave;
-            exit_prompt_checkbox.Checked = Settings.exitprompt;
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -588,11 +580,6 @@ namespace Overwatch_Map_Statistics_v3
         {
             StatProfileManager.LoadStatProfiles();
             UpdateStatDisplayLists();
-        }
-
-        private void exit_prompt_checkbox_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.exitprompt = exit_prompt_checkbox.Checked;
         }
     }
 }
