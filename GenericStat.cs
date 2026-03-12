@@ -66,6 +66,11 @@
             return miscoutcomes.Values.Select(entry => entry.count).Sum();
         }
 
+        public int GetNoteCount()
+        {
+            return notes.Values.Select(entry => entry.count).Sum();
+        }
+
         private void AddMiscOutcome(string outcome, int count)
         {
             if (miscoutcomes.TryGetValue(outcome, out MiscStat? value)) value.Add(count);

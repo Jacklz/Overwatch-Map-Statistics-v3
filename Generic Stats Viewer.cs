@@ -13,6 +13,11 @@
 
         private void Generic_Stats_Viewer_Load(object sender, EventArgs e)
         {
+            PopulateGrids();
+        }
+
+        public void PopulateGrids()
+        {
             misc_outcomes_grid.Rows.Clear();
             foreach (var entry in stat.miscoutcomes)
             {

@@ -33,7 +33,7 @@
         {
             foreach (var stat in stats)
             {
-                session_grid.Rows.Add(stat.map.mapname, stat.wins - stat.losses, stat.wins, stat.losses, stat.draws, stat.total, stat.winrate, "...", stat);
+                session_grid.Rows.Add(stat.map.mapname, stat.wins - stat.losses, stat.wins, stat.losses, stat.draws, stat.total, stat.winrate, stat.GetMiscCount() + stat.GetNoteCount(), stat);
             }
         }
 

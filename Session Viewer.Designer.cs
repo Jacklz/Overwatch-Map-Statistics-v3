@@ -34,9 +34,8 @@
             DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             session_grid = new DataGridView();
-            consolidate_session_checkbox = new CheckBox();
-            session_entries_count_label = new Label();
             session_map = new DataGridViewTextBoxColumn();
             session_netwins = new DataGridViewTextBoxColumn();
             session_wins = new DataGridViewTextBoxColumn();
@@ -46,6 +45,8 @@
             session_winrate = new DataGridViewTextBoxColumn();
             session_details = new DataGridViewButtonColumn();
             session_mapstat = new DataGridViewTextBoxColumn();
+            consolidate_session_checkbox = new CheckBox();
+            session_entries_count_label = new Label();
             ((System.ComponentModel.ISupportInitialize)session_grid).BeginInit();
             SuspendLayout();
             // 
@@ -58,14 +59,97 @@
             dataGridViewCellStyle1.BackColor = Color.LightGray;
             session_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             session_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            session_grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             session_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             session_grid.Columns.AddRange(new DataGridViewColumn[] { session_map, session_netwins, session_wins, session_losses, session_draws, session_total, session_winrate, session_details, session_mapstat });
             session_grid.Location = new Point(2, 36);
             session_grid.Name = "session_grid";
             session_grid.ReadOnly = true;
+            session_grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             session_grid.Size = new Size(699, 300);
             session_grid.TabIndex = 0;
             session_grid.CellContentClick += session_grid_CellContentClick;
+            // 
+            // session_map
+            // 
+            session_map.FillWeight = 170F;
+            session_map.HeaderText = "Map";
+            session_map.Name = "session_map";
+            session_map.ReadOnly = true;
+            // 
+            // session_netwins
+            // 
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            session_netwins.DefaultCellStyle = dataGridViewCellStyle3;
+            session_netwins.FillWeight = 120F;
+            session_netwins.HeaderText = "Net Wins";
+            session_netwins.Name = "session_netwins";
+            session_netwins.ReadOnly = true;
+            // 
+            // session_wins
+            // 
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            session_wins.DefaultCellStyle = dataGridViewCellStyle4;
+            session_wins.HeaderText = "Wins";
+            session_wins.Name = "session_wins";
+            session_wins.ReadOnly = true;
+            // 
+            // session_losses
+            // 
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            session_losses.DefaultCellStyle = dataGridViewCellStyle5;
+            session_losses.HeaderText = "Losses";
+            session_losses.Name = "session_losses";
+            session_losses.ReadOnly = true;
+            // 
+            // session_draws
+            // 
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            session_draws.DefaultCellStyle = dataGridViewCellStyle6;
+            session_draws.HeaderText = "Draws";
+            session_draws.Name = "session_draws";
+            session_draws.ReadOnly = true;
+            // 
+            // session_total
+            // 
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            session_total.DefaultCellStyle = dataGridViewCellStyle7;
+            session_total.HeaderText = "Total";
+            session_total.Name = "session_total";
+            session_total.ReadOnly = true;
+            // 
+            // session_winrate
+            // 
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.Format = "N2";
+            dataGridViewCellStyle8.NullValue = null;
+            session_winrate.DefaultCellStyle = dataGridViewCellStyle8;
+            session_winrate.HeaderText = "Win %";
+            session_winrate.Name = "session_winrate";
+            session_winrate.ReadOnly = true;
+            // 
+            // session_details
+            // 
+            session_details.HeaderText = "Misc";
+            session_details.Name = "session_details";
+            session_details.ReadOnly = true;
+            session_details.Resizable = DataGridViewTriState.True;
+            session_details.SortMode = DataGridViewColumnSortMode.Automatic;
+            session_details.Text = "";
+            // 
+            // session_mapstat
+            // 
+            session_mapstat.HeaderText = "map_stat";
+            session_mapstat.Name = "session_mapstat";
+            session_mapstat.ReadOnly = true;
+            session_mapstat.Visible = false;
             // 
             // consolidate_session_checkbox
             // 
@@ -88,80 +172,6 @@
             session_entries_count_label.Size = new Size(51, 15);
             session_entries_count_label.TabIndex = 2;
             session_entries_count_label.Text = "0 Entries";
-            // 
-            // session_map
-            // 
-            session_map.FillWeight = 170F;
-            session_map.HeaderText = "Map";
-            session_map.Name = "session_map";
-            session_map.ReadOnly = true;
-            // 
-            // session_netwins
-            // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            session_netwins.DefaultCellStyle = dataGridViewCellStyle2;
-            session_netwins.FillWeight = 120F;
-            session_netwins.HeaderText = "Net Wins";
-            session_netwins.Name = "session_netwins";
-            session_netwins.ReadOnly = true;
-            // 
-            // session_wins
-            // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            session_wins.DefaultCellStyle = dataGridViewCellStyle3;
-            session_wins.HeaderText = "Wins";
-            session_wins.Name = "session_wins";
-            session_wins.ReadOnly = true;
-            // 
-            // session_losses
-            // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            session_losses.DefaultCellStyle = dataGridViewCellStyle4;
-            session_losses.HeaderText = "Losses";
-            session_losses.Name = "session_losses";
-            session_losses.ReadOnly = true;
-            // 
-            // session_draws
-            // 
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            session_draws.DefaultCellStyle = dataGridViewCellStyle5;
-            session_draws.HeaderText = "Draws";
-            session_draws.Name = "session_draws";
-            session_draws.ReadOnly = true;
-            // 
-            // session_total
-            // 
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            session_total.DefaultCellStyle = dataGridViewCellStyle6;
-            session_total.HeaderText = "Total";
-            session_total.Name = "session_total";
-            session_total.ReadOnly = true;
-            // 
-            // session_winrate
-            // 
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.Format = "N2";
-            dataGridViewCellStyle7.NullValue = null;
-            session_winrate.DefaultCellStyle = dataGridViewCellStyle7;
-            session_winrate.HeaderText = "Win %";
-            session_winrate.Name = "session_winrate";
-            session_winrate.ReadOnly = true;
-            // 
-            // session_details
-            // 
-            session_details.HeaderText = "Details";
-            session_details.Name = "session_details";
-            session_details.ReadOnly = true;
-            session_details.Resizable = DataGridViewTriState.True;
-            session_details.SortMode = DataGridViewColumnSortMode.Automatic;
-            session_details.Text = "...";
-            // 
-            // session_mapstat
-            // 
-            session_mapstat.HeaderText = "map_stat";
-            session_mapstat.Name = "session_mapstat";
-            session_mapstat.ReadOnly = true;
-            session_mapstat.Visible = false;
             // 
             // Session_Viewer
             // 
