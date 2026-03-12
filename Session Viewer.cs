@@ -25,8 +25,10 @@
         {
             if (!canupdate) return;
             session_grid.Rows.Clear();
-            PopulateGrid(consolidate == true ? entry.Consolidate() : entry.Summarize());
-            session_entries_count_label.Text = $"{session_grid.Rows.Count} Entries";
+            var con = entry.Consolidate();
+            var sum = entry.Summarize();
+            PopulateGrid(consolidate == true ? con : sum);
+            session_entries_count_label.Text = $"{session_grid.Rows.Count}/{sum.Count} Entries";
         }
 
         private void PopulateGrid(List<MapStat> stats)

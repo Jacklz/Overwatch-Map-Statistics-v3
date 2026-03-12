@@ -228,6 +228,7 @@ namespace Overwatch_Map_Statistics_v3
             GenericStat? stat = (GenericStat?)totals_grid.Rows[0].Cells[6].Value;
             Generic_Stats_Viewer viewer = new(stat, "Misc");
             viewer.PopulateGrids();
+            data_entries_grid.Sort(data_entries_grid.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
             ExportStatsToCSV(map_stats_grid, totals_grid, mode_stats_grid, day_stats_grid, data_entries_grid, viewer.notes_grid, viewer.misc_outcomes_grid);
             MessageBox.Show("Successfully exported the current state of grids");
         }
@@ -245,6 +246,8 @@ namespace Overwatch_Map_Statistics_v3
             }
         }
 
+        //grids are exported with the column count -2 to account for
+        //the last 2 columns to not be exported
         private static void ExportCsv(DataGridView grid, string path)
         {
             //var lines = new List<string>

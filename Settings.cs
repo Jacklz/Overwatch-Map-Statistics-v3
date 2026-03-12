@@ -6,6 +6,7 @@ namespace Overwatch_Map_Statistics_v3
     {
         public static bool showconfirmdialogs = true;
         public static bool resetaftersave = false;
+        public static bool exitprompt = true;
 
         public static IOrderedEnumerable<FieldInfo> GetSettings()
         {

@@ -526,6 +526,7 @@ namespace Overwatch_Map_Statistics_v3
         {
             confirm_dialogs_checkbox.Checked = Settings.showconfirmdialogs;
             reset_after_save_checkbox.Checked = Settings.resetaftersave;
+            exit_prompt_checkbox.Checked = Settings.exitprompt;
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -587,6 +588,11 @@ namespace Overwatch_Map_Statistics_v3
         {
             StatProfileManager.LoadStatProfiles();
             UpdateStatDisplayLists();
+        }
+
+        private void exit_prompt_checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.exitprompt = exit_prompt_checkbox.Checked;
         }
     }
 }
