@@ -9,6 +9,7 @@ namespace Overwatch_Map_Statistics_v3
         private readonly Dictionary<string, ModeStat> modestats = [];
         private readonly Dictionary<string, DayStat> daystats = [];
         private readonly Dictionary<string, Dictionary<string, MapStat>> popstats = [];
+        private readonly Dictionary<string, ComboStat> combostat = [];
         private DateTime orgstart;
         private DateTime orgend;
         private bool allowupdate = false;
@@ -124,7 +125,6 @@ namespace Overwatch_Map_Statistics_v3
                     if (!popstats.TryGetValue(dayofweek, out var value))
                     {
                         value = [];
-                        //value[data.mapname] = new(data.mapname, data.mode);
                         popstats[dayofweek] = value;
                     }
                     if (!value.TryGetValue(data.mapname, out var mapvalue))
@@ -135,6 +135,12 @@ namespace Overwatch_Map_Statistics_v3
                     mapvalue.HandleOutcome(data.outcome);
                     mapvalue.AddNote([.. data.notes]);
                 }
+                if (!combostat.TryGetValue(dayofweek, out var combo))
+                {
+                    combo = new();
+                    combostat[dayofweek] = combo;
+                }
+                combo.AddData(entry);
             }
             UpdateDataEntriesCount();
             foreach (var entry in mapstats.Values.OrderBy(stat => stat.map.mapname))
@@ -156,7 +162,7 @@ namespace Overwatch_Map_Statistics_v3
                 totalmisc += misc;
             }
             int totalgames = totalwins + totallosses + totaldraws;
-            double winrate = Math.Round((double)totalwins / (double)(totalwins + totallosses), 4) * 100;
+            double winrate = Math.Round(totalwins / (double)(totalwins + totallosses), 4) * 100;
             totals_grid.Rows.Add(totalwins, totallosses, totaldraws, totalgames, winrate, totalmisc, notesoutcomes);
             foreach (var entry in daystats.Values.OrderBy(day => day.day))
             {
@@ -164,16 +170,28 @@ namespace Overwatch_Map_Statistics_v3
             }
             foreach (DayOfWeek day in Enum.GetValues<DayOfWeek>())
             {
-                if (popstats.TryGetValue(day.ToString(), out var dict))
+                string dayname = day.ToString();
+                if (combostat.TryGetValue(dayname, out var dict))
                 {
-                    var map = dict.Values.OrderBy(entry => entry.total).LastOrDefault();
+                    var map = dict.GetMostPopularMap(dayname);
                     if (map != default)
                     {
-                        popular_grid.Rows.Add(day.ToString(), map.map.mapname, map.winrate, map.total, "...", dict);
+                        popular_grid.Rows.Add(dayname, map.map.mapname, map.winrate, map.total, "...", dict);
                         continue;
                     }
                 }
-                popular_grid.Rows.Add(day.ToString(), "NA", 0, 0, "...");
+                popular_grid.Rows.Add(dayname, "NA", 0, 0, "...");
+
+                //if (popstats.TryGetValue(day.ToString(), out var dict))
+                //{
+                //    var map = dict.Values.OrderBy(entry => entry.total).LastOrDefault();
+                //    if (map != default)
+                //    {
+                //        popular_grid.Rows.Add(day.ToString(), map.map.mapname, map.winrate, map.total, "...", dict);
+                //        continue;
+                //    }
+                //}
+                //popular_grid.Rows.Add(day.ToString(), "NA", 0, 0, "...");
             }
         }
 
@@ -185,11 +203,12 @@ namespace Overwatch_Map_Statistics_v3
             day_stats_grid.Rows.Clear();
             data_entries_grid.Rows.Clear();
             popular_grid.Rows.Clear();
-            UpdateDataEntriesCount();
+            //UpdateDataEntriesCount();
             totals_grid.Rows.Clear();
             mapstats.Clear();
             modestats.Clear();
             daystats.Clear();
+            combostat.Clear();
             popstats.Clear();
             filteredentries.Clear();
             LoadStats();
@@ -454,11 +473,17 @@ namespace Overwatch_Map_Statistics_v3
         {
             if (e.RowIndex == -1) return;
             if (e.ColumnIndex != 4) return;
-            var entry = (Dictionary<string, MapStat>?)popular_grid.Rows[e.RowIndex].Cells[5].Value;
+            var entry = (ComboStat?)popular_grid.Rows[e.RowIndex].Cells[5].Value;
             string? day = popular_grid.Rows[e.RowIndex].Cells[0].Value?.ToString();
             if (entry == null || day == null) return;
             Popular_Details_Viewer pop = new(entry, day);
             pop.Show();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            AboutBox1 aboutBox1 = new(filteredentries);
+            aboutBox1.Show();
         }
     }
 }
