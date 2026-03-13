@@ -15,7 +15,6 @@
             var grid = GridCreator.CreateDataEntriesGrid(700, 400);
             grid.Location = new(0, 0);
             this.Controls.Add(grid);
-            grid.PopulateDataEntries(entries);
         }
     }
 }

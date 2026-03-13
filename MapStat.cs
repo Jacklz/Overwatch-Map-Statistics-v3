@@ -4,11 +4,6 @@
     {
         public readonly Map map;
 
-        public MapStat(Map map)
-        {
-            this.map = map;
-        }
-
         public MapStat(string name, string mode)
         {
             map = new(name, mode);

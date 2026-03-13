@@ -145,7 +145,6 @@
             role_checkedlistbox = new CheckedListBox();
             label3 = new Label();
             profile_checkedlistbox = new CheckedListBox();
-            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)map_stats_grid).BeginInit();
             tabControl1.SuspendLayout();
             map_stats_page.SuspendLayout();
@@ -640,7 +639,6 @@
             // 
             // data_entries_page
             // 
-            data_entries_page.Controls.Add(button1);
             data_entries_page.Controls.Add(entries_count_label);
             data_entries_page.Controls.Add(map_search_textbox);
             data_entries_page.Controls.Add(label6);
@@ -949,16 +947,6 @@
             profile_checkedlistbox.TabIndex = 0;
             profile_checkedlistbox.ItemCheck += profile_checkedlistbox_ItemCheck;
             // 
-            // button1
-            // 
-            button1.Location = new Point(318, 18);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 4;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
             // Stats_Viewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1074,6 +1062,5 @@
         private DataGridViewTextBoxColumn pop_total_col;
         private DataGridViewButtonColumn pop_details_col;
         private DataGridViewTextBoxColumn pop_entry_col;
-        private Button button1;
     }
 }

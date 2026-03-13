@@ -479,11 +479,5 @@ namespace Overwatch_Map_Statistics_v3
             Popular_Details_Viewer pop = new(entry, day);
             pop.Show();
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            AboutBox1 aboutBox1 = new(filteredentries);
-            aboutBox1.Show();
-        }
     }
 }

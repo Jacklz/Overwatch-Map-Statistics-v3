@@ -11,7 +11,7 @@
             }         
         }
 
-        public static void PopulateMapStats(this DataGridView grid, List<MapStat> entries)
+        public static void PopulateMapStats(this DataGridView grid, IOrderedEnumerable<MapStat> entries)
         {
             grid.Rows.Clear();
             foreach (var entry in entries)
@@ -21,7 +21,7 @@
             }
         }
 
-        public static void PopulateDayStats(this DataGridView grid, List<DayStat> entries)
+        public static void PopulateDayStats(this DataGridView grid, IOrderedEnumerable<DayStat> entries)
         {
             grid.Rows.Clear();
             foreach (var entry in entries)
