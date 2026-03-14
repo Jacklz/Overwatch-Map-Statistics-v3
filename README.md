@@ -16,3 +16,11 @@ I have iterated on it several times over the years and am now making it public.
 ![Session](screenshots/session.jpg)
 
 ![Stats](screenshots/stats.jpg)
+
+![Stats](screenshots/stats2.jpg)
+
+![Stats](screenshots/stats3.jpg)
+
+![Stats](screenshots/stats4.jpg)
+
+![Stats](screenshots/stats5.jpg)
