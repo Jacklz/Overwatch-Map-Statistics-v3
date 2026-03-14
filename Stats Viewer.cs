@@ -8,7 +8,6 @@ namespace Overwatch_Map_Statistics_v3
         private readonly Dictionary<string, MapStat> mapstats = [];
         private readonly Dictionary<string, ModeStat> modestats = [];
         private readonly Dictionary<string, DayStat> daystats = [];
-        private readonly Dictionary<string, Dictionary<string, MapStat>> popstats = [];
         private readonly Dictionary<string, ComboStat> combostat = [];
         private DateTime orgstart;
         private DateTime orgend;
@@ -122,18 +121,6 @@ namespace Overwatch_Map_Statistics_v3
                     daystat.AddNote([.. data.notes]);
                     notesoutcomes.AddNote([.. data.notes]);
                     notesoutcomes.HandleOutcome(data.outcome);
-                    if (!popstats.TryGetValue(dayofweek, out var value))
-                    {
-                        value = [];
-                        popstats[dayofweek] = value;
-                    }
-                    if (!value.TryGetValue(data.mapname, out var mapvalue))
-                    {
-                        mapvalue = new(data.mapname, data.mode);
-                        popstats[dayofweek][data.mapname] = mapvalue;
-                    }
-                    mapvalue.HandleOutcome(data.outcome);
-                    mapvalue.AddNote([.. data.notes]);
                 }
                 if (!combostat.TryGetValue(dayofweek, out var combo))
                 {
@@ -181,17 +168,6 @@ namespace Overwatch_Map_Statistics_v3
                     }
                 }
                 popular_grid.Rows.Add(dayname, "NA", 0, 0, "...");
-
-                //if (popstats.TryGetValue(day.ToString(), out var dict))
-                //{
-                //    var map = dict.Values.OrderBy(entry => entry.total).LastOrDefault();
-                //    if (map != default)
-                //    {
-                //        popular_grid.Rows.Add(day.ToString(), map.map.mapname, map.winrate, map.total, "...", dict);
-                //        continue;
-                //    }
-                //}
-                //popular_grid.Rows.Add(day.ToString(), "NA", 0, 0, "...");
             }
         }
 
@@ -203,13 +179,11 @@ namespace Overwatch_Map_Statistics_v3
             day_stats_grid.Rows.Clear();
             data_entries_grid.Rows.Clear();
             popular_grid.Rows.Clear();
-            //UpdateDataEntriesCount();
             totals_grid.Rows.Clear();
             mapstats.Clear();
             modestats.Clear();
             daystats.Clear();
             combostat.Clear();
-            popstats.Clear();
             filteredentries.Clear();
             LoadStats();
         }
@@ -276,19 +250,21 @@ namespace Overwatch_Map_Statistics_v3
             Generic_Stats_Viewer viewer = new(stat, "Misc");
             viewer.PopulateGrids();
             data_entries_grid.Sort(data_entries_grid.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
-            ExportStatsToCSV(map_stats_grid, totals_grid, mode_stats_grid, day_stats_grid, data_entries_grid, viewer.notes_grid, viewer.misc_outcomes_grid);
+            ExportStatsToCSV("",map_stats_grid, totals_grid, mode_stats_grid, day_stats_grid, data_entries_grid, popular_grid, viewer.notes_grid, viewer.misc_outcomes_grid);
             MessageBox.Show("Successfully exported the current state of grids");
         }
 
-        private static void ExportStatsToCSV(params DataGridView[] grids)
+        public static void ExportStatsToCSV(string day, params DataGridView[] grids)
         {
             Directory.CreateDirectory("Exported stats");
             string time = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-            string export = Path.Combine("Exported stats", time);
+            string export;
+            if (day.Length == 0) export = Path.Combine("Exported stats", time);
+            else export = Path.Combine("Exported stats", day, time);
             Directory.CreateDirectory(export);
             foreach (var grid in grids)
             {
-                string path = Path.Combine("Exported stats", time, $"{grid.Name}.csv");
+                string path = Path.Combine("Exported stats", day, time, $"{grid.Name}.csv");
                 ExportCsv(grid, path);
             }
         }

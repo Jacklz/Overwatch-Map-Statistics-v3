@@ -87,5 +87,11 @@
         {
             Stats_Viewer.OpenGenStatWindow(mode_stats_grid, e, 7, 6);
         }
+
+        private void export_day_button_Click(object sender, EventArgs e)
+        {
+            Stats_Viewer.ExportStatsToCSV(day, pop_map_stats_grid, totals_grid, mode_stats_grid, data_entries_grid);
+            MessageBox.Show($"Successfully exported '{day}' stats");
+        }
     }
 }

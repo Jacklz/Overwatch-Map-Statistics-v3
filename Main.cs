@@ -351,7 +351,7 @@ namespace Overwatch_Map_Statistics_v3
             int index = statprofiles_checkedlistbox.SelectedIndex;
             if (index == -1) return;
             string? name = statprofiles_checkedlistbox.Items[index]?.ToString();
-            var result = MessageBox.Show("Removing this stat profile will also delete the stats associated with it. Are you sure?", "Warning", MessageBoxButtons.YesNo);
+            var result = MessageBox.Show($"Removing this stat profile will also delete the stats associated with it. Are you sure you want to delete the '{name}' stat profile?", "Warning", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
                 StatProfileManager.RemoveStatProfile(name);
