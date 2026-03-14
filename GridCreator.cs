@@ -6,6 +6,10 @@
         {
             DataGridView grid = CreateGrid(width, height);
             AddColumnsToGrid(grid, "Day", "Wins", "Losses", "Draws", "Total", "Winrate", "Misc");
+            grid.CellContentClick += (o, e) =>
+            {
+
+            };
             return grid;
         }
 
@@ -29,6 +33,14 @@
         {
             DataGridView grid = CreateGrid(width, height);
             AddColumnsToGrid(grid, "Total Wins", "Total Losses", "Total Draws", "Total Games", "Winrate", "Misc");
+            grid.CellContentClick += (o, e) =>
+            {
+                GenericStat? stat = GetCellData<GenericStat>(grid, e);
+                if (stat != null)
+                {
+                    
+                }
+            };
             return grid;
         }
 
@@ -43,6 +55,10 @@
         {
             DataGridView grid = CreateGrid(width, height);
             AddColumnsToGrid(grid, "Map", "Mode", "Wins", "Losses", "Draws", "Total", "Winrate", "Misc");
+            grid.CellContentClick += (o, e) =>
+            {
+
+            };
             return grid;
         }
 

@@ -63,6 +63,8 @@
             pop_draws = new DataGridViewTextBoxColumn();
             pop_total = new DataGridViewTextBoxColumn();
             pop_winrate = new DataGridViewTextBoxColumn();
+            misc_col = new DataGridViewButtonColumn();
+            data_col = new DataGridViewTextBoxColumn();
             tabControl1 = new TabControl();
             map_stats_page = new TabPage();
             map_totals_page = new TabPage();
@@ -121,13 +123,14 @@
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
             pop_map_stats_grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             pop_map_stats_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            pop_map_stats_grid.Columns.AddRange(new DataGridViewColumn[] { pop_map, pop_mode, pop_win, pop_loss, pop_draws, pop_total, pop_winrate });
+            pop_map_stats_grid.Columns.AddRange(new DataGridViewColumn[] { pop_map, pop_mode, pop_win, pop_loss, pop_draws, pop_total, pop_winrate, misc_col, data_col });
             pop_map_stats_grid.Location = new Point(3, 3);
             pop_map_stats_grid.Name = "pop_map_stats_grid";
             pop_map_stats_grid.ReadOnly = true;
             pop_map_stats_grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             pop_map_stats_grid.Size = new Size(694, 300);
             pop_map_stats_grid.TabIndex = 0;
+            pop_map_stats_grid.CellContentClick += pop_map_stats_grid_CellContentClick;
             // 
             // pop_map
             // 
@@ -182,6 +185,21 @@
             pop_winrate.Name = "pop_winrate";
             pop_winrate.ReadOnly = true;
             // 
+            // misc_col
+            // 
+            misc_col.HeaderText = "Misc";
+            misc_col.Name = "misc_col";
+            misc_col.ReadOnly = true;
+            misc_col.Resizable = DataGridViewTriState.True;
+            misc_col.SortMode = DataGridViewColumnSortMode.Automatic;
+            // 
+            // data_col
+            // 
+            data_col.HeaderText = "Data";
+            data_col.Name = "data_col";
+            data_col.ReadOnly = true;
+            data_col.Visible = false;
+            // 
             // tabControl1
             // 
             tabControl1.Controls.Add(map_stats_page);
@@ -211,7 +229,7 @@
             map_totals_page.Location = new Point(4, 24);
             map_totals_page.Name = "map_totals_page";
             map_totals_page.Padding = new Padding(3);
-            map_totals_page.Size = new Size(705, 305);
+            map_totals_page.Size = new Size(701, 309);
             map_totals_page.TabIndex = 1;
             map_totals_page.Text = "Map Totals";
             map_totals_page.UseVisualStyleBackColor = true;
@@ -239,6 +257,7 @@
             totals_grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             totals_grid.Size = new Size(696, 50);
             totals_grid.TabIndex = 3;
+            totals_grid.CellContentClick += totals_grid_CellContentClick;
             // 
             // total_wins_column
             // 
@@ -324,6 +343,7 @@
             mode_stats_grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             mode_stats_grid.Size = new Size(696, 150);
             mode_stats_grid.TabIndex = 2;
+            mode_stats_grid.CellContentClick += mode_stats_grid_CellContentClick;
             // 
             // map_type_column
             // 
@@ -424,6 +444,7 @@
             data_entries_grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             data_entries_grid.Size = new Size(693, 300);
             data_entries_grid.TabIndex = 1;
+            data_entries_grid.CellContentClick += data_entries_grid_CellContentClick;
             // 
             // entries_date
             // 
@@ -519,13 +540,6 @@
         #endregion
 
         private DataGridView pop_map_stats_grid;
-        private DataGridViewTextBoxColumn pop_map;
-        private DataGridViewTextBoxColumn pop_mode;
-        private DataGridViewTextBoxColumn pop_win;
-        private DataGridViewTextBoxColumn pop_loss;
-        private DataGridViewTextBoxColumn pop_draws;
-        private DataGridViewTextBoxColumn pop_total;
-        private DataGridViewTextBoxColumn pop_winrate;
         private TabControl tabControl1;
         private TabPage map_stats_page;
         private TabPage map_totals_page;
@@ -556,5 +570,14 @@
         private DataGridViewTextBoxColumn winrate_totals_column;
         private DataGridViewButtonColumn total_details_column;
         private DataGridViewTextBoxColumn misc_entry;
+        private DataGridViewTextBoxColumn pop_map;
+        private DataGridViewTextBoxColumn pop_mode;
+        private DataGridViewTextBoxColumn pop_win;
+        private DataGridViewTextBoxColumn pop_loss;
+        private DataGridViewTextBoxColumn pop_draws;
+        private DataGridViewTextBoxColumn pop_total;
+        private DataGridViewTextBoxColumn pop_winrate;
+        private DataGridViewButtonColumn misc_col;
+        private DataGridViewTextBoxColumn data_col;
     }
 }

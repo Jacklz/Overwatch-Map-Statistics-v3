@@ -447,7 +447,7 @@ namespace Overwatch_Map_Statistics_v3
             OpenGenStatWindow(day_stats_grid, e, 7, 6);
         }
 
-        private static void OpenGenStatWindow(DataGridView grid, DataGridViewCellEventArgs e, int infocol, int clickcol)
+        public static void OpenGenStatWindow(DataGridView grid, DataGridViewCellEventArgs e, int infocol, int clickcol)
         {
             if (e.RowIndex == -1) return;
             if (e.ColumnIndex != clickcol) return;
