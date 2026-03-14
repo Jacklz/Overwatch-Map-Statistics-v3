@@ -101,7 +101,6 @@
             reset_after_save_checkbox = new CheckBox();
             confirm_dialogs_checkbox = new CheckBox();
             general_tooltip = new ToolTip(components);
-            new_stats_button = new Button();
             tabControl1.SuspendLayout();
             session_page.SuspendLayout();
             maps_page.SuspendLayout();
@@ -659,7 +658,6 @@
             // 
             // stats_page
             // 
-            stats_page.Controls.Add(new_stats_button);
             stats_page.Controls.Add(refresh_statprofiles_button);
             stats_page.Controls.Add(recall_stats_button);
             stats_page.Controls.Add(gen_rand_stats_button);
@@ -832,16 +830,6 @@
             confirm_dialogs_checkbox.UseVisualStyleBackColor = true;
             confirm_dialogs_checkbox.CheckedChanged += confirm_dialogs_checkbox_CheckedChanged;
             // 
-            // new_stats_button
-            // 
-            new_stats_button.Location = new Point(234, 217);
-            new_stats_button.Name = "new_stats_button";
-            new_stats_button.Size = new Size(88, 23);
-            new_stats_button.TabIndex = 12;
-            new_stats_button.Text = "New Stats";
-            new_stats_button.UseVisualStyleBackColor = true;
-            new_stats_button.Click += new_stats_button_Click;
-            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -949,6 +937,5 @@
         private Button recall_stats_button;
         private CheckBox reset_after_save_checkbox;
         private Button refresh_statprofiles_button;
-        private Button new_stats_button;
     }
 }

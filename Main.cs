@@ -581,10 +581,5 @@ namespace Overwatch_Map_Statistics_v3
             StatProfileManager.LoadStatProfiles();
             UpdateStatDisplayLists();
         }
-
-        private void new_stats_button_Click(object sender, EventArgs e)
-        {
-            
-        }
     }
 }
