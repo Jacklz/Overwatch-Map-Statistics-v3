@@ -8,3 +8,7 @@ Program Features:
 -View stats for saved sessions.
 -Add new maps and game modes with ease when new content comes out.
 -Exporting stats with the click of a button to a .CSV file ready to import to google sheets or similar programs.
+
+![Session](screenshots/session.jpg)
+
+![Stats](screenshots/stats.jpg)
