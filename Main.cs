@@ -16,6 +16,7 @@ namespace Overwatch_Map_Statistics_v3
             session_date_picker.Value = DateTime.Today;
             PrepareDirectory();
             UpdateAllDisplayLists();
+            UpdateRecordLabel();
         }
 
         private static void PrepareDirectory()
