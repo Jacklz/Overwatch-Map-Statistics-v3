@@ -8,6 +8,7 @@ Program Features:
 -View stats for saved sessions.
 -Add new maps and game modes with ease when new content comes out.
 -Exporting stats with the click of a button to a .CSV file ready to import to google sheets or similar programs.
+-The current session's record is automatically exported to a 'today.txt' file for easy display on OBS.
 
 ![Session](screenshots/session.jpg)
 
