@@ -10,17 +10,6 @@
         public readonly Dictionary<string, MiscStat> miscoutcomes = [];
         public readonly Dictionary<string, MiscStat> notes = [];
 
-        //public void Combine(GenericStat stat)
-        //{
-        //    AddWin(stat.wins);
-        //    AddLoss(stat.losses);
-        //    AddDraw(stat.draws);
-        //    foreach (var outcome in stat.miscoutcomes)
-        //    {
-        //        miscoutcomes[outcome.Key].Add(outcome.Value.count);
-        //    }
-        //}
-
         public void HandleOutcome(string outcome)
         {
             switch (outcome)

@@ -250,7 +250,7 @@ namespace Overwatch_Map_Statistics_v3
             Generic_Stats_Viewer viewer = new(stat, "Misc");
             viewer.PopulateGrids();
             data_entries_grid.Sort(data_entries_grid.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
-            ExportStatsToCSV("",map_stats_grid, totals_grid, mode_stats_grid, day_stats_grid, data_entries_grid, popular_grid, viewer.notes_grid, viewer.misc_outcomes_grid);
+            ExportStatsToCSV("", map_stats_grid, totals_grid, mode_stats_grid, day_stats_grid, data_entries_grid, popular_grid, viewer.notes_grid, viewer.misc_outcomes_grid);
             MessageBox.Show("Successfully exported the current state of grids");
         }
 

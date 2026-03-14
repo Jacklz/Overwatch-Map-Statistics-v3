@@ -20,7 +20,7 @@
             {
                 pop_map_stats_grid.Rows.Add(entry.map.mapname, entry.map.mode, entry.wins, entry.losses, entry.draws, entry.total, entry.winrate, entry.GetMiscCount() + entry.GetNoteCount(), entry);
             }
-            mode_stats_grid.Rows.Clear();
+            pop_mode_stats_grid.Rows.Clear();
             int totalmisc = 0;
             int totalwins = 0;
             int totallosses = 0;
@@ -29,7 +29,7 @@
             foreach (var entry in stat.modestats[day].Values)
             {
                 int misc = entry.GetNoteCount() + entry.GetMiscCount();
-                mode_stats_grid.Rows.Add(entry.mode, entry.wins, entry.losses, entry.draws, entry.total, entry.winrate, misc, entry);
+                pop_mode_stats_grid.Rows.Add(entry.mode, entry.wins, entry.losses, entry.draws, entry.total, entry.winrate, misc, entry);
                 totalwins += entry.wins;
                 totallosses += entry.losses;
                 totaldraws += entry.draws;
@@ -51,18 +51,18 @@
             }
             int totalgames = totalwins + totallosses + totaldraws;
             double winrate = Math.Round(totalwins / (double)(totalwins + totallosses), 4) * 100;
-            totals_grid.Rows.Clear();
-            totals_grid.Rows.Add(totalwins, totallosses, totaldraws, totalgames, winrate, totalmisc, notesoutcomes);
+            pop_totals_grid.Rows.Clear();
+            pop_totals_grid.Rows.Add(totalwins, totallosses, totaldraws, totalgames, winrate, totalmisc, notesoutcomes);
             foreach (var entry in stat.records)
             {
-                data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetTotal(), "...", entry);
+                pop_data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetTotal(), "...", entry);
             }
         }
 
         private void data_entries_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex == -1) return;
-            var data = (SessionRecordEntry?)data_entries_grid.Rows[e.RowIndex].Cells[7].Value;
+            var data = (SessionRecordEntry?)pop_data_entries_grid.Rows[e.RowIndex].Cells[7].Value;
             if (data == null) return;
             switch (e.ColumnIndex)
             {
@@ -80,17 +80,17 @@
 
         private void totals_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            Stats_Viewer.OpenGenStatWindow(totals_grid, e, 6, 5);
+            Stats_Viewer.OpenGenStatWindow(pop_totals_grid, e, 6, 5);
         }
 
         private void mode_stats_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            Stats_Viewer.OpenGenStatWindow(mode_stats_grid, e, 7, 6);
+            Stats_Viewer.OpenGenStatWindow(pop_mode_stats_grid, e, 7, 6);
         }
 
         private void export_day_button_Click(object sender, EventArgs e)
         {
-            Stats_Viewer.ExportStatsToCSV(day, pop_map_stats_grid, totals_grid, mode_stats_grid, data_entries_grid);
+            Stats_Viewer.ExportStatsToCSV(day, pop_map_stats_grid, pop_totals_grid, pop_mode_stats_grid, pop_data_entries_grid);
             MessageBox.Show($"Successfully exported '{day}' stats");
         }
     }
