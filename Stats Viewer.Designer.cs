@@ -653,7 +653,7 @@
             // entries_count_label
             // 
             entries_count_label.AutoSize = true;
-            entries_count_label.Location = new Point(142, 37);
+            entries_count_label.Location = new Point(166, 37);
             entries_count_label.Name = "entries_count_label";
             entries_count_label.Size = new Size(54, 15);
             entries_count_label.TabIndex = 3;
@@ -663,7 +663,7 @@
             // 
             map_search_textbox.Location = new Point(9, 29);
             map_search_textbox.Name = "map_search_textbox";
-            map_search_textbox.Size = new Size(127, 23);
+            map_search_textbox.Size = new Size(151, 23);
             map_search_textbox.TabIndex = 2;
             map_search_textbox.TextChanged += map_search_textbox_TextChanged;
             // 
@@ -672,9 +672,9 @@
             label6.AutoSize = true;
             label6.Location = new Point(9, 11);
             label6.Name = "label6";
-            label6.Size = new Size(137, 15);
+            label6.Size = new Size(151, 15);
             label6.TabIndex = 1;
-            label6.Text = "Search map or outcome:";
+            label6.Text = "Search map/outcome/note";
             // 
             // data_entries_grid
             // 

@@ -169,6 +169,7 @@ namespace Overwatch_Map_Statistics_v3
                 }
                 popular_grid.Rows.Add(dayname, "NA", 0, 0, "...");
             }
+            data_entries_grid.Sort(data_entries_grid.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
         }
 
         private void ResetStatGrids()
@@ -390,11 +391,13 @@ namespace Overwatch_Map_Statistics_v3
                 {
                     bool name = data.mapname.Contains(text, StringComparison.OrdinalIgnoreCase);
                     bool outcome = data.outcome.Contains(text, StringComparison.OrdinalIgnoreCase);
-                    return name || outcome;
+                    bool note = data.notes.Where(item => item.Contains(text, StringComparison.OrdinalIgnoreCase)).Any();
+                    return name || outcome || note;
                 }).Any();
                 if (!map) continue;
-                data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetMiscOutcomes(), entry.GetTotal(), "...", entry);
+                data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetTotal(), "...", entry);
             }
+            data_entries_grid.Sort(data_entries_grid.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
             UpdateDataEntriesCount();
         }
 

@@ -57,6 +57,8 @@
             {
                 pop_data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetTotal(), "...", entry);
             }
+            pop_data_entries_grid.Sort(pop_data_entries_grid.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+            UpdateDataEntriesCount();
         }
 
         private void data_entries_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -92,6 +94,31 @@
         {
             Stats_Viewer.ExportStatsToCSV(day, pop_map_stats_grid, pop_totals_grid, pop_mode_stats_grid, pop_data_entries_grid);
             MessageBox.Show($"Successfully exported '{day}' stats");
+        }
+
+        private void map_search_textbox_TextChanged(object sender, EventArgs e)
+        {
+            pop_data_entries_grid.Rows.Clear();
+            string text = map_search_textbox.Text;
+            foreach (var entry in stat.records)
+            {
+                bool map = entry.mapdata.Where(data =>
+                {
+                    bool name = data.mapname.Contains(text, StringComparison.OrdinalIgnoreCase);
+                    bool outcome = data.outcome.Contains(text, StringComparison.OrdinalIgnoreCase);
+                    bool note = data.notes.Where(item => item.Contains(text, StringComparison.OrdinalIgnoreCase)).Any();
+                    return name || outcome || note;
+                }).Any();
+                if (!map) continue;
+                pop_data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetTotal(), "...", entry);
+            }
+            pop_data_entries_grid.Sort(pop_data_entries_grid.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+            UpdateDataEntriesCount();
+        }
+
+        private void UpdateDataEntriesCount()
+        {
+            entries_count_label.Text = $"Entries: {pop_data_entries_grid.Rows.Count}";
         }
     }
 }
