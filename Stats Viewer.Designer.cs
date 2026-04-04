@@ -27,6 +27,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
@@ -145,6 +146,7 @@
             role_checkedlistbox = new CheckedListBox();
             label3 = new Label();
             profile_checkedlistbox = new CheckedListBox();
+            toolTip1 = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)map_stats_grid).BeginInit();
             tabControl1.SuspendLayout();
             map_stats_page.SuspendLayout();
@@ -814,6 +816,7 @@
             save_selection.Size = new Size(211, 23);
             save_selection.TabIndex = 15;
             save_selection.Text = "Save selection as stat profile";
+            toolTip1.SetToolTip(save_selection, "Will export the current state of stat grids to its own stat profile. Appends data if stat profile already exists");
             save_selection.UseVisualStyleBackColor = true;
             save_selection.Click += save_selection_Click;
             // 
@@ -1062,5 +1065,6 @@
         private DataGridViewTextBoxColumn pop_total_col;
         private DataGridViewButtonColumn pop_details_col;
         private DataGridViewTextBoxColumn pop_entry_col;
+        private ToolTip toolTip1;
     }
 }

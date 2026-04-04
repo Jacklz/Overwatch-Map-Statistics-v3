@@ -50,7 +50,6 @@
             save_statprofile_combobox = new ComboBox();
             session_date_picker = new DateTimePicker();
             save_profile_combobox = new ComboBox();
-            remove_sel_entry_button = new Button();
             session_entries_listbox = new ListBox();
             maps_page = new TabPage();
             remove_map_button = new Button();
@@ -92,7 +91,6 @@
             check_all_statprofiles_button = new Button();
             uncheck_all_statprofiles_button = new Button();
             view_stats_button = new Button();
-            remove_statprofile_button = new Button();
             add_statprofile_button = new Button();
             label10 = new Label();
             statprofile_textbox = new TextBox();
@@ -222,7 +220,6 @@
             session_page.Controls.Add(save_statprofile_combobox);
             session_page.Controls.Add(session_date_picker);
             session_page.Controls.Add(save_profile_combobox);
-            session_page.Controls.Add(remove_sel_entry_button);
             session_page.Controls.Add(session_entries_listbox);
             session_page.Controls.Add(label1);
             session_page.Controls.Add(save_button);
@@ -325,16 +322,6 @@
             save_profile_combobox.Name = "save_profile_combobox";
             save_profile_combobox.Size = new Size(123, 23);
             save_profile_combobox.TabIndex = 12;
-            // 
-            // remove_sel_entry_button
-            // 
-            remove_sel_entry_button.Location = new Point(117, 218);
-            remove_sel_entry_button.Name = "remove_sel_entry_button";
-            remove_sel_entry_button.Size = new Size(171, 23);
-            remove_sel_entry_button.TabIndex = 11;
-            remove_sel_entry_button.Text = "Remove Selected Entry";
-            remove_sel_entry_button.UseVisualStyleBackColor = true;
-            remove_sel_entry_button.Click += remove_sel_entry_button_Click;
             // 
             // session_entries_listbox
             // 
@@ -665,7 +652,6 @@
             stats_page.Controls.Add(check_all_statprofiles_button);
             stats_page.Controls.Add(uncheck_all_statprofiles_button);
             stats_page.Controls.Add(view_stats_button);
-            stats_page.Controls.Add(remove_statprofile_button);
             stats_page.Controls.Add(add_statprofile_button);
             stats_page.Controls.Add(label10);
             stats_page.Controls.Add(statprofile_textbox);
@@ -749,17 +735,6 @@
             view_stats_button.UseVisualStyleBackColor = true;
             view_stats_button.Click += view_stats_button_Click;
             // 
-            // remove_statprofile_button
-            // 
-            remove_statprofile_button.Location = new Point(234, 99);
-            remove_statprofile_button.Name = "remove_statprofile_button";
-            remove_statprofile_button.Size = new Size(88, 23);
-            remove_statprofile_button.TabIndex = 4;
-            remove_statprofile_button.Text = "Remove";
-            general_tooltip.SetToolTip(remove_statprofile_button, "Removes the highlighted entry, not the checked entry");
-            remove_statprofile_button.UseVisualStyleBackColor = true;
-            remove_statprofile_button.Click += remove_statprofile_button_Click;
-            // 
             // add_statprofile_button
             // 
             add_statprofile_button.Location = new Point(234, 70);
@@ -840,7 +815,7 @@
             MaximizeBox = false;
             Name = "Main";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Overwatch Map Statistics v3.0 By Jacklz";
+            Text = "Overwatch Map Statistics v3.0.1 By Jacklz";
             FormClosing += Main_FormClosing;
             Load += Main_Load;
             tabControl1.ResumeLayout(false);
@@ -892,7 +867,6 @@
         private Label label7;
         private ListBox modelist_box;
         private ListBox session_entries_listbox;
-        private Button remove_sel_entry_button;
         private TabPage outcomes_page;
         private Button remove_outcome_button;
         private Button add_outcome_button;
@@ -911,7 +885,6 @@
         private Label label9;
         private ListBox profiles_listbox;
         private TabPage stats_page;
-        private Button remove_statprofile_button;
         private Button add_statprofile_button;
         private Label label10;
         private TextBox statprofile_textbox;

@@ -22,7 +22,7 @@ namespace Overwatch_Map_Statistics_v3
         {
             statprofiles.Remove(statprofile);
             string path = Path.Combine(dir, $"{statprofile}.json");
-            File.Delete(path);
+            if (File.Exists(path)) File.Delete(path);
         }
 
         public static void CreateStatProfile(string statprofile)

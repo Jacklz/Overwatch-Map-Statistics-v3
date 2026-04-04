@@ -64,8 +64,14 @@
             string path = Path.Combine(dir, $"{filename}.txt");
             if (File.Exists(path))
             {
-                if (filename == "maps") return [.. File.ReadAllLines(path)];
-                return [.. File.ReadAllLines(path).Select(entry => entry.Replace("-", ""))];
+                if (filename == "maps") return [.. File.ReadAllLines(path).Select(entry =>
+                {
+                    return Main.RemoveForbiddenCharacters(entry, '-');
+                })];
+                return [.. File.ReadAllLines(path).Select(entry =>
+                {
+                    return Main.RemoveForbiddenCharacters(entry);
+                })];
             }
             else File.WriteAllLines(path, entries);
             return entries;
@@ -154,13 +160,18 @@
                 new("Watchpoint: Gibraltar", "Escort"),
             ];
             var tmp = CheckOrCreateFile("maps", [.. maps.Select(entry => entry.fullname)]);
-            allmaps = tmp.Select(entry =>
+            allmaps = [.. tmp.Select(entry =>
             {
+                int div = entry.Count(text => text == '-');
                 int index = entry.IndexOf('-');
+                if (index == -1 || div > 1)
+                {
+                    throw new Exception($"Broken map entry found in maps.txt. Entry '{entry}' must be in the proper format '[Map name] - [Mode name]'. Either fix the offending entry manually or delete the maps.txt file to restore the default list.");
+                }
                 string name = entry.Substring(0, index).Trim();
                 string mode = entry.Substring(index + 1).Trim();
                 return new Map(name, mode);
-            }).ToList();
+            })];
         }
     }
 }

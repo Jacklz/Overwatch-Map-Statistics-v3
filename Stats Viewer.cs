@@ -351,6 +351,11 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name!");
                 return;
             }
+            if (Main.HasIllegalCharacter(newname, out char off))
+            {
+                MessageBox.Show($"Cannot create a new stat profile with the character '{off}' in its name");
+                return;
+            }
             List<SessionRecordEntry> newentries = [.. filteredentries.Select(entry => entry.Clone())];
             StatProfileManager.SaveStatProfileData(newname, false, [.. newentries]);
             instance.UpdateStatDisplayLists();

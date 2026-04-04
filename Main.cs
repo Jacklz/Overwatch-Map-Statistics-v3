@@ -4,6 +4,7 @@ namespace Overwatch_Map_Statistics_v3
     {
         internal static Dictionary<string, string> maptomode = [];
         internal static List<Stats_Viewer> statwindows = [];
+        internal static char[] forbiddencharacters = ['-', ','];
 
         public Main()
         {
@@ -17,6 +18,7 @@ namespace Overwatch_Map_Statistics_v3
             PrepareDirectory();
             UpdateAllDisplayLists();
             UpdateRecordLabel();
+            CreateAllContextMenus();
         }
 
         private static void PrepareDirectory()
@@ -132,7 +134,7 @@ namespace Overwatch_Map_Statistics_v3
             UpdateRecordLabel();
         }
 
-        private bool RequestConfirmation(string message, string title = "")
+        private static bool RequestConfirmation(string message, string title = "")
         {
             if (Settings.showconfirmdialogs)
             {
@@ -140,15 +142,6 @@ namespace Overwatch_Map_Statistics_v3
                 if (result == DialogResult.No) return false;
             }
             return true;
-        }
-
-        private void remove_sel_entry_button_Click(object sender, EventArgs e)
-        {
-            int index = session_entries_listbox.SelectedIndex;
-            if (index == -1) return;
-            if (!RequestConfirmation("Are you sure you want to delete the selected entry?")) return;
-            session_entries_listbox.Items.RemoveAt(index);
-            UpdateRecordLabel();
         }
 
         private void reset_entry_button_Click(object sender, EventArgs e)
@@ -185,9 +178,9 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a mode name!");
                 return;
             }
-            if (mode.Contains('-'))
+            if (HasIllegalCharacter(mode, out char off))
             {
-                MessageBox.Show("Cannot add a mode with '-' contained in its name");
+                MessageBox.Show($"Cannot add a mode with the character '{off}' contained in its name");
                 return;
             }
             EntriesManager.ModifyEntry(EntriesManager.EntryType.mode, mode, false);
@@ -215,9 +208,9 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Could not add map! Make sure both the map name and map type are defined");
                 return;
             }
-            if (mapname.Contains('-'))
+            if (HasIllegalCharacter(mapname, out char off))
             {
-                MessageBox.Show("Cannot add a map with '-' contained in its name");
+                MessageBox.Show($"Cannot add a map with the character '{off}' contained in its name");
                 return;
             }
             string? maptype = map_type_combo.Items[index]?.ToString();
@@ -246,9 +239,9 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name for the outcome");
                 return;
             }
-            if (name.Contains('-'))
+            if (HasIllegalCharacter(name, out char off))
             {
-                MessageBox.Show("Cannot add an outcome with '-' contained in its name");
+                MessageBox.Show($"Cannot add an outcome with the character '{off}' contained in its name");
                 return;
             }
             EntriesManager.ModifyEntry(EntriesManager.EntryType.outcome, name, false);
@@ -267,6 +260,30 @@ namespace Overwatch_Map_Statistics_v3
             outcomes_listbox.SelectedIndex = -1;
         }
 
+        internal static bool HasIllegalCharacter(string text, out char offender)
+        {
+            foreach (char character in forbiddencharacters)
+            {
+                if (text.Contains(character))
+                {
+                    offender = character;
+                    return true;
+                }
+            }
+            offender = ' ';
+            return false;
+        }
+
+        internal static string RemoveForbiddenCharacters(string text, params char[] ignore)
+        {
+            foreach (var ch in forbiddencharacters)
+            {
+                if (ignore.Contains(ch)) continue;
+                text = text.Replace(ch.ToString(), "");
+            }
+            return text;
+        }
+
         private void add_note_button_Click(object sender, EventArgs e)
         {
             string name = note_textbox.Text;
@@ -275,9 +292,9 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name for the note");
                 return;
             }
-            if (name.Contains('-'))
+            if (HasIllegalCharacter(name, out char off))
             {
-                MessageBox.Show("Cannot add a note with '-' contained in its name");
+                MessageBox.Show($"Cannot add a note with the character '{off}' contained in its name");
                 return;
             }
             EntriesManager.ModifyEntry(EntriesManager.EntryType.note, name, false);
@@ -302,6 +319,11 @@ namespace Overwatch_Map_Statistics_v3
             if (name.Length == 0)
             {
                 MessageBox.Show("Enter a name for the profile");
+                return;
+            }
+            if (HasIllegalCharacter(name, out char off))
+            {
+                MessageBox.Show($"Cannot add a profile with the character '{off}' contained in its name");
                 return;
             }
             EntriesManager.ModifyEntry(EntriesManager.EntryType.profile, name, false);
@@ -342,24 +364,29 @@ namespace Overwatch_Map_Statistics_v3
                 MessageBox.Show("Enter a name for the stat profile");
                 return;
             }
+            if (HasIllegalCharacter(name, out char off))
+            {
+                MessageBox.Show($"Cannot add a stat profile with the character '{off}' contained in its name");
+                return;
+            }
             StatProfileManager.CreateStatProfile(name);
             UpdateStatDisplayLists();
             statprofile_textbox.Clear();
         }
 
-        private void remove_statprofile_button_Click(object sender, EventArgs e)
-        {
-            int index = statprofiles_checkedlistbox.SelectedIndex;
-            if (index == -1) return;
-            string? name = statprofiles_checkedlistbox.Items[index]?.ToString();
-            var result = MessageBox.Show($"Removing this stat profile will also delete the stats associated with it. Are you sure you want to delete the '{name}' stat profile?", "Warning", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
-            {
-                StatProfileManager.RemoveStatProfile(name);
-                UpdateStatDisplayLists();
-                statprofiles_checkedlistbox.SelectedIndex = -1;
-            }
-        }
+        //private void remove_statprofile_button_Click(object sender, EventArgs e)
+        //{
+        //    int index = statprofiles_checkedlistbox.SelectedIndex;
+        //    if (index == -1) return;
+        //    string? name = statprofiles_checkedlistbox.Items[index]?.ToString();
+        //    var result = MessageBox.Show($"Removing this stat profile will also delete the stats associated with it. Are you sure you want to delete the '{name}' stat profile?", "Warning", MessageBoxButtons.YesNo);
+        //    if (result == DialogResult.Yes)
+        //    {
+        //        StatProfileManager.RemoveStatProfile(name);
+        //        UpdateStatDisplayLists();
+        //        statprofiles_checkedlistbox.SelectedIndex = -1;
+        //    }
+        //}
 
         private void UpdateRecordLabel()
         {
@@ -581,6 +608,135 @@ namespace Overwatch_Map_Statistics_v3
         {
             StatProfileManager.LoadStatProfiles();
             UpdateStatDisplayLists();
+        }
+
+        private void CreateAllContextMenus()
+        {
+            CreateSessionContextMenu();
+            CreateStatProfileContextMenu();
+        }
+
+        private void CreateStatProfileContextMenu()
+        {
+            MenuItem delete = new("Delete", (o, e) =>
+            {
+                int index = statprofiles_checkedlistbox.SelectedIndex;
+                if (index == -1) return;
+                string? name = statprofiles_checkedlistbox.Items[index]?.ToString();
+                var result = MessageBox.Show($"Removing this stat profile will also delete the stats associated with it. Are you sure you want to delete the '{name}' stat profile?", "Warning", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    StatProfileManager.RemoveStatProfile(name);
+                    UpdateStatDisplayLists();
+                    statprofiles_checkedlistbox.SelectedIndex = -1;
+                }
+            });
+            CreateContextMenu(statprofiles_checkedlistbox, [.. CreateContextMenuItems(delete)]);
+        }
+
+        private void CreateSessionContextMenu()
+        {
+            MenuItem delete = new("Delete", (o, e) =>
+            {
+                int i = session_entries_listbox.SelectedIndex;
+                if (i == -1) return;
+                if (!RequestConfirmation("Are you sure you want to delete the selected entry?")) return;
+                session_entries_listbox.Items.RemoveAt(i);
+                UpdateRecordLabel();
+            });
+            MenuItem moveup = new("Move up", (o, e) =>
+            {
+                int i = session_entries_listbox.SelectedIndex;
+                if (i > 0)
+                {
+                    var item = session_entries_listbox.Items[i];
+                    session_entries_listbox.Items.RemoveAt(i);
+                    session_entries_listbox.Items.Insert(i - 1, item);
+                    session_entries_listbox.SelectedIndex = i - 1;
+                }
+            });
+            MenuItem movedown = new("Move down", (o, e) =>
+            {
+                int i = session_entries_listbox.SelectedIndex;
+                if (i >= 0 && i < session_entries_listbox.Items.Count - 1)
+                {
+                    var item = session_entries_listbox.Items[i];
+                    session_entries_listbox.Items.RemoveAt(i);
+                    session_entries_listbox.Items.Insert(i + 1, item);
+                    session_entries_listbox.SelectedIndex = i + 1;
+                }
+            });
+            MenuItem redo = new("Redo", (o, e) =>
+            {
+                int i = session_entries_listbox.SelectedIndex;
+                if (i == -1) return;
+                var item = session_entries_listbox.Items[i];
+                string[] parts = item.ToString().Split("-");
+                string map = parts[0].Trim();
+                string role = parts[1].Trim();
+                string outcome = parts[2].Trim();
+                List<string> notelist = [];
+                if (parts.Length > 3)
+                {
+                    string notes = parts[3];
+                    notelist.AddRange(notes.Split('|').Select(entry => entry.Trim()));
+                }
+                maplist_combobox.SelectedIndex = maplist_combobox.Items.IndexOf(map);
+                role_combobox.SelectedIndex = role_combobox.Items.IndexOf(role);
+                outcome_combobox.SelectedIndex = outcome_combobox.Items.IndexOf(outcome);
+                notes_checkedlistbox.ClearSelected();
+                for (int a = 0; a < notes_checkedlistbox.Items.Count; a++)
+                {
+                    notes_checkedlistbox.SetItemChecked(a, false);
+                }
+                foreach (string note in notelist)
+                {
+                    int n = notes_checkedlistbox.Items.IndexOf(note);
+                    notes_checkedlistbox.SetItemChecked(n, true);
+                }
+            });
+            CreateContextMenu(session_entries_listbox, [.. CreateContextMenuItems(delete, moveup, movedown, redo)]);
+        }
+
+        private struct MenuItem
+        {
+            public string name;
+            public Action<object, EventArgs> action;
+
+            public MenuItem(string name, Action<object, EventArgs> action)
+            {
+                this.name = name;
+                this.action = action;
+            }
+        }
+
+        private static List<ToolStripMenuItem> CreateContextMenuItems(params MenuItem[] items)
+        {
+            List<ToolStripMenuItem> list = [];
+            foreach (var entry in items.OrderBy(i => i.name))
+            {
+                ToolStripMenuItem item = new(entry.name, null, (o, e) => { entry.action?.Invoke(o, e); });
+                list.Add(item);
+            }
+            list.Add(new("Cancel"));
+            return list;
+        }
+
+        private static void CreateContextMenu(Control control, params ToolStripMenuItem[] items)
+        {
+            ContextMenuStrip strip = new();
+            strip.Items.AddRange(items);
+            strip.Opening += (o, e) =>
+            {
+                if (strip.SourceControl is ListBox box)
+                {
+                    Point mousePos = box.PointToClient(Cursor.Position);
+                    int index = box.IndexFromPoint(mousePos);
+                    if (index == -1) return;
+                    box.SelectedIndex = index;
+                }
+            };
+            control.ContextMenuStrip = strip;
         }
     }
 }
