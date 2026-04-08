@@ -4,7 +4,7 @@ namespace Overwatch_Map_Statistics_v3
     {
         internal static Dictionary<string, string> maptomode = [];
         internal static List<Stats_Viewer> statwindows = [];
-        internal static char[] forbiddencharacters = ['-', ','];
+        internal static char[] forbiddencharacters = ['-', ',', '|', '"', '\''];
 
         public Main()
         {

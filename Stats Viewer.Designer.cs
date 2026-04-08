@@ -129,13 +129,13 @@
             entries_details = new DataGridViewButtonColumn();
             entries_data = new DataGridViewTextBoxColumn();
             data_selection_page = new TabPage();
-            label5 = new Label();
-            newstat_profilename_textbox = new TextBox();
-            save_selection = new Button();
+            uncheck_all_notes_button = new Button();
+            check_all_notes_button = new Button();
+            label7 = new Label();
+            note_checkedlistbox = new CheckedListBox();
             reset_dates_button = new Button();
             uncheck_all_roles_button = new Button();
             check_all_roles_button = new Button();
-            export_stats_button = new Button();
             uncheck_all_profiles_button = new Button();
             check_all_profiles_button = new Button();
             end_date = new DateTimePicker();
@@ -146,6 +146,11 @@
             role_checkedlistbox = new CheckedListBox();
             label3 = new Label();
             profile_checkedlistbox = new CheckedListBox();
+            export_page = new TabPage();
+            label5 = new Label();
+            newstat_profilename_textbox = new TextBox();
+            save_selection = new Button();
+            export_stats_button = new Button();
             toolTip1 = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)map_stats_grid).BeginInit();
             tabControl1.SuspendLayout();
@@ -159,6 +164,7 @@
             data_entries_page.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)data_entries_grid).BeginInit();
             data_selection_page.SuspendLayout();
+            export_page.SuspendLayout();
             SuspendLayout();
             // 
             // map_stats_grid
@@ -263,6 +269,7 @@
             tabControl1.Controls.Add(day_stats_page);
             tabControl1.Controls.Add(data_entries_page);
             tabControl1.Controls.Add(data_selection_page);
+            tabControl1.Controls.Add(export_page);
             tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -769,13 +776,13 @@
             // 
             // data_selection_page
             // 
-            data_selection_page.Controls.Add(label5);
-            data_selection_page.Controls.Add(newstat_profilename_textbox);
-            data_selection_page.Controls.Add(save_selection);
+            data_selection_page.Controls.Add(uncheck_all_notes_button);
+            data_selection_page.Controls.Add(check_all_notes_button);
+            data_selection_page.Controls.Add(label7);
+            data_selection_page.Controls.Add(note_checkedlistbox);
             data_selection_page.Controls.Add(reset_dates_button);
             data_selection_page.Controls.Add(uncheck_all_roles_button);
             data_selection_page.Controls.Add(check_all_roles_button);
-            data_selection_page.Controls.Add(export_stats_button);
             data_selection_page.Controls.Add(uncheck_all_profiles_button);
             data_selection_page.Controls.Add(check_all_profiles_button);
             data_selection_page.Controls.Add(end_date);
@@ -793,32 +800,43 @@
             data_selection_page.Text = "Data Selection";
             data_selection_page.UseVisualStyleBackColor = true;
             // 
-            // label5
+            // uncheck_all_notes_button
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(226, 430);
-            label5.Name = "label5";
-            label5.Size = new Size(42, 15);
-            label5.TabIndex = 17;
-            label5.Text = "Name:";
+            uncheck_all_notes_button.Location = new Point(596, 154);
+            uncheck_all_notes_button.Name = "uncheck_all_notes_button";
+            uncheck_all_notes_button.Size = new Size(84, 23);
+            uncheck_all_notes_button.TabIndex = 18;
+            uncheck_all_notes_button.Text = "Uncheck all";
+            uncheck_all_notes_button.UseVisualStyleBackColor = true;
+            uncheck_all_notes_button.Click += uncheck_all_notes_button_Click;
             // 
-            // newstat_profilename_textbox
+            // check_all_notes_button
             // 
-            newstat_profilename_textbox.Location = new Point(226, 451);
-            newstat_profilename_textbox.Name = "newstat_profilename_textbox";
-            newstat_profilename_textbox.Size = new Size(145, 23);
-            newstat_profilename_textbox.TabIndex = 16;
+            check_all_notes_button.Location = new Point(596, 125);
+            check_all_notes_button.Name = "check_all_notes_button";
+            check_all_notes_button.Size = new Size(84, 23);
+            check_all_notes_button.TabIndex = 17;
+            check_all_notes_button.Text = "Check all";
+            check_all_notes_button.UseVisualStyleBackColor = true;
+            check_all_notes_button.Click += check_all_notes_button_Click;
             // 
-            // save_selection
+            // label7
             // 
-            save_selection.Location = new Point(9, 451);
-            save_selection.Name = "save_selection";
-            save_selection.Size = new Size(211, 23);
-            save_selection.TabIndex = 15;
-            save_selection.Text = "Save selection as stat profile";
-            toolTip1.SetToolTip(save_selection, "Will export the current state of stat grids to its own stat profile. Appends data if stat profile already exists");
-            save_selection.UseVisualStyleBackColor = true;
-            save_selection.Click += save_selection_Click;
+            label7.AutoSize = true;
+            label7.Location = new Point(335, 107);
+            label7.Name = "label7";
+            label7.Size = new Size(68, 15);
+            label7.TabIndex = 16;
+            label7.Text = "Select note:";
+            // 
+            // note_checkedlistbox
+            // 
+            note_checkedlistbox.FormattingEnabled = true;
+            note_checkedlistbox.Location = new Point(335, 125);
+            note_checkedlistbox.Name = "note_checkedlistbox";
+            note_checkedlistbox.Size = new Size(255, 184);
+            note_checkedlistbox.TabIndex = 15;
+            note_checkedlistbox.ItemCheck += note_checkedlistbox_ItemCheck;
             // 
             // reset_dates_button
             // 
@@ -849,16 +867,6 @@
             check_all_roles_button.Text = "Check all";
             check_all_roles_button.UseVisualStyleBackColor = true;
             check_all_roles_button.Click += check_all_roles_button_Click;
-            // 
-            // export_stats_button
-            // 
-            export_stats_button.Location = new Point(9, 422);
-            export_stats_button.Name = "export_stats_button";
-            export_stats_button.Size = new Size(211, 23);
-            export_stats_button.TabIndex = 11;
-            export_stats_button.Text = "Export stats to csv";
-            export_stats_button.UseVisualStyleBackColor = true;
-            export_stats_button.Click += export_stats_button_Click;
             // 
             // uncheck_all_profiles_button
             // 
@@ -950,6 +958,56 @@
             profile_checkedlistbox.TabIndex = 0;
             profile_checkedlistbox.ItemCheck += profile_checkedlistbox_ItemCheck;
             // 
+            // export_page
+            // 
+            export_page.Controls.Add(label5);
+            export_page.Controls.Add(newstat_profilename_textbox);
+            export_page.Controls.Add(save_selection);
+            export_page.Controls.Add(export_stats_button);
+            export_page.Location = new Point(4, 24);
+            export_page.Name = "export_page";
+            export_page.Size = new Size(713, 479);
+            export_page.TabIndex = 5;
+            export_page.Text = "Export";
+            export_page.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(226, 20);
+            label5.Name = "label5";
+            label5.Size = new Size(42, 15);
+            label5.TabIndex = 21;
+            label5.Text = "Name:";
+            // 
+            // newstat_profilename_textbox
+            // 
+            newstat_profilename_textbox.Location = new Point(226, 41);
+            newstat_profilename_textbox.Name = "newstat_profilename_textbox";
+            newstat_profilename_textbox.Size = new Size(145, 23);
+            newstat_profilename_textbox.TabIndex = 20;
+            // 
+            // save_selection
+            // 
+            save_selection.Location = new Point(9, 41);
+            save_selection.Name = "save_selection";
+            save_selection.Size = new Size(211, 23);
+            save_selection.TabIndex = 19;
+            save_selection.Text = "Save selection as stat profile";
+            toolTip1.SetToolTip(save_selection, "Will export the current state of stat grids to its own stat profile. Appends data if stat profile already exists");
+            save_selection.UseVisualStyleBackColor = true;
+            save_selection.Click += save_selection_Click;
+            // 
+            // export_stats_button
+            // 
+            export_stats_button.Location = new Point(9, 12);
+            export_stats_button.Name = "export_stats_button";
+            export_stats_button.Size = new Size(211, 23);
+            export_stats_button.TabIndex = 18;
+            export_stats_button.Text = "Export stats to csv";
+            export_stats_button.UseVisualStyleBackColor = true;
+            export_stats_button.Click += export_stats_button_Click;
+            // 
             // Stats_Viewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -981,6 +1039,8 @@
             ((System.ComponentModel.ISupportInitialize)data_entries_grid).EndInit();
             data_selection_page.ResumeLayout(false);
             data_selection_page.PerformLayout();
+            export_page.ResumeLayout(false);
+            export_page.PerformLayout();
             ResumeLayout(false);
 
         }
@@ -998,7 +1058,6 @@
         private CheckedListBox profile_checkedlistbox;
         private Label label4;
         private CheckedListBox role_checkedlistbox;
-        private Button export_stats_button;
         private Button uncheck_all_profiles_button;
         private Button check_all_profiles_button;
         private DateTimePicker end_date;
@@ -1011,9 +1070,6 @@
         private DataGridView mode_stats_grid;
         private DataGridView totals_grid;
         private DataGridView day_stats_grid;
-        private Button save_selection;
-        private Label label5;
-        private TextBox newstat_profilename_textbox;
         private DataGridView data_entries_grid;
         private Label label6;
         private TextBox map_search_textbox;
@@ -1066,5 +1122,14 @@
         private DataGridViewButtonColumn pop_details_col;
         private DataGridViewTextBoxColumn pop_entry_col;
         private ToolTip toolTip1;
+        private TabPage export_page;
+        private Label label5;
+        private TextBox newstat_profilename_textbox;
+        private Button save_selection;
+        private Button export_stats_button;
+        private CheckedListBox note_checkedlistbox;
+        private Label label7;
+        private Button uncheck_all_notes_button;
+        private Button check_all_notes_button;
     }
 }

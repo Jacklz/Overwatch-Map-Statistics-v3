@@ -8,12 +8,13 @@ namespace Overwatch_Map_Statistics_v3
         private readonly Dictionary<string, MapStat> mapstats = [];
         private readonly Dictionary<string, ModeStat> modestats = [];
         private readonly Dictionary<string, DayStat> daystats = [];
-        private readonly Dictionary<string, ComboStat> combostat = [];
+        private readonly Dictionary<string, ComboStat> popularstat = [];
         private DateTime orgstart;
         private DateTime orgend;
         private bool allowupdate = false;
         private readonly HashSet<string> checkedprofiles = [];
         private readonly HashSet<string> checkedroles = [];
+        private readonly HashSet<string> checkednotes = [];
         private readonly List<SessionRecordEntry> filteredentries = [];
         private readonly Main instance;
 
@@ -29,58 +30,51 @@ namespace Overwatch_Map_Statistics_v3
 
         private void Stats_Viewer_Load(object sender, EventArgs e)
         {
-            LoadRoles();
-            LoadProfiles();
-            SetDates();
+            PrepareStats();
             LoadStats();
             allowupdate = true;
         }
 
-        private void LoadRoles()
+        private void PrepareStats()
         {
+            if (stats.Count == 0) return;
+            SortedSet<string> profiles = [];
             SortedSet<string> roles = [];
+            SortedSet<string> notes = [];
+            DateTime start = stats[0].date;
+            DateTime end = stats[0].date;
             foreach (var entry in stats)
             {
+                if (entry.date < start) start = entry.date;
+                if (entry.date > end) end = entry.date;
                 foreach (var element in entry.mapdata)
                 {
                     roles.Add(element.role);
+                    foreach (var note in element.notes)
+                    {
+                        notes.Add(note);
+                    }
                 }
-            }
-            foreach (var entry in roles)
-            {
-                role_checkedlistbox.Items.Add(entry);
-            }
-            for (int a = 0; a < role_checkedlistbox.Items.Count; a++)
-            {
-                role_checkedlistbox.SetItemChecked(a, true);
-            }
-        }
-
-        private void LoadProfiles()
-        {
-            SortedSet<string> profiles = [];
-            foreach (var entry in stats)
-            {
                 profiles.Add(entry.profilename);
             }
-            foreach (var entry in profiles)
-            {
-                profile_checkedlistbox.Items.Add(entry);
-            }
-            for (int a = 0; a < profile_checkedlistbox.Items.Count; a++)
-            {
-                profile_checkedlistbox.SetItemChecked(a, true);
-            }
+            start_date.Value = start;
+            end_date.Value = end;
+            orgstart = start;
+            orgend = end;
+            PopulateCheckedListBox(role_checkedlistbox, roles);
+            PopulateCheckedListBox(profile_checkedlistbox, profiles);
+            PopulateCheckedListBox(note_checkedlistbox, notes);
         }
 
-        private void SetDates()
+        private static void PopulateCheckedListBox(CheckedListBox box, IEnumerable<string> items)
         {
-            if (stats.Count == 0) return;
-            var list = stats.OrderBy(entry => entry.date).ToList();
-            start_date.Value = list[0].date;
-            end_date.Value = list[^1].date;
-            orgstart = list[0].date;
-            orgend = list[^1].date;
+            box.BeginUpdate();
+            box.Items.Clear();
+            foreach (var item in items)
+            {
+                box.Items.Add(item, true);
+            }
+            box.EndUpdate();
         }
 
         private void LoadStats()
@@ -94,10 +88,18 @@ namespace Overwatch_Map_Statistics_v3
                 string dayofweek = entry.date.DayOfWeek.ToString();
                 filteredentries.Add(entry);
                 //data entries grid doesnt respect selected roles
+                //also doesnt respect selected notes
                 data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetTotal(), "...", entry);
+                //bool hasnote = checkednotes.Any(n => entry.mapdata.Any(m => m.notes.Contains(n)));
+                //bool hasnote2 = entry.mapdata.Any(m => m.notes.Any(n => checkednotes.Contains(n)));
+                //bool hasrole = checkedroles.Any(r => entry.mapdata.Any(m => r == m.role));
+                //bool hasrole2 = entry.mapdata.Any(r => checkedroles.Contains(r.role));
                 foreach (var data in entry.mapdata)
                 {
                     if (!checkedroles.Contains(data.role)) continue;
+                    //excludes entries with 0 notes
+                    //bool hasnote = checkednotes.Any(a => data.notes.Any(b => b.Contains(a, StringComparison.OrdinalIgnoreCase)));
+                    //if (!hasnote) continue;
                     if (!mapstats.TryGetValue(data.mapname, out var mapstat))
                     {
                         mapstat = new(data.mapname, data.mode);
@@ -122,10 +124,10 @@ namespace Overwatch_Map_Statistics_v3
                     notesoutcomes.AddNote([.. data.notes]);
                     notesoutcomes.HandleOutcome(data.outcome);
                 }
-                if (!combostat.TryGetValue(dayofweek, out var combo))
+                if (!popularstat.TryGetValue(dayofweek, out var combo))
                 {
                     combo = new();
-                    combostat[dayofweek] = combo;
+                    popularstat[dayofweek] = combo;
                 }
                 combo.AddData(entry);
             }
@@ -155,10 +157,11 @@ namespace Overwatch_Map_Statistics_v3
             {
                 day_stats_grid.Rows.Add(entry.day.ToString(), entry.wins, entry.losses, entry.draws, entry.total, entry.winrate, entry.GetNoteCount() + entry.GetMiscCount(), entry);
             }
+            //popular stat does not reflect selected notes or roles
             foreach (DayOfWeek day in Enum.GetValues<DayOfWeek>())
             {
                 string dayname = day.ToString();
-                if (combostat.TryGetValue(dayname, out var dict))
+                if (popularstat.TryGetValue(dayname, out var dict))
                 {
                     var map = dict.GetMostPopularMap(dayname);
                     if (map != default)
@@ -184,7 +187,7 @@ namespace Overwatch_Map_Statistics_v3
             mapstats.Clear();
             modestats.Clear();
             daystats.Clear();
-            combostat.Clear();
+            popularstat.Clear();
             filteredentries.Clear();
             LoadStats();
         }
@@ -462,6 +465,24 @@ namespace Overwatch_Map_Statistics_v3
             if (entry == null || day == null) return;
             Popular_Details_Viewer pop = new(entry, day);
             pop.Show();
+        }
+
+        private void check_all_notes_button_Click(object sender, EventArgs e)
+        {
+            AlterCheckState(note_checkedlistbox, true);
+        }
+
+        private void uncheck_all_notes_button_Click(object sender, EventArgs e)
+        {
+            AlterCheckState(note_checkedlistbox, false);
+        }
+
+        private void note_checkedlistbox_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            string? note = note_checkedlistbox.Items[e.Index].ToString();
+            if (e.NewValue == CheckState.Checked) checkednotes.Add(note);
+            else checkednotes.Remove(note);
+            ResetStatGrids();
         }
     }
 }
