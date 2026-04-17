@@ -1,6 +1,7 @@
 ﻿## v3.0.2
 - Improved existing error handling.
 - Moved stat exporting to its own tab.
+- Added filtering stats by note.
 
 
 ## v3.0.1

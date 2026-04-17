@@ -68,6 +68,7 @@
             DataGridViewCellStyle dataGridViewCellStyle38 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle39 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle40 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle41 = new DataGridViewCellStyle();
             map_stats_grid = new DataGridView();
             map_column = new DataGridViewTextBoxColumn();
             mode_column = new DataGridViewTextBoxColumn();
@@ -129,10 +130,11 @@
             entries_details = new DataGridViewButtonColumn();
             entries_data = new DataGridViewTextBoxColumn();
             data_selection_page = new TabPage();
-            uncheck_all_notes_button = new Button();
-            check_all_notes_button = new Button();
+            label8 = new Label();
+            or_radbutton = new RadioButton();
+            and_radbutton = new RadioButton();
+            note_search_grid = new DataGridView();
             label7 = new Label();
-            note_checkedlistbox = new CheckedListBox();
             reset_dates_button = new Button();
             uncheck_all_roles_button = new Button();
             check_all_roles_button = new Button();
@@ -152,6 +154,9 @@
             save_selection = new Button();
             export_stats_button = new Button();
             toolTip1 = new ToolTip(components);
+            note_column = new DataGridViewTextBoxColumn();
+            include_col = new DataGridViewCheckBoxColumn();
+            exclude_col = new DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)map_stats_grid).BeginInit();
             tabControl1.SuspendLayout();
             map_stats_page.SuspendLayout();
@@ -164,6 +169,7 @@
             data_entries_page.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)data_entries_grid).BeginInit();
             data_selection_page.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)note_search_grid).BeginInit();
             export_page.SuspendLayout();
             SuspendLayout();
             // 
@@ -776,10 +782,11 @@
             // 
             // data_selection_page
             // 
-            data_selection_page.Controls.Add(uncheck_all_notes_button);
-            data_selection_page.Controls.Add(check_all_notes_button);
+            data_selection_page.Controls.Add(label8);
+            data_selection_page.Controls.Add(or_radbutton);
+            data_selection_page.Controls.Add(and_radbutton);
+            data_selection_page.Controls.Add(note_search_grid);
             data_selection_page.Controls.Add(label7);
-            data_selection_page.Controls.Add(note_checkedlistbox);
             data_selection_page.Controls.Add(reset_dates_button);
             data_selection_page.Controls.Add(uncheck_all_roles_button);
             data_selection_page.Controls.Add(check_all_roles_button);
@@ -800,25 +807,57 @@
             data_selection_page.Text = "Data Selection";
             data_selection_page.UseVisualStyleBackColor = true;
             // 
-            // uncheck_all_notes_button
+            // label8
             // 
-            uncheck_all_notes_button.Location = new Point(596, 154);
-            uncheck_all_notes_button.Name = "uncheck_all_notes_button";
-            uncheck_all_notes_button.Size = new Size(84, 23);
-            uncheck_all_notes_button.TabIndex = 18;
-            uncheck_all_notes_button.Text = "Uncheck all";
-            uncheck_all_notes_button.UseVisualStyleBackColor = true;
-            uncheck_all_notes_button.Click += uncheck_all_notes_button_Click;
+            label8.AutoSize = true;
+            label8.Location = new Point(524, 107);
+            label8.Name = "label8";
+            label8.Size = new Size(75, 15);
+            label8.TabIndex = 22;
+            label8.Text = "Comparison:";
             // 
-            // check_all_notes_button
+            // or_radbutton
             // 
-            check_all_notes_button.Location = new Point(596, 125);
-            check_all_notes_button.Name = "check_all_notes_button";
-            check_all_notes_button.Size = new Size(84, 23);
-            check_all_notes_button.TabIndex = 17;
-            check_all_notes_button.Text = "Check all";
-            check_all_notes_button.UseVisualStyleBackColor = true;
-            check_all_notes_button.Click += check_all_notes_button_Click;
+            or_radbutton.AutoSize = true;
+            or_radbutton.Checked = true;
+            or_radbutton.Location = new Point(661, 105);
+            or_radbutton.Name = "or_radbutton";
+            or_radbutton.Size = new Size(41, 19);
+            or_radbutton.TabIndex = 21;
+            or_radbutton.TabStop = true;
+            or_radbutton.Text = "OR";
+            or_radbutton.UseVisualStyleBackColor = true;
+            or_radbutton.CheckedChanged += or_radbutton_CheckedChanged;
+            // 
+            // and_radbutton
+            // 
+            and_radbutton.AutoSize = true;
+            and_radbutton.Location = new Point(605, 105);
+            and_radbutton.Name = "and_radbutton";
+            and_radbutton.Size = new Size(50, 19);
+            and_radbutton.TabIndex = 20;
+            and_radbutton.Text = "AND";
+            and_radbutton.UseVisualStyleBackColor = true;
+            and_radbutton.CheckedChanged += and_radbutton_CheckedChanged;
+            // 
+            // note_search_grid
+            // 
+            note_search_grid.AllowUserToAddRows = false;
+            note_search_grid.AllowUserToDeleteRows = false;
+            note_search_grid.AllowUserToResizeColumns = false;
+            note_search_grid.AllowUserToResizeRows = false;
+            dataGridViewCellStyle41.BackColor = Color.LightGray;
+            note_search_grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle41;
+            note_search_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            note_search_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            note_search_grid.Columns.AddRange(new DataGridViewColumn[] { note_column, include_col, exclude_col });
+            note_search_grid.Location = new Point(335, 125);
+            note_search_grid.Name = "note_search_grid";
+            note_search_grid.RowHeadersVisible = false;
+            note_search_grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            note_search_grid.Size = new Size(367, 287);
+            note_search_grid.TabIndex = 19;
+            note_search_grid.CellValueChanged += note_search_grid_CellValueChanged;
             // 
             // label7
             // 
@@ -828,15 +867,6 @@
             label7.Size = new Size(68, 15);
             label7.TabIndex = 16;
             label7.Text = "Select note:";
-            // 
-            // note_checkedlistbox
-            // 
-            note_checkedlistbox.FormattingEnabled = true;
-            note_checkedlistbox.Location = new Point(335, 125);
-            note_checkedlistbox.Name = "note_checkedlistbox";
-            note_checkedlistbox.Size = new Size(255, 184);
-            note_checkedlistbox.TabIndex = 15;
-            note_checkedlistbox.ItemCheck += note_checkedlistbox_ItemCheck;
             // 
             // reset_dates_button
             // 
@@ -1008,6 +1038,24 @@
             export_stats_button.UseVisualStyleBackColor = true;
             export_stats_button.Click += export_stats_button_Click;
             // 
+            // note_column
+            // 
+            note_column.HeaderText = "Note";
+            note_column.Name = "note_column";
+            note_column.ReadOnly = true;
+            // 
+            // include_col
+            // 
+            include_col.FillWeight = 50F;
+            include_col.HeaderText = "Explicit Include";
+            include_col.Name = "include_col";
+            // 
+            // exclude_col
+            // 
+            exclude_col.FillWeight = 30F;
+            exclude_col.HeaderText = "Exclude";
+            exclude_col.Name = "exclude_col";
+            // 
             // Stats_Viewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1039,6 +1087,7 @@
             ((System.ComponentModel.ISupportInitialize)data_entries_grid).EndInit();
             data_selection_page.ResumeLayout(false);
             data_selection_page.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)note_search_grid).EndInit();
             export_page.ResumeLayout(false);
             export_page.PerformLayout();
             ResumeLayout(false);
@@ -1127,9 +1176,13 @@
         private TextBox newstat_profilename_textbox;
         private Button save_selection;
         private Button export_stats_button;
-        private CheckedListBox note_checkedlistbox;
         private Label label7;
-        private Button uncheck_all_notes_button;
-        private Button check_all_notes_button;
+        private DataGridView note_search_grid;
+        private Label label8;
+        private RadioButton or_radbutton;
+        private RadioButton and_radbutton;
+        private DataGridViewTextBoxColumn note_column;
+        private DataGridViewCheckBoxColumn include_col;
+        private DataGridViewCheckBoxColumn exclude_col;
     }
 }

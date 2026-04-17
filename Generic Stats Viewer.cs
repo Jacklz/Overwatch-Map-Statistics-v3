@@ -19,12 +19,12 @@
         public void PopulateGrids()
         {
             misc_outcomes_grid.Rows.Clear();
-            foreach (var entry in stat.miscoutcomes)
+            foreach (var entry in stat.miscoutcomes.OrderBy(e => e.Key))
             {
                 misc_outcomes_grid.Rows.Add(entry.Key, entry.Value.count);
             }
             notes_grid.Rows.Clear();
-            foreach (var entry in stat.notes)
+            foreach (var entry in stat.notes.OrderBy(e => e.Key))
             {
                 notes_grid.Rows.Add(entry.Key, entry.Value.count);
             }

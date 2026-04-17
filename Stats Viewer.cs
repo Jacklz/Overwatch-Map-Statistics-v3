@@ -14,7 +14,7 @@ namespace Overwatch_Map_Statistics_v3
         private bool allowupdate = false;
         private readonly HashSet<string> checkedprofiles = [];
         private readonly HashSet<string> checkedroles = [];
-        private readonly HashSet<string> checkednotes = [];
+        //private readonly HashSet<string> checkednotes = [];
         private readonly List<SessionRecordEntry> filteredentries = [];
         private readonly Main instance;
 
@@ -63,7 +63,11 @@ namespace Overwatch_Map_Statistics_v3
             orgend = end;
             PopulateCheckedListBox(role_checkedlistbox, roles);
             PopulateCheckedListBox(profile_checkedlistbox, profiles);
-            PopulateCheckedListBox(note_checkedlistbox, notes);
+            //PopulateCheckedListBox(note_checkedlistbox, notes);
+            foreach (var entry in notes)
+            {
+                note_search_grid.Rows.Add(entry, false, false);
+            }
         }
 
         private static void PopulateCheckedListBox(CheckedListBox box, IEnumerable<string> items)
@@ -86,20 +90,17 @@ namespace Overwatch_Map_Statistics_v3
                 if (!checkedprofiles.Contains(entry.profilename)) continue;
                 if (entry.date > end_date.Value || entry.date < start_date.Value) continue;
                 string dayofweek = entry.date.DayOfWeek.ToString();
-                filteredentries.Add(entry);
+                //filteredentries.Add(entry);
                 //data entries grid doesnt respect selected roles
                 //also doesnt respect selected notes
-                data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetTotal(), "...", entry);
-                //bool hasnote = checkednotes.Any(n => entry.mapdata.Any(m => m.notes.Contains(n)));
-                //bool hasnote2 = entry.mapdata.Any(m => m.notes.Any(n => checkednotes.Contains(n)));
-                //bool hasrole = checkedroles.Any(r => entry.mapdata.Any(m => r == m.role));
-                //bool hasrole2 = entry.mapdata.Any(r => checkedroles.Contains(r.role));
+                //popular stats also do not respect this
+                //data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetTotal(), "...", entry);
+                bool addentry = false;
                 foreach (var data in entry.mapdata)
                 {
                     if (!checkedroles.Contains(data.role)) continue;
-                    //excludes entries with 0 notes
-                    //bool hasnote = checkednotes.Any(a => data.notes.Any(b => b.Contains(a, StringComparison.OrdinalIgnoreCase)));
-                    //if (!hasnote) continue;
+                    if (!IncludeNote(data.notes, and_radbutton.Checked)) continue;
+                    addentry = true;
                     if (!mapstats.TryGetValue(data.mapname, out var mapstat))
                     {
                         mapstat = new(data.mapname, data.mode);
@@ -124,12 +125,21 @@ namespace Overwatch_Map_Statistics_v3
                     notesoutcomes.AddNote([.. data.notes]);
                     notesoutcomes.HandleOutcome(data.outcome);
                 }
-                if (!popularstat.TryGetValue(dayofweek, out var combo))
+                //should fix above issue of disrespect
+                //popular stats may still not completely respect note filters
+                if (addentry)
                 {
-                    combo = new();
-                    popularstat[dayofweek] = combo;
-                }
-                combo.AddData(entry);
+                    filteredentries.Add(entry);
+                    data_entries_grid.Rows.Add(entry.date, entry.GetNetWins(), entry.GetWins(), entry.GetLosses(), entry.GetDraws(), entry.GetTotal(), "...", entry);
+                    if (!popularstat.TryGetValue(dayofweek, out var combo))
+                    {
+                        combo = new();
+                        popularstat[dayofweek] = combo;
+                    }
+                    //popular stats should add map results not session records
+                    //to record accurate popular data
+                    combo.AddData(entry);
+                }   
             }
             UpdateDataEntriesCount();
             foreach (var entry in mapstats.Values.OrderBy(stat => stat.map.mapname))
@@ -467,22 +477,68 @@ namespace Overwatch_Map_Statistics_v3
             pop.Show();
         }
 
-        private void check_all_notes_button_Click(object sender, EventArgs e)
+        private bool IncludeNote(List<string> notes, bool and)
         {
-            AlterCheckState(note_checkedlistbox, true);
+            var noteSet = new HashSet<string>(notes);
+            bool present = false;
+            bool found = false;
+            foreach (DataGridViewRow row in note_search_grid.Rows)
+            {
+                string note = row.Cells[0].Value?.ToString();
+                if (string.IsNullOrEmpty(note)) continue;
+                bool include = Convert.ToBoolean(row.Cells[1].Value);
+                bool exclude = Convert.ToBoolean(row.Cells[2].Value);
+                if (exclude && noteSet.Contains(note)) return false;
+                if (include)
+                {
+                    present = true;
+                    if (and)
+                    {
+                        if (!noteSet.Contains(note)) return false;
+                    }
+                    else
+                    {
+                        if (noteSet.Contains(note)) found = true;
+                    }
+                }
+            }
+            if (!and && present) return found;
+            return true;
         }
 
-        private void uncheck_all_notes_button_Click(object sender, EventArgs e)
+        //private bool noteupdate = false;
+        private void note_search_grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            AlterCheckState(note_checkedlistbox, false);
+            //if (noteupdate) return;
+            if ((e.ColumnIndex == 1 || e.ColumnIndex == 2) && e.RowIndex >= 0)
+            {
+                //noteupdate = true;
+                //var row = note_search_grid.Rows[e.RowIndex];
+                //bool col1 = Convert.ToBoolean(row.Cells[1].Value);
+                //bool col2 = Convert.ToBoolean(row.Cells[2].Value);
+                //if (col1)
+                //{
+                //    row.Cells[2].Value = false;
+                //    note_search_grid.InvalidateCell(2, e.RowIndex);
+                //}
+                //else if (col2)
+                //{
+                //    row.Cells[1].Value = false;
+                //    note_search_grid.InvalidateCell(1, e.RowIndex);
+                //}
+                //noteupdate = false;
+                ResetStatGrids();
+            }
         }
 
-        private void note_checkedlistbox_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void and_radbutton_CheckedChanged(object sender, EventArgs e)
         {
-            string? note = note_checkedlistbox.Items[e.Index].ToString();
-            if (e.NewValue == CheckState.Checked) checkednotes.Add(note);
-            else checkednotes.Remove(note);
-            ResetStatGrids();
+            if (and_radbutton.Checked) ResetStatGrids();
+        }
+
+        private void or_radbutton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (or_radbutton.Checked) ResetStatGrids();
         }
     }
 }

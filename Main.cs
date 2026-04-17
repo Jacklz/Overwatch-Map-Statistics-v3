@@ -698,7 +698,7 @@ namespace Overwatch_Map_Statistics_v3
             CreateContextMenu(session_entries_listbox, [.. CreateContextMenuItems(delete, moveup, movedown, redo)]);
         }
 
-        private struct MenuItem
+        public struct MenuItem
         {
             public string name;
             public Action<object, EventArgs> action;
@@ -710,7 +710,7 @@ namespace Overwatch_Map_Statistics_v3
             }
         }
 
-        private static List<ToolStripMenuItem> CreateContextMenuItems(params MenuItem[] items)
+        public static List<ToolStripMenuItem> CreateContextMenuItems(params MenuItem[] items)
         {
             List<ToolStripMenuItem> list = [];
             foreach (var entry in items.OrderBy(i => i.name))
@@ -722,7 +722,7 @@ namespace Overwatch_Map_Statistics_v3
             return list;
         }
 
-        private static void CreateContextMenu(Control control, params ToolStripMenuItem[] items)
+        public static void CreateContextMenu(Control control, params ToolStripMenuItem[] items)
         {
             ContextMenuStrip strip = new();
             strip.Items.AddRange(items);

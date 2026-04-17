@@ -10,7 +10,7 @@
         {
             records.Add(record);
             string dayofweek = record.date.DayOfWeek.ToString();
-            foreach (var data in record.mapdata)
+            foreach (var data in record.mapdata)//use where extension to check specific notes?
             {
                 if (!mapstats.TryGetValue(dayofweek, out var mapdict))
                 {
